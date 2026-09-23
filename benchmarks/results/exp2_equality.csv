@@ -1,5 +1,5 @@
 method,n,queries,mean_reads,std_reads,min_reads,max_reads,mean_ms,std_ms,theoretical_reads,parameters
-Full Scan (Heap),100000,1000,1539,0,1539,1539,22.5043,4.13584,1539,P = 1539 páginas
-Búsqueda binaria (Sequential),100000,1000,11.034,0.18132,11,12,0.0927672,0.205552,11.03,M = 2084 páginas principales
-B+ (IndexScan),100000,1000,3,0,3,3,0.0390466,0.0164814,3,h = 2
-Hash (IndexScan),100000,1000,3,0,3,3,0.0127724,0.00399932,3,global depth = 8
+Full Scan (Heap),100000,1000,1539,0,1539,1539,22.7262,1.45263,1539,P = 1539 páginas
+Búsqueda binaria (Sequential),100000,1000,11.034,0.18132,11,12,0.0913542,0.15137,11.03,M = 2084 páginas principales
+B+ (IndexScan),100000,1000,3,0,3,3,0.038456,0.0074421,3,h = 2
+Hash (IndexScan),100000,1000,3,0,3,3,0.0136931,0.00702885,3,global depth = 8

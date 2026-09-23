@@ -55,7 +55,7 @@ costo por inserción aproximadamente constante.}
 \begin{itemize}
 \item \textbf{Heap}: 1.98 I/O por inserción para todo $N$, exactamente el costo teórico de 1R + 1W
   (el 0.02 que falta son las inserciones que abren una página nueva, que cuestan solo 1W: una de cada 65).
-  Es la inserción más barata y la más rápida (4.7\,s para 500\,000 registros).
+  Es la inserción más barata y la más rápida ($\approx 4.8$\,s para 500\,000 registros).
 \item \textbf{Sequential sin reorganización}: $\approx 3$ I/O por inserción (1R de la página principal,
   1R + 1W de la cabeza de su overflow). La inserción es barata, pero el archivo degenera: con 500\,000
   registros queda 1 página principal y 7\,692 de overflow, y una búsqueda puntual posterior cuesta en
@@ -126,7 +126,7 @@ $M=2\,084$ páginas principales hace en promedio $\log_2 M = 11.03$ sondeos ($\l
 $\lceil\log_2 M\rceil$ según la clave, de ahí $\sigma=0.18$), el \textbf{B$^+$} de altura $h=2$ cuesta
 exactamente $h+1=3$ lecturas y el \textbf{hash} exactamente 3 (directorio + bucket + registro, sin
 overflow). El índice reduce el costo en un factor de $\approx 500$ frente al full scan. En tiempo, B$^+$
-y hash hacen las mismas 3 lecturas pero el hash es 3 veces más rápido: busca la clave en el bucket con
+y hash hacen las mismas 3 lecturas pero el hash es casi 3 veces más rápido: busca la clave en el bucket con
 una búsqueda de bytes en C, mientras que el B$^+$ decodifica dos nodos completos con \code{struct}. La
 búsqueda binaria es $\approx 250$ veces más rápida que el full scan a pesar de no usar índice.
 

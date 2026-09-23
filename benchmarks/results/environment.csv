@@ -1,10 +1,15 @@
 key,value
-python,3.12.13
-platform,macOS-26.3.1-arm64-arm-64bit
-machine,arm64
-processor,arm
 cpus,10
-date,2026-09-22 20:28:58
-mode,full
-exp2_seconds,37.1
-exp3_seconds,18
+date,2026-09-22 20:59:05
+exp1_mode,full
+exp1_seconds,177.3
+exp2_mode,full
+exp2_seconds,38.2
+exp3_mode,full
+exp3_seconds,18.3
+exp4_mode,full
+exp4_seconds,55.8
+machine,arm64
+platform,macOS-26.3.1-arm64-arm-64bit
+processor,arm
+python,3.12.13
