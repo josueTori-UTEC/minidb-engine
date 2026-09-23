@@ -190,12 +190,12 @@ relleno & 22 & 2 & -- & alineación a 24 bytes \\
 
 \paragraph{Página 0 de metadatos.} Tras el header, la página~0 de cada archivo guarda
 \code{magic} (\code{MDB1}), versión, tipo de archivo, \code{page\_size} y \code{num\_pages}
-(16 bytes) y luego los campos propios de cada estructura: cabeza de la free-list y nº de registros
+(16 bytes) y luego los campos propios de cada estructura: cabeza de la free-list y número de registros
 (Heap); capacidad, columna clave, fill factor y mínimo/máximo de la PK (Sequential); raíz, altura,
-capacidades y nº de hojas (B$^+$); profundidad global y la tabla de segmentos del directorio (hash).
+capacidades y número de hojas (B$^+$); profundidad global y la tabla de segmentos del directorio (hash).
 La página~0 se lee una vez al abrir el archivo y queda en memoria. Al final de cada sentencia se
 escribe \textbf{solo si cambió su estructura} (cabeza de la free-list, raíz o altura del B$^+$,
-directorio del hash); las estadísticas (nº de registros, mínimo y máximo de la clave) viajan en esa
+directorio del hash); las estadísticas (número de registros, mínimo y máximo de la clave) viajan en esa
 escritura o al cerrar el archivo. Tanto la lectura al abrir como estas escrituras se cuentan en el
 \code{DiskCounter}: por ejemplo, el \code{INSERT} que obliga a crear una página nueva del Heap cuesta
 1W de la página nueva más 1W de la página~0 (cambió la cabeza de la free-list), mientras que un
@@ -465,7 +465,7 @@ fila por el mismo camino que \code{INSERT} (solo lee archivos dentro de \code{MI
 Endpoint & Respuesta \\
 \midrule
 \code{POST /api/query} & \code{\{sql, page, page\_size, planner\}} $\to$ columnas, filas de la página pedida, total, mensaje, plan (tipo, estructura, índice, predicado, filtro, costo estimado, candidatos) y métricas (\code{disk\_reads}, \code{disk\_writes}, \code{parse\_ms}, \code{exec\_ms}, \code{total\_ms}). Errores 400 con tipo, mensaje y posición. \\
-\code{GET /api/tables} & tablas con columnas y tipos, organización, nº de registros y de páginas, índices (tipo, columna, altura del B$^+$ o profundidad global del hash). \\
+\code{GET /api/tables} & tablas con columnas y tipos, organización, número de registros y de páginas, índices (tipo, columna, altura del B$^+$ o profundidad global del hash). \\
 \code{POST /api/tables/reorganize} & reorganiza una tabla SEQUENTIAL y devuelve páginas antes/después e I/O. \\
 \code{GET /api/tables/\{t\}/pages/\{id\}} & header decodificado, contenido de la página y hexdump (inspector del video). \\
 \bottomrule
@@ -582,9 +582,9 @@ transacciones con WAL y, para el Entregable~2, los módulos espacial (R-Tree), t
 vectorial (IVF/HNSW).
 
 \begin{thebibliography}{9}
-\bibitem{ramakrishnan} R. Ramakrishnan y J. Gehrke. \emph{Database Management Systems}, 3.ª ed. McGraw-Hill, 2003.
-\bibitem{garcia} H. Garcia-Molina, J. D. Ullman y J. Widom. \emph{Database Systems: The Complete Book}, 2.ª ed. Pearson, 2008.
-\bibitem{silberschatz} A. Silberschatz, H. F. Korth y S. Sudarshan. \emph{Database System Concepts}, 7.ª ed. McGraw-Hill, 2019.
+\bibitem{ramakrishnan} R. Ramakrishnan y J. Gehrke. \emph{Database Management Systems}, 3.\textsuperscript{a} ed. McGraw-Hill, 2003.
+\bibitem{garcia} H. Garcia-Molina, J. D. Ullman y J. Widom. \emph{Database Systems: The Complete Book}, 2.\textsuperscript{a} ed. Pearson, 2008.
+\bibitem{silberschatz} A. Silberschatz, H. F. Korth y S. Sudarshan. \emph{Database System Concepts}, 7.\textsuperscript{a} ed. McGraw-Hill, 2019.
 \bibitem{fagin} R. Fagin, J. Nievergelt, N. Pippenger y H. R. Strong. Extendible hashing --- a fast access method for dynamic files. \emph{ACM TODS}, 4(3):315--344, 1979.
 \bibitem{comer} D. Comer. The ubiquitous B-tree. \emph{ACM Computing Surveys}, 11(2):121--137, 1979.
 \bibitem{selinger} P. G. Selinger et al. Access path selection in a relational database management system. \emph{SIGMOD}, 1979.
