@@ -19,3 +19,17 @@ services:
 
     environment:
       - MINIDB_DATA_DIR=/app/data
+      - MINIDB_PAGE_SIZE=4096
+      - MINIDB_PLANNER=rules
+
+  frontend:
+    # Vite compila el cliente y nginx lo sirve; /api se reenvía al servicio backend.
+    build: ./frontend
+
+    container_name: minidb-frontend
+
+    ports:
+      - "5173:80"
+
+    depends_on:
+      - backend
