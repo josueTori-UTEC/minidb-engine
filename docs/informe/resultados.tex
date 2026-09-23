@@ -16,6 +16,17 @@ principal. Los tiempos son secundarios: los archivos caben en la caché de pági
 de modo que una ``lectura'' cuesta microsegundos y el tiempo refleja sobre todo el costo de CPU de
 Python. En un disco real el costo estaría dominado por el número de transferencias.
 
+\paragraph{Reproducibilidad.} Para verificar lo anterior repetimos los experimentos 2, 3 y 4 completos en
+una segunda máquina (Windows 11 sobre un AMD64 de 8 núcleos, Python 3.12.1). Todas las columnas de I/O
+salen idénticas, incluida la desviación estándar: el full scan lee 1\,539 páginas ($\sigma = 0$), la
+búsqueda binaria 11.034 ($\sigma = 0.181$) y el B$^+$ y el hash 3 ($\sigma = 0$); en el Experimento~4
+coinciden además el fan-out, la altura, el número de hojas, la I/O de carga y los MB transferidos para
+los cuatro tamaños de bloque. Lo único que cambia es el tiempo, de 3 a 10 veces mayor en Windows: la
+búsqueda puntual pasa de 0.014--22.7\,ms a 0.051--87.6\,ms según la estructura, un rango del 25\,\% con
+el B$^+$ de 109 a 570\,ms, y la carga de los 100\,000 registros del Experimento~4 de 3.7--12.1\,s a
+19.9--40.9\,s. Las conclusiones no se mueven: en ambas máquinas el B$^+$ le gana al full scan en tiempo
+hasta el 5\,\% de selectividad y lo pierde al 10\,\%.
+
 En el Experimento~1 se mide la \emph{inserción estructural} en todas las organizaciones (sin validar la
 unicidad de la PK, porque las claves generadas son únicas por construcción): así se compara lo mismo en
 todas, ya que el Heap sin índice no valida y los índices B$^+$/hash se miden por separado. En el motor SQL
