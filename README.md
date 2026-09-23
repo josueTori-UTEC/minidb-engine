@@ -1,5 +1,7 @@
 # MiniDB — Motor relacional en disco
 
+[![tests](https://github.com/josueTori-UTEC/minidb-engine/actions/workflows/tests.yml/badge.svg)](https://github.com/josueTori-UTEC/minidb-engine/actions/workflows/tests.yml)
+
 Proyecto del curso **Base de Datos II (CS2042) — UTEC 2026-II**, Entregable 1.
 
 MiniDB es un mini gestor de bases de datos relacional construido desde cero que opera
@@ -102,6 +104,9 @@ Variables de entorno del backend:
 ```bash
 pytest            # 133 tests (de ~12 s en macOS a ~45 s en Windows)
 ```
+
+Los mismos tests corren en GitHub Actions en cada push y cada pull request
+([`.github/workflows/tests.yml`](.github/workflows/tests.yml)).
 
 Cubren round-trip de header/página/registro/RID, **exactitud del contador** (insert en heap
 = 1R + 1W, búsqueda en B+ = h lecturas, full scan = P lecturas, hash = 2 lecturas),
