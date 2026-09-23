@@ -67,6 +67,9 @@ SEQ_META = MetaCodec(
         ("fill_factor", "H"),  # milésimas
         ("record_count", "Q"),
         ("reorganizations", "I"),
+        ("has_bounds", "B"),  # min/max de una PK numérica (estadística para el planner)
+        ("min_key", "d"),
+        ("max_key", "d"),
     ],
 )
 OVF_META = MetaCodec(FileKind.SEQ_OVERFLOW, [("record_size", "H"), ("capacity", "H"), ("main_file_pages", "I")])
@@ -125,6 +128,8 @@ class SequentialFile:
         self.ovf: DiskManager
         self.record_count = 0
         self.reorganizations = 0
+        self.min_key: float | None = None
+        self.max_key: float | None = None
         self._dirty = False
         self._stats_dirty = False
         self._ovf_meta_pages = 1
@@ -195,21 +200,27 @@ class SequentialFile:
         sf._ovf_meta_pages = ovf.num_pages()
         sf.record_count = int(meta["record_count"])
         sf.reorganizations = int(meta["reorganizations"])
+        if meta["has_bounds"]:
+            sf.min_key, sf.max_key = float(meta["min_key"]), float(meta["max_key"])
         return sf
 
     # ------------------------------------------------------------------ metadatos
+    def _meta_values(self, record_count: int, reorganizations: int) -> dict[str, Any]:
+        return {
+            "record_size": self.schema.record_size,
+            "capacity": self.layout.capacity,
+            "key_column": self.key_index,
+            "fill_factor": round(self.fill_factor * 1000),
+            "record_count": record_count,
+            "reorganizations": reorganizations,
+            "has_bounds": 0 if self.min_key is None else 1,
+            "min_key": 0.0 if self.min_key is None else self.min_key,
+            "max_key": 0.0 if self.max_key is None else self.max_key,
+        }
+
     def _main_meta_bytes(self) -> bytes:
         return SEQ_META.pack(
-            self.page_size,
-            self.main.num_pages(),
-            {
-                "record_size": self.schema.record_size,
-                "capacity": self.layout.capacity,
-                "key_column": self.key_index,
-                "fill_factor": round(self.fill_factor * 1000),
-                "record_count": self.record_count,
-                "reorganizations": self.reorganizations,
-            },
+            self.page_size, self.main.num_pages(), self._meta_values(self.record_count, self.reorganizations)
         )
 
     def _ovf_meta_bytes(self) -> bytes:
@@ -343,7 +354,7 @@ class SequentialFile:
             page = RecordPage.new(self.layout, page_id, PageType.SEQ_MAIN)
             slot = page.insert(record)
             self.main.write_page(page_id, page.to_bytes())
-            self._after_insert(structural=True)
+            self._after_insert(key, structural=True)
             return RID(page_id, slot)
 
         page = self._locate(key)
@@ -361,7 +372,7 @@ class SequentialFile:
         if page.has_space():
             slot = page.insert(record)
             self.main.write_page(page.page_id, page.to_bytes())
-            self._after_insert()
+            self._after_insert(key)
             return RID(page.page_id, slot)
 
         if (
@@ -377,7 +388,7 @@ class SequentialFile:
             page.header.next_page_id = new_id
             self.main.write_page(page.page_id, page.to_bytes())
             self.main.write_page(new_id, new_page.to_bytes())
-            self._after_insert(structural=True)
+            self._after_insert(key, structural=True)
             return RID(new_id, slot)
 
         head_id = page.header.aux_page_id
@@ -386,7 +397,7 @@ class SequentialFile:
             if head.has_space():
                 slot = head.insert(record)
                 self.ovf.write_page(head_id, head.to_bytes())
-                self._after_insert()
+                self._after_insert(key)
                 return RID(-head_id, slot)
         new_id = self.ovf.allocate_page()
         ovf_page = RecordPage.new(self.layout, new_id, PageType.SEQ_OVERFLOW)
@@ -396,14 +407,19 @@ class SequentialFile:
         self.ovf.write_page(new_id, ovf_page.to_bytes())
         page.header.aux_page_id = new_id
         self.main.write_page(page.page_id, page.to_bytes())
-        self._after_insert()
+        self._after_insert(key)
         return RID(-new_id, slot)
 
-    def _after_insert(self, structural: bool = False) -> None:
+    def _after_insert(self, key: Any, structural: bool = False) -> None:
         self.record_count += 1
         self._stats_dirty = True
         if structural:
             self._dirty = True
+        if not self._key_is_char:
+            if self.min_key is None or key < self.min_key:
+                self.min_key = float(key)
+            if self.max_key is None or key > self.max_key:
+                self.max_key = float(key)
 
     def _display_key(self, key: Any) -> Any:
         return key.rstrip(b"\x00").decode("utf-8", errors="ignore") if self._key_is_char else key
@@ -599,16 +615,7 @@ class SequentialFile:
                     total += 1
         new_main_pages = writer.finish(
             lambda num_pages: SEQ_META.pack(
-                self.page_size,
-                num_pages,
-                {
-                    "record_size": self.schema.record_size,
-                    "capacity": self.layout.capacity,
-                    "key_column": self.key_index,
-                    "fill_factor": round(self.fill_factor * 1000),
-                    "record_count": total,
-                    "reorganizations": self.reorganizations + 1,
-                },
+                self.page_size, num_pages, self._meta_values(total, self.reorganizations + 1)
             )
         )
         self.main.close()

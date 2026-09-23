@@ -70,6 +70,9 @@ BPT_META = MetaCodec(
         ("entry_count", "Q"),
         ("leaf_pages", "I"),
         ("unique", "B"),
+        ("has_bounds", "B"),  # min/max de claves numéricas (estadística para el planner)
+        ("min_key", "d"),
+        ("max_key", "d"),
     ],
 )
 POINTER_SIZE = 4
@@ -119,6 +122,8 @@ class BPlusTree:
         self.entry_count: int = int(meta["entry_count"])
         self.leaf_pages: int = int(meta["leaf_pages"])
         self.unique = bool(meta["unique"])
+        self.min_key: float | None = float(meta["min_key"]) if meta["has_bounds"] else None
+        self.max_key: float | None = float(meta["max_key"]) if meta["has_bounds"] else None
         self._dirty = False
         self._stats_dirty = False
         self._leaf_structs: dict[int, struct.Struct] = {}
@@ -149,6 +154,9 @@ class BPlusTree:
             "entry_count": 0,
             "leaf_pages": 0,
             "unique": 1 if unique else 0,
+            "has_bounds": 0,
+            "min_key": 0.0,
+            "max_key": 0.0,
         }
         dm.write_page(dm.allocate_page(), BPT_META.pack(page_size, 1, meta))
         return cls(dm, column, meta)
@@ -176,6 +184,9 @@ class BPlusTree:
                 "entry_count": self.entry_count,
                 "leaf_pages": self.leaf_pages,
                 "unique": 1 if self.unique else 0,
+                "has_bounds": 0 if self.min_key is None else 1,
+                "min_key": 0.0 if self.min_key is None else self.min_key,
+                "max_key": 0.0 if self.max_key is None else self.max_key,
             },
         )
 
@@ -287,6 +298,8 @@ class BPlusTree:
         """Inserta ``(value, rid)``. En un índice único lanza ``DuplicateKeyError`` si
         la clave ya existe (se detecta en la misma hoja, sin lecturas extra)."""
         key = self._raw_key(value)
+        if not self._is_char:
+            self._track_bounds(key)
         if self.root == NULL_PAGE:
             self.entry_count += 1
             self._stats_dirty = True
@@ -359,6 +372,73 @@ class BPlusTree:
         self.root = new_root.page_id
         self.height += 1
         self._dirty = True
+
+    def _track_bounds(self, key: Any) -> None:
+        if self.min_key is None or key < self.min_key:
+            self.min_key = float(key)
+            self._stats_dirty = True
+        if self.max_key is None or key > self.max_key:
+            self.max_key = float(key)
+            self._stats_dirty = True
+
+    def bulk_load(self, items: Iterator[tuple[Any, RID]], fill_factor: float = 1.0) -> None:
+        """Construye el árbol de abajo hacia arriba a partir de pares ORDENADOS por clave.
+
+        Escribe cada hoja una sola vez (llenas al ``fill_factor``) y luego los niveles
+        internos; en memoria solo se guarda la primera clave de cada nodo del nivel
+        en construcción. Se usa al reconstruir el índice de la PK tras reorganizar un
+        Sequential File (el recorrido sale ordenado).
+        """
+        if self.root != NULL_PAGE:
+            raise PageFormatError("bulk_load requiere un árbol vacío")
+        per_leaf = max(1, int(self.leaf_capacity * fill_factor))
+        level: list[tuple[Any, int]] = []  # (primera clave, page_id) de cada nodo del nivel
+        current: LeafNode | None = None
+        last_key = None
+        for value, rid in items:
+            key = self._raw_key(value)
+            if last_key is not None and key < last_key:
+                raise PageFormatError("bulk_load recibió claves desordenadas")
+            if self.unique and last_key is not None and key == last_key:
+                raise DuplicateKeyError(f"clave duplicada en índice único: {self.display(key)}")
+            last_key = key
+            if not self._is_char:
+                self._track_bounds(key)
+            if current is None or len(current.keys) >= per_leaf:
+                new_leaf = LeafNode(self.dm.allocate_page())
+                if current is not None:
+                    current.next_leaf = new_leaf.page_id
+                    new_leaf.prev_leaf = current.page_id
+                    self._write_leaf(current)
+                current = new_leaf
+                level.append((key, new_leaf.page_id))
+            current.keys.append(key)
+            current.pids.append(rid.page_id)
+            current.slots.append(rid.slot)
+            self.entry_count += 1
+        if current is None:
+            return
+        self._write_leaf(current)
+        self.leaf_pages = len(level)
+        self.height = 1
+        per_node = max(3, int(self.fan_out * fill_factor))
+        while len(level) > 1:
+            # Reparto parejo de los hijos: con per_node >= 3 cada nodo recibe >= 2 hijos.
+            nodes = -(-len(level) // per_node)
+            base, extra = divmod(len(level), nodes)
+            parents: list[tuple[Any, int]] = []
+            start = 0
+            for i in range(nodes):
+                size = base + (1 if i < extra else 0)
+                group = level[start : start + size]
+                start += size
+                node = InternalNode(self.dm.allocate_page(), [k for k, _ in group[1:]], [pid for _, pid in group])
+                self._write_internal(node)
+                parents.append((group[0][0], node.page_id))
+            level = parents
+            self.height += 1
+        self.root = level[0][1]
+        self._dirty = self._stats_dirty = True
 
     # ------------------------------------------------------------------ búsqueda
     def _descend(self, key: Any | None) -> tuple[LeafNode | None, Any]:

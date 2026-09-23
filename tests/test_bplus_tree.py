@@ -181,3 +181,29 @@ def test_indice_unico_h_lecturas_exactas_y_rechaza_duplicados(tmp_path, counter)
     tree.close()
     again = BPlusTree.open(tmp_path / "u.bpt", INT_COL, 1024, DiskCounter())
     assert again.unique
+
+
+@pytest.mark.parametrize("n", [1, 2, 99, 100, 101, 5_000, 30_001])
+def test_bulk_load_desde_entrada_ordenada(tmp_path, counter, n):
+    tree = BPlusTree.create(tmp_path / f"bl{n}.bpt", INT_COL, 1024, counter, unique=True)
+    tree.bulk_load((k * 2, RID(k + 1, 0)) for k in range(n))
+    stats = tree.check_invariants()
+    assert stats["entries"] == n
+    # hojas llenas: ceil(n / L) hojas
+    assert stats["leaves"] == -(-n // tree.leaf_capacity)
+    for k in random.Random(n).sample(range(n), min(n, 200)):
+        assert tree.search(k * 2) == [RID(k + 1, 0)]
+        assert tree.search(k * 2 + 1) == []
+    assert [k for k, _ in tree.range_search(10, 20)] == [k for k in range(10, 21, 2) if k < 2 * n]
+    tree.insert(-1, RID(9, 9))  # se puede seguir insertando
+    tree.insert(2 * n + 1, RID(9, 9))
+    tree.check_invariants()
+    assert (tree.min_key, tree.max_key) == (-1, 2 * n + 1)
+
+
+def test_bulk_load_rechaza_desorden(tmp_path, counter):
+    from backend.storage.page import PageFormatError
+
+    tree = _tree(tmp_path, counter)
+    with pytest.raises(PageFormatError):
+        tree.bulk_load(iter([(2, RID(1, 0)), (1, RID(1, 1))]))
