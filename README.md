@@ -21,7 +21,7 @@ paginados que se leen y escriben de a una página completa (`seek` + `read`/`wri
 | Datos sintéticos ≥ 100 000 registros y 4 experimentos automatizados | [`data/generate.py`](data/generate.py), [`benchmarks/`](benchmarks) |
 | Informe LaTeX y guion del video | [`docs/informe/`](docs/informe), [`docs/guion_video.md`](docs/guion_video.md) |
 
-**Integrantes:** Renzo Acervo, Josué Toribio, _completar_, _completar_.
+**Integrantes:** Renzo Acervo, Josué Toribio, Lisseth Rondan.
 
 ![Cliente web de MiniDB: explorador de tablas, editor SQL, resultados paginados y plan con métricas de I/O](docs/informe/figuras/frontend.png)
 
