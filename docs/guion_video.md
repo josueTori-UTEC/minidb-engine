@@ -3,7 +3,7 @@
 El enunciado pide que el video muestre: **(1)** la inspección de los archivos binarios en disco,
 **(2)** la ejecución de consultas en el cliente web observando el plan de ejecución y **(3)** los
 resultados del benchmark automatizado. Este guion dura ~8 minutos; cada bloque indica quién habla
-(repartir entre los 4 integrantes) y exactamente qué mostrar.
+(repartir entre los 3 integrantes) y exactamente qué mostrar.
 
 ## Preparación (antes de grabar)
 
@@ -92,7 +92,7 @@ INSERT INTO empleados_seq VALUES (100001, 'Ada Lovelace', 'Analytics', 5200.0);
   **Costo** (el optimizador elige `SeqScan`, 1 539 lecturas): un índice no agrupado pierde frente al
   full scan cuando el rango es grande. Los candidatos con su costo estimado aparecen en el panel del plan.
 
-## 4:30 – 6:30 · Inspección de los archivos binarios (integrante 4)
+## 4:30 – 6:30 · Inspección de los archivos binarios (integrante 1)
 
 En la terminal:
 
@@ -117,7 +117,7 @@ Qué señalar:
 Luego abrir el **inspector de páginas** del cliente web (botón en el explorador) y mostrar una hoja
 del B+ (claves ordenadas y RIDs, `next_leaf`/`prev_leaf`) y un nodo interno (claves y punteros).
 
-## 6:30 – 8:00 · Resultados del benchmark automatizado (integrante 1)
+## 6:30 – 8:00 · Resultados del benchmark automatizado (integrante 3)
 
 ```bash
 python -m benchmarks.run_all --quick     # en vivo, ~30 s (la corrida completa tarda ~7 min)
@@ -136,7 +136,7 @@ Mostrar las figuras de `benchmarks/results/` (o del informe) y decir la conclusi
 4. **Exp. 4 (`exp4_block_size.png`)**: al subir B el fan-out crece (125 → 1021) y la altura baja
    (3 → 2), pero los bytes transferidos crecen casi linealmente.
 
-## 8:00 – 8:30 · Cierre
+## 8:00 – 8:30 · Cierre (integrante 2)
 
-Resumen: todo acceso a disco medido con `DiskCounter`, costos medidos = teóricos, 130 tests y
+Resumen: todo acceso a disco medido con `DiskCounter`, costos medidos = teóricos, 133 tests y
 `docker compose up --build` levanta todo. Mencionar el informe (`docs/informe/informe.pdf`).

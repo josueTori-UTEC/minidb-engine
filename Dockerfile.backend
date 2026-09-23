@@ -8,4 +8,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend ./backend
 
+# El generador del dataset: con Compose llega por el volumen ./data, pero copiarlo
+# deja la imagen autosuficiente para correrla sola.
+COPY data/generate.py ./data/generate.py
+
 CMD ["uvicorn", "backend.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
