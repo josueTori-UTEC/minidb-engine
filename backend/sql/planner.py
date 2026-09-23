@@ -23,8 +23,8 @@ principales del Sequential, ``k`` registros que califican):
 * IndexScan BTREE = h + k (k = 1 si el índice es único)
 * IndexScan HASH = 2 + k (directorio + bucket)
 * IndexRangeScan = h + (hojas - 1) + k
-* BinarySearch = ceil(log2 M) + overflow promedio por página
-* SeqFileRangeScan = ceil(log2 M) + páginas del rango (+ su overflow)
+* BinarySearch = log2 M (redondeado) + overflow promedio por página
+* SeqFileRangeScan = log2 M + páginas del rango - 1 (+ su overflow)
 
 ``k`` se estima con la selectividad: 1 para igualdad sobre columna única; 1/10
 para igualdad sobre columna no única; para rangos numéricos se interpola con el
@@ -124,7 +124,13 @@ def _range_selectivity(bounds: ColumnBounds, lo_stat: float | None, hi_stat: flo
 
 
 def _log2_pages(m: int) -> int:
+    """Cota de sondeos de la búsqueda binaria sobre M páginas: ceil(log2 M)."""
     return max(1, math.ceil(math.log2(m))) if m > 1 else 1
+
+
+def _expected_probes(m: int) -> int:
+    """Sondeos esperados de la bisección: floor o ceil de log2 M según la clave (~log2 M)."""
+    return max(1, round(math.log2(m))) if m > 1 else 1
 
 
 def _seqscan_pages(table: Table) -> int:
@@ -164,10 +170,12 @@ def _binary_search(table: Table, p: BoundPredicate) -> AccessPath:
     assert isinstance(f, SequentialFile)
     m = f.main_pages
     chain = f.overflow_pages / m if m else 0.0
-    cost = _log2_pages(m) + math.ceil(chain)
+    probes = _expected_probes(m)
+    cost = probes + math.ceil(chain)
     return AccessPath(
         "BinarySearch", "SEQUENTIAL", GROUP_EQUALITY, cost,
-        f"Búsqueda binaria sobre {m} páginas principales (~log2 M = {_log2_pages(m)}) + overflow de la página",
+        f"Búsqueda binaria sobre {m} páginas principales (~log2 M = {math.log2(max(m, 1)):.1f} sondeos) "
+        f"+ overflow de la página",
         column=p.column.name, predicate=str(p), eq_value=p.value, used=[p], estimated_rows=1.0,
     )
 
@@ -197,13 +205,17 @@ def _seq_range_scan(table: Table, bounds: ColumnBounds) -> AccessPath:
     col = table.schema.columns[f.key_index]
     sel = _range_selectivity(bounds, f.min_key, f.max_key, col.type != ColumnType.CHAR)
     m, o = f.main_pages, f.overflow_pages
-    pages = math.ceil(sel * m) + math.ceil(sel * o)
-    start = _log2_pages(m) if bounds.low is not None else 0
-    cost = start + max(1, pages)
+    pages = max(1, math.ceil(sel * m)) + math.ceil(sel * o)
+    if bounds.low is not None:
+        # la bisección ya deja leída la primera página del rango
+        cost = _expected_probes(m) + pages - 1
+        detail = f"Búsqueda binaria de la cota inferior (~log2 M) + ~{pages} página(s) contiguas del rango"
+    else:
+        cost = pages
+        detail = f"Recorrido desde la primera página: ~{pages} página(s) contiguas"
     return AccessPath(
         "SeqFileRangeScan", "SEQUENTIAL", GROUP_RANGE, cost,
-        f"Búsqueda binaria de la cota inferior + ~{max(1, pages)} página(s) contiguas del rango "
-        f"(selectividad estimada {sel:.2%})",
+        f"{detail} (selectividad estimada {sel:.2%})",
         column=col.name, predicate=bounds.describe(col.name), bounds=bounds,
         used=list(bounds.predicates or []), estimated_rows=sel * f.record_count,
     )
