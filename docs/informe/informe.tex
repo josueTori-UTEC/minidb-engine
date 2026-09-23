@@ -480,12 +480,26 @@ páginas), \textbf{editor SQL} con resaltado (CodeMirror~6), botón Ejecutar y a
 (tipo de plan, índice, lecturas y escrituras, tiempos de parseo y ejecución, costo estimado frente al
 real, candidatos y un gráfico del historial de I/O de las últimas consultas).
 
-\IfFileExists{figuras/frontend.png}{
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{frontend.png}
-\caption{Cliente web: explorador, editor, resultados y plan/métricas de una consulta con \code{IndexScan}.}
-\end{figure}}{}
+\caption{Cliente web con los cuatro paneles: explorador (tabla HEAP con B$^+$ y tabla SEQUENTIAL con
+hash), editor SQL, resultados paginados (401 filas) y plan \code{IndexRangeScan} con 404 lecturas, igual
+al costo estimado. El historial compara las últimas consultas: \code{SeqScan} (1\,539 lecturas),
+\code{IndexScan} (3), \code{SeqFileRangeScan} (13) e \code{IndexRangeScan} (404).}
+\label{fig:frontend}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{inspector.png}
+\caption{Inspector de páginas (\code{GET /api/tables/\{t\}/pages/\{id\}}): página 1 del Heap. En el
+hexdump se ven los 24 bytes del header (\code{page\_id}=1, tipo 1, \code{record\_count} = \code{41 00}
+= 65, \code{free\_space\_offset} = \code{ff ff} porque está llena y los punteros en $-1$), el bitmap
+(\code{ff}$\times$8 + \code{01} = 65 slots ocupados) y el primer registro: \code{e6 0e 00 00} = id 3814
+seguido del nombre en UTF-8.}
+\label{fig:inspector}
+\end{figure}
 
 %==========================================================================================
 \section{Análisis de costos teóricos}
