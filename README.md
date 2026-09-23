@@ -72,7 +72,8 @@ reinicio de los contenedores.
 
 Cada respuesta trae las filas (paginadas), el plan elegido con su costo estimado y los
 candidatos que se descartaron, y las métricas exactas: `disk_reads`, `disk_writes`,
-`parse_ms`, `exec_ms` y `total_ms`.
+`parse_ms`, `exec_ms` y `total_ms`. En la barra del editor, el selector **Planner** cambia entre
+las reglas del enunciado (por defecto) y el optimizador por costos (campo `planner` de la API).
 
 ## 2. Desarrollo local (sin Docker)
 

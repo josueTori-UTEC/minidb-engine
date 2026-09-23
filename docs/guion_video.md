@@ -87,8 +87,10 @@ INSERT INTO empleados_seq VALUES (100001, 'Ada Lovelace', 'Analytics', 5200.0);
 - Explicar el área principal ordenada + overflow encadenado y que la carga ya disparó
   reorganizaciones automáticas (mensaje del `COPY`; overflow < 10 % de las páginas principales).
 - Pulsar **Reorganizar** en el explorador: mostrar páginas antes/después, overflow = 0 e I/O.
-- (Opcional) `SELECT ... WHERE id >= 1 AND id <= 25000` con planner `rules` vs `cost` para mostrar
-  por qué un índice no agrupado pierde frente al full scan con rangos grandes.
+- Volver a `empleados` y ejecutar `SELECT * FROM empleados WHERE id >= 1 AND id <= 25000;` con el
+  selector **Planner: Reglas** (regla del enunciado → `IndexRangeScan`, ~25 000 lecturas) y luego con
+  **Costo** (el optimizador elige `SeqScan`, 1 539 lecturas): un índice no agrupado pierde frente al
+  full scan cuando el rango es grande. Los candidatos con su costo estimado aparecen en el panel del plan.
 
 ## 4:30 – 6:30 · Inspección de los archivos binarios (integrante 4)
 
