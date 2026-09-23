@@ -1,9 +1,13 @@
 import CodeMirror, {
+  Decoration,
   EditorSelection,
   EditorView,
   Prec,
+  StateEffect,
+  StateField,
   keymap,
   type BasicSetupOptions,
+  type DecorationSet,
   type EditorState,
   type ViewUpdate,
 } from '@uiw/react-codemirror'
@@ -85,6 +89,24 @@ function cursorInfo(state: EditorState): CursorInfo {
   }
 }
 
+// Subrayado del token que causó un error de sintaxis; desaparece al editar el texto.
+const setErrorMark = StateEffect.define<{ from: number; to: number } | null>()
+const errorMark = StateField.define<DecorationSet>({
+  create: () => Decoration.none,
+  update(marks, tr) {
+    if (tr.docChanged) return Decoration.none
+    for (const effect of tr.effects) {
+      if (effect.is(setErrorMark)) {
+        marks = effect.value
+          ? Decoration.set([Decoration.mark({ class: 'cm-sql-error' }).range(effect.value.from, effect.value.to)])
+          : Decoration.none
+      }
+    }
+    return marks
+  },
+  provide: (field) => EditorView.decorations.from(field),
+})
+
 export function SqlEditor({ value, onChange, onRun, running, locked, tables, ref }: SqlEditorProps) {
   const viewRef = useRef<EditorView | null>(null)
   const [cursor, setCursor] = useState<CursorInfo>({ line: 1, column: 1, selected: 0, hasSelection: false })
@@ -123,6 +145,7 @@ export function SqlEditor({ value, onChange, onRun, running, locked, tables, ref
         ]),
       ),
       EditorView.contentAttributes.of({ 'aria-label': 'Editor SQL' }),
+      errorMark,
     ]
   }, [tables])
 
@@ -155,9 +178,13 @@ export function SqlEditor({ value, onChange, onRun, running, locked, tables, ref
         const pos = Math.min(base + Math.max(offset, 0), doc.length)
         const ahead = doc.sliceString(pos, Math.min(pos + 80, doc.length))
         const word = /^[\p{L}\p{N}_]+/u.exec(ahead)?.[0].length ?? (ahead !== '' && !/^\s/.test(ahead) ? 1 : 0)
+        // Cursor en el error (sin seleccionar: así Ctrl+Enter vuelve a ejecutar todo) y token subrayado
         view.dispatch({
-          selection: EditorSelection.single(pos, pos + word),
-          effects: EditorView.scrollIntoView(pos, { y: 'center' }),
+          selection: EditorSelection.cursor(pos),
+          effects: [
+            setErrorMark.of({ from: pos, to: Math.min(pos + Math.max(word, 1), doc.length) }),
+            EditorView.scrollIntoView(pos, { y: 'center' }),
+          ],
         })
         view.focus()
       },

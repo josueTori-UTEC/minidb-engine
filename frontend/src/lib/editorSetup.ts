@@ -36,6 +36,12 @@ export const editorTheme: Extension = EditorView.theme({
     backgroundColor: 'var(--editor-bg)',
   },
   '&.cm-focused': { outline: 'none' },
+  '.cm-sql-error': {
+    textDecoration: 'underline wavy var(--danger)',
+    textUnderlineOffset: '3px',
+    backgroundColor: 'var(--danger-soft)',
+    borderRadius: '2px',
+  },
   '.cm-scroller': { fontFamily: 'var(--font-mono)', lineHeight: '1.65' },
   '.cm-content': { padding: '8px 0', caretColor: 'var(--accent)' },
   '.cm-line': { padding: '0 12px 0 8px' },
