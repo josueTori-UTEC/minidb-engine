@@ -1,5 +1,4 @@
-% Informe del Proyecto 1 (Entregable 1) — MiniDB
-% Compilar:  cd docs/informe && tectonic informe.tex      (o latexmk -pdf informe.tex, o Overleaf)
+
 \documentclass[11pt,a4paper]{article}
 
 \usepackage{iftex}
@@ -44,16 +43,29 @@
   rulecolor=\color{black!15}, columns=fullflexible, breaklines=true}
 \newcommand{\code}[1]{\texttt{#1}}
 
-\title{\textbf{MiniDB: gestor de bases de datos relacional en disco}\\[0.3em]
-\large Proyecto 1 (Entregable 1) --- Base de Datos II (CS2042) --- UTEC 2026-II\\
-\normalsize Docente: Percy Lovon Ramos}
-\author{Renzo Acervo \and Josué Toribio \and \emph{(integrante 3)} \and \emph{(integrante 4)}}
-\date{Septiembre de 2026}
+\hypersetup{pdftitle={MiniDB: gestor de bases de datos relacional en disco},
+  pdfauthor={Renzo Acervo, Josué Toribio, Lisseth Rondan}}
 
 \begin{document}
-\maketitle
 
-\begin{abstract}
+%----------------------------- Portada estilo artículo -----------------------------
+\thispagestyle{plain}
+\begin{center}
+{\LARGE MiniDB: gestor de bases de datos relacional en disco\par}
+\vspace{1.4em}
+{\large Renzo Acervo\textsuperscript{a}, Josué Toribio\textsuperscript{a}, Lisseth Rondan\textsuperscript{a}\par}
+\vspace{1em}
+{\small\itshape \textsuperscript{a}Departamento de Ciencia de la Computación, Universidad de Ingeniería y
+Tecnología (UTEC), Lima, Perú\par}
+\vspace{0.5em}
+{\small Proyecto 1 (Entregable 1) --- Base de Datos II (CS2042) --- 2026-II --- Docente: Percy Lovon Ramos\par}
+\end{center}
+
+\vspace{1.5em}
+\noindent\rule{\textwidth}{0.4pt}\par
+\vspace{0.4em}
+\noindent\textbf{Resumen}\par
+\vspace{0.3em}
 \noindent MiniDB es un gestor de bases de datos relacional construido desde cero en Python que opera
 directamente sobre memoria secundaria. Todo dato e índice vive en archivos binarios organizados en
 páginas de tamaño fijo que se transfieren de a una con \code{seek} + \code{read}/\code{write} y se
@@ -66,10 +78,16 @@ Con 100\,000--500\,000 registros sintéticos, los cuatro experimentos pedidos re
 teóricos: la inserción en el Heap cuesta 2 I/O, la búsqueda puntual cuesta $P$ lecturas con full scan,
 $\lceil\log_2 M\rceil$ con búsqueda binaria, $h+1$ con el B$^+$ y 3 con el hash, y un índice no agrupado
 deja de convenir frente al full scan cuando el rango supera $\approx P/N$ de la tabla.
-\end{abstract}
 
+\vspace{0.6em}
+\noindent\textit{Palabras clave:}\enspace Bases de datos, Memoria secundaria, Paginación, Heap File,
+Sequential File, Árbol B$^+$, Extendible Hashing, Costo de I/O.\par
+\vspace{0.3em}
+\noindent\rule{\textwidth}{0.4pt}
+
+\clearpage
 \tableofcontents
-\newpage
+\clearpage
 
 %==========================================================================================
 \section{Introducción}
@@ -591,3 +609,4 @@ vectorial (IVF/HNSW).
 \end{thebibliography}
 
 \end{document}
+
