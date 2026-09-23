@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { ApiError, CellValue, ColumnInfo, QueryResponse, StatementSummary, TableInfo } from '../api'
-import { codePointOffsetToUtf16, columnTypeLabel, fmtInt, fmtMs, formatCell, lineColumnAt } from '../lib/format'
+import { codePointOffsetToUtf16, columnTypeLabel, fmtInt, fmtMs, formatCell, lineColumnAt, rowsToCsv } from '../lib/format'
 import { RUN_SHORTCUT } from '../lib/platform'
 import type { ResultState } from '../types'
 import { Badge, StatementBadge } from './Badges'
@@ -25,8 +25,13 @@ export function ResultsPanel({ result, busy, pageSize, tables, onPage, onPageSiz
           <Icon name="table" />
           Resultados
         </h2>
-        <div className="panel-actions results-summary" aria-live="polite">
-          <ResultSummary result={result} busy={busy} />
+        <div className="panel-actions">
+          <span className="results-summary" aria-live="polite">
+            <ResultSummary result={result} busy={busy} />
+          </span>
+          {!busy && result.status === 'success' && result.response.columns.length > 0 && (
+            <CopyRowsButton response={result.response} />
+          )}
         </div>
       </header>
       {busy && <div className="progress-bar" aria-hidden="true" />}
@@ -57,6 +62,34 @@ export function ResultsPanel({ result, busy, pageSize, tables, onPage, onPageSiz
         )}
       </div>
     </section>
+  )
+}
+
+/** Copia al portapapeles las filas de la página visible (el backend pagina el resto). */
+function CopyRowsButton({ response }: { response: QueryResponse }) {
+  const [copied, setCopied] = useState(false)
+  const label = response.total_rows > response.rows.length ? 'Copiar página' : 'Copiar CSV'
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(rowsToCsv(response.columns, response.rows))
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 1500)
+    } catch {
+      setCopied(false)
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      className="btn btn-ghost btn-xs"
+      onClick={() => void copy()}
+      title={`Copiar ${fmtInt(response.rows.length)} fila(s) en CSV, con la cabecera`}
+    >
+      <Icon name={copied ? 'check' : 'copy'} size={13} />
+      {copied ? 'Copiado' : label}
+    </button>
   )
 }
 

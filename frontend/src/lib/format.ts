@@ -55,6 +55,22 @@ export function formatCell(value: CellValue | undefined, columnType?: string): F
   return { text: value, numeric: false, isNull: false }
 }
 
+function csvField(value: CellValue | undefined): string {
+  if (value === null || value === undefined) return ''
+  const text = String(value)
+  return /["\n\r,]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text
+}
+
+/**
+ * Filas en CSV con cabecera, listo para pegar en una hoja de cálculo. Usa los valores
+ * crudos (no los formateados para pantalla) y escapa según RFC 4180.
+ */
+export function rowsToCsv(columns: readonly string[], rows: readonly CellValue[][]): string {
+  const lines = [columns.map(csvField).join(',')]
+  for (const row of rows) lines.push(row.map(csvField).join(','))
+  return lines.join('\n')
+}
+
 /**
  * El backend (Python) cuenta offsets en code points; JavaScript y CodeMirror en unidades UTF-16.
  * Solo difieren si el texto tiene caracteres fuera del BMP (por ejemplo, emojis).
