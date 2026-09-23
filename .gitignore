@@ -1,23 +1,46 @@
+# Python
 __pycache__/
 *.py[cod]
-*.bin
-*.db
-*.dat
-
+.pytest_cache/
 .venv/
 venv/
 env/
-
 .env
 
+# Editores
 .vscode/
 .idea/
+.DS_Store
 
+# Frontend
 node_modules/
 dist/
 
+# Binarios del motor (se generan en tiempo de ejecución, nunca se commitean)
+*.bin
+*.db
+*.dat
+*.heap
+*.seq
+*.ovf
+*.bpt
+*.hsh
+*.run
+*.tmp
+
+# Datos generados: solo se versionan el generador y el .gitkeep
 data/*
 !data/.gitkeep
+!data/generate.py
 
-benchmarks/results/*
-!benchmarks/results/.gitkeep
+# Benchmarks: los resultados (CSV + PNG) SÍ se versionan; los archivos de trabajo no
+benchmarks/work/
+
+# Informe LaTeX: solo se versionan las fuentes y el PDF final
+docs/informe/*.aux
+docs/informe/*.log
+docs/informe/*.out
+docs/informe/*.toc
+docs/informe/*.fls
+docs/informe/*.fdb_latexmk
+docs/informe/*.synctex.gz

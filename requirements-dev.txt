@@ -1,0 +1,5 @@
+# Dependencias de desarrollo: tests y benchmarks (no se instalan en la imagen).
+-r requirements.txt
+pytest==9.1.1
+httpx2==2.13.0
+matplotlib==3.11.2
