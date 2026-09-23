@@ -97,7 +97,7 @@ Variables de entorno del backend:
 ## 3. Tests
 
 ```bash
-pytest            # ~130 tests, ~15 s
+pytest            # 133 tests, ~12 s
 ```
 
 Cubren round-trip de header/página/registro/RID, **exactitud del contador** (insert en heap
@@ -106,7 +106,9 @@ invariantes del B+ tras 20 000 inserts aleatorios (hojas ordenadas y enlazadas, 
 profundidad, altura acotada por log_M N), hash con duplicados y splits de directorio,
 `reorganize` (conserva registros, vacía el overflow, respeta el fill factor, ordenamiento
 externo), persistencia tras cerrar y reabrir, parser (casos válidos y errores con posición),
-planner/executor de punta a punta y la API.
+planner/executor de punta a punta, la API y **pruebas aleatorias diferenciales**: miles de
+inserciones, borrados y búsquedas en cada estructura (y por SQL) comparadas contra un modelo en
+memoria, con páginas pequeñas para forzar splits, overflow y reorganizaciones.
 
 ## 4. Benchmarks (4 experimentos del enunciado)
 

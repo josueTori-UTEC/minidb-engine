@@ -551,7 +551,11 @@ sentidos, todas a la misma profundidad, nodos al menos al 50\,\% y altura entre 
 $\log_M N$); hash con duplicados, profundidad máxima y splits del directorio en varias páginas;
 \code{reorganize} (conserva registros, vacía el overflow, respeta el fill factor y usa ordenamiento
 externo con cadenas largas); persistencia (cerrar, reabrir y obtener los mismos resultados); parser
-(casos válidos y errores con posición); planner y ejecutor de punta a punta; y la API REST.
+(casos válidos y errores con posición); planner y ejecutor de punta a punta; y la API REST. Además,
+pruebas aleatorias \emph{diferenciales} ejecutan miles de inserciones, borrados y búsquedas sobre
+cada estructura (y por SQL, con índices B$^+$ y hash sobre una tabla Sequential) y comparan cada
+resultado con un modelo en memoria, con páginas de 512 bytes para forzar splits, overflow,
+reorganizaciones y cierres/reaperturas. En total son 133 pruebas que corren en $\approx 12$\,s.
 
 %==========================================================================================
 \section{Conclusiones}
