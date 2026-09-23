@@ -168,4 +168,5 @@ class DiskManager:
         self.close()
 
     def __repr__(self) -> str:
-        return f"DiskManager({self.path.name!r}, page_size={self.page_size}, pages={self._num_pages})"
+        pages = getattr(self, "_num_pages", "?")
+        return f"DiskManager({self.path.name!r}, page_size={self.page_size}, pages={pages})"
