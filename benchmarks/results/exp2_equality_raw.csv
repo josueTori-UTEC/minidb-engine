@@ -1,0 +1,4001 @@
+method,key,reads,ms
+Full Scan (Heap),15614,1539,22.4296
+Full Scan (Heap),41876,1539,21.7267
+Full Scan (Heap),65866,1539,22.2742
+Full Scan (Heap),67086,1539,21.9796
+Full Scan (Heap),84830,1539,21.7756
+Full Scan (Heap),13453,1539,21.7236
+Full Scan (Heap),29267,1539,21.5071
+Full Scan (Heap),78779,1539,21.4187
+Full Scan (Heap),81460,1539,21.29
+Full Scan (Heap),72950,1539,21.2464
+Full Scan (Heap),55131,1539,21.3212
+Full Scan (Heap),75048,1539,21.252
+Full Scan (Heap),71803,1539,22.2961
+Full Scan (Heap),95754,1539,22.285
+Full Scan (Heap),64344,1539,22.1433
+Full Scan (Heap),98439,1539,22.2904
+Full Scan (Heap),76877,1539,22.3274
+Full Scan (Heap),57816,1539,21.8918
+Full Scan (Heap),31449,1539,21.6878
+Full Scan (Heap),333,1539,21.4828
+Full Scan (Heap),80505,1539,21.5635
+Full Scan (Heap),10581,1539,21.444
+Full Scan (Heap),14515,1539,21.329
+Full Scan (Heap),37650,1539,21.3429
+Full Scan (Heap),12852,1539,21.275
+Full Scan (Heap),58938,1539,21.3365
+Full Scan (Heap),1506,1539,21.5132
+Full Scan (Heap),89808,1539,22.1349
+Full Scan (Heap),64263,1539,22.0587
+Full Scan (Heap),89049,1539,22.09
+Full Scan (Heap),41188,1539,21.6808
+Full Scan (Heap),27555,1539,21.9239
+Full Scan (Heap),52065,1539,21.8159
+Full Scan (Heap),32967,1539,21.7181
+Full Scan (Heap),45569,1539,21.782
+Full Scan (Heap),46746,1539,21.7402
+Full Scan (Heap),49329,1539,21.9395
+Full Scan (Heap),97776,1539,21.587
+Full Scan (Heap),67317,1539,21.5491
+Full Scan (Heap),83587,1539,21.575
+Full Scan (Heap),10004,1539,21.4605
+Full Scan (Heap),94780,1539,21.6779
+Full Scan (Heap),44617,1539,21.7271
+Full Scan (Heap),11753,1539,21.5168
+Full Scan (Heap),73067,1539,21.4068
+Full Scan (Heap),70526,1539,21.431
+Full Scan (Heap),38289,1539,21.3453
+Full Scan (Heap),37697,1539,21.5716
+Full Scan (Heap),59959,1539,21.6948
+Full Scan (Heap),18467,1539,21.3531
+Full Scan (Heap),84515,1539,21.3935
+Full Scan (Heap),92272,1539,21.4046
+Full Scan (Heap),93902,1539,21.3699
+Full Scan (Heap),75685,1539,21.7528
+Full Scan (Heap),40502,1539,21.5068
+Full Scan (Heap),3243,1539,21.4497
+Full Scan (Heap),93175,1539,21.4055
+Full Scan (Heap),48346,1539,21.3157
+Full Scan (Heap),47651,1539,21.3047
+Full Scan (Heap),60434,1539,21.2813
+Full Scan (Heap),55341,1539,22.1044
+Full Scan (Heap),11887,1539,22.5357
+Full Scan (Heap),52269,1539,21.431
+Full Scan (Heap),76772,1539,21.4063
+Full Scan (Heap),72673,1539,21.3022
+Full Scan (Heap),65334,1539,21.573
+Full Scan (Heap),15264,1539,21.3872
+Full Scan (Heap),55764,1539,21.9651
+Full Scan (Heap),66370,1539,21.825
+Full Scan (Heap),98324,1539,21.5088
+Full Scan (Heap),78665,1539,21.6794
+Full Scan (Heap),64361,1539,21.6632
+Full Scan (Heap),52187,1539,22.8069
+Full Scan (Heap),68768,1539,22.4756
+Full Scan (Heap),33901,1539,22.0618
+Full Scan (Heap),55046,1539,21.6587
+Full Scan (Heap),73925,1539,25.0014
+Full Scan (Heap),62809,1539,21.8098
+Full Scan (Heap),67234,1539,24.1896
+Full Scan (Heap),67894,1539,22.1578
+Full Scan (Heap),3327,1539,21.554
+Full Scan (Heap),75435,1539,22.0866
+Full Scan (Heap),29429,1539,21.5462
+Full Scan (Heap),16909,1539,21.5634
+Full Scan (Heap),6408,1539,21.5007
+Full Scan (Heap),92362,1539,21.5615
+Full Scan (Heap),68580,1539,21.5977
+Full Scan (Heap),87882,1539,21.5313
+Full Scan (Heap),13445,1539,21.9679
+Full Scan (Heap),94019,1539,21.5163
+Full Scan (Heap),81568,1539,21.5208
+Full Scan (Heap),56284,1539,21.621
+Full Scan (Heap),61610,1539,21.468
+Full Scan (Heap),18667,1539,21.3645
+Full Scan (Heap),63192,1539,21.3997
+Full Scan (Heap),30006,1539,21.586
+Full Scan (Heap),15993,1539,23.0114
+Full Scan (Heap),82139,1539,22.0173
+Full Scan (Heap),91844,1539,22.3193
+Full Scan (Heap),59874,1539,21.8615
+Full Scan (Heap),88383,1539,21.7908
+Full Scan (Heap),61526,1539,22.1702
+Full Scan (Heap),93654,1539,21.6386
+Full Scan (Heap),71518,1539,21.7812
+Full Scan (Heap),32900,1539,21.685
+Full Scan (Heap),73374,1539,21.3413
+Full Scan (Heap),52702,1539,21.5006
+Full Scan (Heap),87786,1539,21.3539
+Full Scan (Heap),40322,1539,21.341
+Full Scan (Heap),71847,1539,21.5335
+Full Scan (Heap),84786,1539,21.4641
+Full Scan (Heap),65785,1539,21.735
+Full Scan (Heap),91531,1539,21.4077
+Full Scan (Heap),62770,1539,21.4197
+Full Scan (Heap),52685,1539,21.3453
+Full Scan (Heap),56763,1539,21.3103
+Full Scan (Heap),26547,1539,21.4145
+Full Scan (Heap),38585,1539,22.6066
+Full Scan (Heap),35264,1539,22.2429
+Full Scan (Heap),1216,1539,22.0462
+Full Scan (Heap),4340,1539,22.038
+Full Scan (Heap),19641,1539,21.6775
+Full Scan (Heap),85937,1539,21.5805
+Full Scan (Heap),78286,1539,21.4785
+Full Scan (Heap),60061,1539,21.4684
+Full Scan (Heap),68537,1539,21.4541
+Full Scan (Heap),64163,1539,21.4463
+Full Scan (Heap),47178,1539,21.4497
+Full Scan (Heap),26194,1539,22.3888
+Full Scan (Heap),34094,1539,21.5503
+Full Scan (Heap),90787,1539,21.4227
+Full Scan (Heap),63645,1539,21.5835
+Full Scan (Heap),61166,1539,21.5874
+Full Scan (Heap),67013,1539,21.5473
+Full Scan (Heap),65164,1539,21.6487
+Full Scan (Heap),56916,1539,21.4381
+Full Scan (Heap),73117,1539,21.4121
+Full Scan (Heap),87019,1539,21.6895
+Full Scan (Heap),4407,1539,21.5729
+Full Scan (Heap),38020,1539,21.6662
+Full Scan (Heap),41505,1539,22.4561
+Full Scan (Heap),59986,1539,22.3715
+Full Scan (Heap),12895,1539,21.7037
+Full Scan (Heap),57469,1539,21.9437
+Full Scan (Heap),90353,1539,21.8706
+Full Scan (Heap),93916,1539,22.161
+Full Scan (Heap),67525,1539,21.9817
+Full Scan (Heap),33926,1539,21.6278
+Full Scan (Heap),59366,1539,21.8156
+Full Scan (Heap),23993,1539,22.133
+Full Scan (Heap),55808,1539,21.7385
+Full Scan (Heap),95418,1539,21.7465
+Full Scan (Heap),62803,1539,21.692
+Full Scan (Heap),8428,1539,21.919
+Full Scan (Heap),85007,1539,22.1285
+Full Scan (Heap),34927,1539,21.9636
+Full Scan (Heap),65330,1539,21.7581
+Full Scan (Heap),48514,1539,21.5935
+Full Scan (Heap),12670,1539,21.7386
+Full Scan (Heap),25505,1539,21.4117
+Full Scan (Heap),97984,1539,21.5507
+Full Scan (Heap),53912,1539,21.6755
+Full Scan (Heap),19184,1539,21.4275
+Full Scan (Heap),58904,1539,21.4578
+Full Scan (Heap),1840,1539,21.4072
+Full Scan (Heap),12081,1539,21.5822
+Full Scan (Heap),29,1539,21.2488
+Full Scan (Heap),59144,1539,21.3341
+Full Scan (Heap),76106,1539,21.2952
+Full Scan (Heap),71643,1539,22.1377
+Full Scan (Heap),10888,1539,21.9141
+Full Scan (Heap),79972,1539,21.7227
+Full Scan (Heap),26057,1539,21.5117
+Full Scan (Heap),32485,1539,21.359
+Full Scan (Heap),15836,1539,21.3905
+Full Scan (Heap),81406,1539,21.6649
+Full Scan (Heap),5854,1539,21.785
+Full Scan (Heap),98548,1539,21.821
+Full Scan (Heap),71625,1539,21.5147
+Full Scan (Heap),35198,1539,21.5035
+Full Scan (Heap),87619,1539,21.5886
+Full Scan (Heap),99309,1539,21.3499
+Full Scan (Heap),83285,1539,21.4773
+Full Scan (Heap),46826,1539,21.3748
+Full Scan (Heap),20285,1539,21.3242
+Full Scan (Heap),673,1539,21.3487
+Full Scan (Heap),41084,1539,21.5455
+Full Scan (Heap),87109,1539,21.5571
+Full Scan (Heap),76424,1539,22.3841
+Full Scan (Heap),75273,1539,22.237
+Full Scan (Heap),64486,1539,23.1701
+Full Scan (Heap),90408,1539,22.3021
+Full Scan (Heap),94434,1539,22.0126
+Full Scan (Heap),17677,1539,21.769
+Full Scan (Heap),71540,1539,21.6322
+Full Scan (Heap),29220,1539,21.6382
+Full Scan (Heap),61995,1539,21.6527
+Full Scan (Heap),77062,1539,21.8143
+Full Scan (Heap),17199,1539,21.8055
+Full Scan (Heap),78399,1539,21.7845
+Full Scan (Heap),90774,1539,22.1957
+Full Scan (Heap),66155,1539,23.1705
+Full Scan (Heap),38101,1539,29.1512
+Full Scan (Heap),11067,1539,27.274
+Full Scan (Heap),54760,1539,29.3809
+Full Scan (Heap),87629,1539,22.4437
+Full Scan (Heap),20988,1539,22.3358
+Full Scan (Heap),17741,1539,22.1673
+Full Scan (Heap),76813,1539,21.8935
+Full Scan (Heap),40109,1539,21.3866
+Full Scan (Heap),66546,1539,21.3413
+Full Scan (Heap),54007,1539,21.9676
+Full Scan (Heap),51172,1539,21.6002
+Full Scan (Heap),19469,1539,22.116
+Full Scan (Heap),68162,1539,22.7415
+Full Scan (Heap),25782,1539,22.4045
+Full Scan (Heap),49284,1539,21.408
+Full Scan (Heap),1853,1539,21.452
+Full Scan (Heap),13912,1539,30.4705
+Full Scan (Heap),51033,1539,31.2928
+Full Scan (Heap),9626,1539,22.105
+Full Scan (Heap),6734,1539,21.8408
+Full Scan (Heap),45485,1539,29.441
+Full Scan (Heap),84709,1539,21.6509
+Full Scan (Heap),46322,1539,21.6185
+Full Scan (Heap),3381,1539,21.7383
+Full Scan (Heap),3354,1539,22.2444
+Full Scan (Heap),66898,1539,21.6514
+Full Scan (Heap),62394,1539,21.6415
+Full Scan (Heap),42961,1539,21.8605
+Full Scan (Heap),89496,1539,21.5593
+Full Scan (Heap),39803,1539,21.5841
+Full Scan (Heap),59001,1539,21.6011
+Full Scan (Heap),42736,1539,21.558
+Full Scan (Heap),15909,1539,87.8157
+Full Scan (Heap),65218,1539,71.6038
+Full Scan (Heap),61156,1539,64.1048
+Full Scan (Heap),74924,1539,72.9363
+Full Scan (Heap),81082,1539,63.4237
+Full Scan (Heap),22379,1539,38.9352
+Full Scan (Heap),20171,1539,30.7291
+Full Scan (Heap),77498,1539,23.414
+Full Scan (Heap),68107,1539,22.3471
+Full Scan (Heap),27131,1539,22.5043
+Full Scan (Heap),56834,1539,22.2417
+Full Scan (Heap),81703,1539,25.6529
+Full Scan (Heap),44096,1539,25.1567
+Full Scan (Heap),60139,1539,23.6103
+Full Scan (Heap),78410,1539,22.386
+Full Scan (Heap),30583,1539,22.47
+Full Scan (Heap),88933,1539,26.037
+Full Scan (Heap),93177,1539,22.0874
+Full Scan (Heap),9111,1539,22.0754
+Full Scan (Heap),71743,1539,21.55
+Full Scan (Heap),52319,1539,21.8376
+Full Scan (Heap),4477,1539,21.595
+Full Scan (Heap),25624,1539,21.483
+Full Scan (Heap),84834,1539,21.5365
+Full Scan (Heap),22724,1539,21.9922
+Full Scan (Heap),5930,1539,21.8622
+Full Scan (Heap),84965,1539,22.4562
+Full Scan (Heap),71404,1539,22.1912
+Full Scan (Heap),6317,1539,21.8095
+Full Scan (Heap),59222,1539,22.1321
+Full Scan (Heap),98922,1539,22.437
+Full Scan (Heap),83998,1539,22.0344
+Full Scan (Heap),24711,1539,22.4879
+Full Scan (Heap),63418,1539,21.8294
+Full Scan (Heap),93186,1539,21.7403
+Full Scan (Heap),88950,1539,22.2269
+Full Scan (Heap),2684,1539,22.4576
+Full Scan (Heap),16927,1539,22.0407
+Full Scan (Heap),84627,1539,21.8217
+Full Scan (Heap),69460,1539,22.7663
+Full Scan (Heap),28669,1539,22.2991
+Full Scan (Heap),67745,1539,22.4257
+Full Scan (Heap),18052,1539,22.0351
+Full Scan (Heap),21023,1539,21.7351
+Full Scan (Heap),86668,1539,21.7042
+Full Scan (Heap),24381,1539,21.4261
+Full Scan (Heap),51115,1539,21.3761
+Full Scan (Heap),35758,1539,21.5618
+Full Scan (Heap),55753,1539,21.4703
+Full Scan (Heap),69863,1539,21.5063
+Full Scan (Heap),54276,1539,21.4628
+Full Scan (Heap),10310,1539,21.3297
+Full Scan (Heap),50225,1539,21.9868
+Full Scan (Heap),39966,1539,26.4506
+Full Scan (Heap),24537,1539,21.9238
+Full Scan (Heap),45098,1539,22.3586
+Full Scan (Heap),22898,1539,22.8815
+Full Scan (Heap),34531,1539,22.6535
+Full Scan (Heap),60807,1539,22.4424
+Full Scan (Heap),65222,1539,22.0731
+Full Scan (Heap),54492,1539,21.8342
+Full Scan (Heap),37706,1539,23.268
+Full Scan (Heap),61303,1539,21.4785
+Full Scan (Heap),23195,1539,23.5077
+Full Scan (Heap),42702,1539,21.368
+Full Scan (Heap),68071,1539,21.631
+Full Scan (Heap),63184,1539,21.5063
+Full Scan (Heap),58273,1539,21.468
+Full Scan (Heap),15743,1539,21.4722
+Full Scan (Heap),69108,1539,21.5407
+Full Scan (Heap),68774,1539,21.7231
+Full Scan (Heap),35892,1539,21.661
+Full Scan (Heap),12395,1539,22.0465
+Full Scan (Heap),28093,1539,21.9635
+Full Scan (Heap),30322,1539,21.854
+Full Scan (Heap),644,1539,21.7631
+Full Scan (Heap),12206,1539,22.2818
+Full Scan (Heap),59522,1539,22.2722
+Full Scan (Heap),84631,1539,21.6676
+Full Scan (Heap),43312,1539,21.8907
+Full Scan (Heap),53478,1539,22.3944
+Full Scan (Heap),71443,1539,22.0731
+Full Scan (Heap),87871,1539,21.811
+Full Scan (Heap),23915,1539,21.6293
+Full Scan (Heap),3564,1539,22.21
+Full Scan (Heap),46131,1539,22.1162
+Full Scan (Heap),20547,1539,22.0495
+Full Scan (Heap),46099,1539,22.4207
+Full Scan (Heap),73663,1539,22.3587
+Full Scan (Heap),90068,1539,21.8108
+Full Scan (Heap),75017,1539,21.9062
+Full Scan (Heap),70567,1539,22.1134
+Full Scan (Heap),28383,1539,22.0961
+Full Scan (Heap),14378,1539,21.578
+Full Scan (Heap),81368,1539,21.4289
+Full Scan (Heap),93850,1539,21.4373
+Full Scan (Heap),36763,1539,21.2875
+Full Scan (Heap),72850,1539,21.36
+Full Scan (Heap),98468,1539,21.4591
+Full Scan (Heap),74455,1539,21.5788
+Full Scan (Heap),95810,1539,22.0035
+Full Scan (Heap),28107,1539,21.7454
+Full Scan (Heap),74690,1539,21.8942
+Full Scan (Heap),38627,1539,21.7809
+Full Scan (Heap),73772,1539,21.4602
+Full Scan (Heap),35141,1539,22.1675
+Full Scan (Heap),87859,1539,22.226
+Full Scan (Heap),72842,1539,21.896
+Full Scan (Heap),17383,1539,21.5176
+Full Scan (Heap),13299,1539,21.7932
+Full Scan (Heap),34566,1539,21.5973
+Full Scan (Heap),12640,1539,21.7604
+Full Scan (Heap),57155,1539,21.8689
+Full Scan (Heap),22450,1539,21.9607
+Full Scan (Heap),13899,1539,21.5139
+Full Scan (Heap),89725,1539,21.6124
+Full Scan (Heap),7921,1539,22.098
+Full Scan (Heap),99499,1539,28.8161
+Full Scan (Heap),46695,1539,33.8226
+Full Scan (Heap),94681,1539,66.2187
+Full Scan (Heap),24314,1539,30.3055
+Full Scan (Heap),84666,1539,27.7407
+Full Scan (Heap),82587,1539,28.1808
+Full Scan (Heap),13936,1539,24.6853
+Full Scan (Heap),66405,1539,23.0893
+Full Scan (Heap),41098,1539,33.6662
+Full Scan (Heap),36279,1539,23.7883
+Full Scan (Heap),77085,1539,21.9925
+Full Scan (Heap),8378,1539,25.0813
+Full Scan (Heap),38147,1539,21.836
+Full Scan (Heap),41236,1539,21.8982
+Full Scan (Heap),21154,1539,21.7914
+Full Scan (Heap),34192,1539,21.7545
+Full Scan (Heap),33571,1539,22.4034
+Full Scan (Heap),8242,1539,24.2878
+Full Scan (Heap),1819,1539,21.9976
+Full Scan (Heap),53955,1539,21.89
+Full Scan (Heap),33692,1539,21.8468
+Full Scan (Heap),54334,1539,21.8242
+Full Scan (Heap),2023,1539,26.2375
+Full Scan (Heap),7512,1539,21.7734
+Full Scan (Heap),12642,1539,21.7802
+Full Scan (Heap),30832,1539,21.63
+Full Scan (Heap),3012,1539,21.6663
+Full Scan (Heap),40622,1539,22.1235
+Full Scan (Heap),16125,1539,24.0952
+Full Scan (Heap),12304,1539,22.4773
+Full Scan (Heap),89893,1539,22.2003
+Full Scan (Heap),73555,1539,21.8234
+Full Scan (Heap),75561,1539,21.7786
+Full Scan (Heap),45916,1539,21.584
+Full Scan (Heap),41285,1539,21.6592
+Full Scan (Heap),59775,1539,21.8343
+Full Scan (Heap),79595,1539,21.5859
+Full Scan (Heap),82016,1539,25.3226
+Full Scan (Heap),85816,1539,21.7478
+Full Scan (Heap),93614,1539,21.5825
+Full Scan (Heap),80629,1539,21.382
+Full Scan (Heap),4983,1539,21.4315
+Full Scan (Heap),52979,1539,21.4648
+Full Scan (Heap),41428,1539,22.2997
+Full Scan (Heap),79664,1539,21.5162
+Full Scan (Heap),28264,1539,21.9062
+Full Scan (Heap),77865,1539,22.9614
+Full Scan (Heap),60644,1539,25.6437
+Full Scan (Heap),55853,1539,21.7368
+Full Scan (Heap),88595,1539,21.5973
+Full Scan (Heap),15656,1539,21.7123
+Full Scan (Heap),89977,1539,23.4615
+Full Scan (Heap),49041,1539,21.6304
+Full Scan (Heap),65702,1539,21.6933
+Full Scan (Heap),89313,1539,21.8265
+Full Scan (Heap),32975,1539,21.4956
+Full Scan (Heap),50994,1539,21.5676
+Full Scan (Heap),38258,1539,21.7174
+Full Scan (Heap),46704,1539,21.568
+Full Scan (Heap),7554,1539,21.7509
+Full Scan (Heap),96389,1539,21.6162
+Full Scan (Heap),93740,1539,21.7194
+Full Scan (Heap),57245,1539,21.7275
+Full Scan (Heap),3102,1539,21.5694
+Full Scan (Heap),36888,1539,23.1515
+Full Scan (Heap),91135,1539,21.5887
+Full Scan (Heap),43326,1539,21.3572
+Full Scan (Heap),37953,1539,21.8449
+Full Scan (Heap),95306,1539,21.3141
+Full Scan (Heap),16033,1539,21.2592
+Full Scan (Heap),38921,1539,22.6394
+Full Scan (Heap),54610,1539,22.2923
+Full Scan (Heap),41797,1539,21.6862
+Full Scan (Heap),76757,1539,21.5705
+Full Scan (Heap),2657,1539,21.8812
+Full Scan (Heap),71062,1539,21.6994
+Full Scan (Heap),44891,1539,21.6854
+Full Scan (Heap),25880,1539,22.0133
+Full Scan (Heap),73514,1539,21.4773
+Full Scan (Heap),7360,1539,21.8794
+Full Scan (Heap),94592,1539,21.7963
+Full Scan (Heap),14759,1539,21.564
+Full Scan (Heap),21250,1539,21.4021
+Full Scan (Heap),81130,1539,21.2578
+Full Scan (Heap),16081,1539,21.3326
+Full Scan (Heap),15504,1539,21.3733
+Full Scan (Heap),4892,1539,21.3364
+Full Scan (Heap),16474,1539,21.2385
+Full Scan (Heap),68497,1539,21.293
+Full Scan (Heap),46405,1539,21.2711
+Full Scan (Heap),78244,1539,21.2543
+Full Scan (Heap),84921,1539,21.3466
+Full Scan (Heap),85957,1539,23.7312
+Full Scan (Heap),39616,1539,21.9944
+Full Scan (Heap),3775,1539,26.2914
+Full Scan (Heap),55676,1539,22.1431
+Full Scan (Heap),75777,1539,21.7263
+Full Scan (Heap),16555,1539,21.7312
+Full Scan (Heap),46658,1539,21.455
+Full Scan (Heap),54434,1539,21.6055
+Full Scan (Heap),50346,1539,21.8773
+Full Scan (Heap),49439,1539,21.8413
+Full Scan (Heap),31367,1539,21.7863
+Full Scan (Heap),55180,1539,22.375
+Full Scan (Heap),86848,1539,22.7398
+Full Scan (Heap),28779,1539,22.118
+Full Scan (Heap),16412,1539,22.1945
+Full Scan (Heap),24048,1539,21.8496
+Full Scan (Heap),71163,1539,22.8025
+Full Scan (Heap),3725,1539,22.248
+Full Scan (Heap),86713,1539,21.9308
+Full Scan (Heap),94014,1539,21.8443
+Full Scan (Heap),70954,1539,21.7459
+Full Scan (Heap),89621,1539,21.6325
+Full Scan (Heap),72732,1539,21.5358
+Full Scan (Heap),52018,1539,21.4512
+Full Scan (Heap),33420,1539,21.572
+Full Scan (Heap),19358,1539,21.9803
+Full Scan (Heap),29918,1539,21.622
+Full Scan (Heap),3063,1539,21.6287
+Full Scan (Heap),2176,1539,21.4593
+Full Scan (Heap),36285,1539,21.4746
+Full Scan (Heap),70930,1539,21.4181
+Full Scan (Heap),62763,1539,21.791
+Full Scan (Heap),54773,1539,21.6676
+Full Scan (Heap),34579,1539,21.8462
+Full Scan (Heap),41255,1539,21.925
+Full Scan (Heap),18175,1539,21.848
+Full Scan (Heap),82154,1539,21.527
+Full Scan (Heap),77811,1539,22.2896
+Full Scan (Heap),11724,1539,21.837
+Full Scan (Heap),23502,1539,22.1762
+Full Scan (Heap),72481,1539,22.4312
+Full Scan (Heap),4982,1539,21.9738
+Full Scan (Heap),85225,1539,21.6715
+Full Scan (Heap),67378,1539,22.3194
+Full Scan (Heap),34764,1539,21.9989
+Full Scan (Heap),44658,1539,22.5549
+Full Scan (Heap),82970,1539,22.6964
+Full Scan (Heap),68217,1539,21.5722
+Full Scan (Heap),98899,1539,21.6246
+Full Scan (Heap),97399,1539,21.4757
+Full Scan (Heap),41616,1539,21.269
+Full Scan (Heap),7374,1539,21.387
+Full Scan (Heap),86229,1539,21.952
+Full Scan (Heap),1496,1539,21.4092
+Full Scan (Heap),82295,1539,21.4938
+Full Scan (Heap),31826,1539,21.4899
+Full Scan (Heap),61676,1539,21.606
+Full Scan (Heap),7642,1539,21.5132
+Full Scan (Heap),29077,1539,21.3008
+Full Scan (Heap),89017,1539,21.3175
+Full Scan (Heap),66666,1539,21.5134
+Full Scan (Heap),19772,1539,21.5182
+Full Scan (Heap),97674,1539,21.2816
+Full Scan (Heap),52308,1539,21.4772
+Full Scan (Heap),92704,1539,21.5564
+Full Scan (Heap),47177,1539,21.4037
+Full Scan (Heap),30476,1539,21.8178
+Full Scan (Heap),73609,1539,22.2266
+Full Scan (Heap),36145,1539,22.1105
+Full Scan (Heap),45048,1539,22.0162
+Full Scan (Heap),26343,1539,21.8052
+Full Scan (Heap),49117,1539,21.5158
+Full Scan (Heap),47070,1539,21.6613
+Full Scan (Heap),60198,1539,22.1812
+Full Scan (Heap),83495,1539,21.8584
+Full Scan (Heap),59974,1539,21.7408
+Full Scan (Heap),71932,1539,21.5467
+Full Scan (Heap),62137,1539,21.3598
+Full Scan (Heap),88265,1539,21.3437
+Full Scan (Heap),76098,1539,21.4764
+Full Scan (Heap),40920,1539,21.5377
+Full Scan (Heap),24629,1539,21.3985
+Full Scan (Heap),20748,1539,21.4342
+Full Scan (Heap),82316,1539,21.39
+Full Scan (Heap),53811,1539,21.3726
+Full Scan (Heap),20157,1539,21.3455
+Full Scan (Heap),63552,1539,21.3427
+Full Scan (Heap),697,1539,21.3235
+Full Scan (Heap),46457,1539,21.4142
+Full Scan (Heap),68581,1539,22.0396
+Full Scan (Heap),92059,1539,22.1458
+Full Scan (Heap),53521,1539,21.91
+Full Scan (Heap),4917,1539,22.4869
+Full Scan (Heap),83771,1539,21.7417
+Full Scan (Heap),22620,1539,21.9887
+Full Scan (Heap),11038,1539,22.3373
+Full Scan (Heap),39196,1539,22.175
+Full Scan (Heap),48863,1539,22.6676
+Full Scan (Heap),71661,1539,22.6188
+Full Scan (Heap),95815,1539,21.9521
+Full Scan (Heap),34737,1539,21.7432
+Full Scan (Heap),18083,1539,21.6794
+Full Scan (Heap),93680,1539,21.7102
+Full Scan (Heap),96931,1539,21.7109
+Full Scan (Heap),13206,1539,21.5742
+Full Scan (Heap),2406,1539,21.7403
+Full Scan (Heap),69916,1539,21.5879
+Full Scan (Heap),28459,1539,21.474
+Full Scan (Heap),91174,1539,21.362
+Full Scan (Heap),76335,1539,21.5987
+Full Scan (Heap),40202,1539,21.584
+Full Scan (Heap),75056,1539,21.4293
+Full Scan (Heap),5852,1539,21.558
+Full Scan (Heap),51548,1539,21.4605
+Full Scan (Heap),49884,1539,21.3892
+Full Scan (Heap),70646,1539,21.308
+Full Scan (Heap),67712,1539,21.366
+Full Scan (Heap),84417,1539,21.2709
+Full Scan (Heap),86740,1539,21.2393
+Full Scan (Heap),20716,1539,21.2287
+Full Scan (Heap),66685,1539,21.9571
+Full Scan (Heap),13753,1539,22.1939
+Full Scan (Heap),11212,1539,21.7339
+Full Scan (Heap),18599,1539,21.6626
+Full Scan (Heap),96021,1539,22.1864
+Full Scan (Heap),51015,1539,21.7393
+Full Scan (Heap),43727,1539,21.8611
+Full Scan (Heap),71761,1539,21.7427
+Full Scan (Heap),34268,1539,21.6304
+Full Scan (Heap),40688,1539,21.6971
+Full Scan (Heap),5452,1539,21.7465
+Full Scan (Heap),96644,1539,21.7209
+Full Scan (Heap),77690,1539,21.6332
+Full Scan (Heap),86805,1539,21.5203
+Full Scan (Heap),24875,1539,21.9639
+Full Scan (Heap),21262,1539,21.8555
+Full Scan (Heap),38393,1539,21.529
+Full Scan (Heap),38705,1539,21.4672
+Full Scan (Heap),70932,1539,21.6535
+Full Scan (Heap),37432,1539,21.3295
+Full Scan (Heap),46822,1539,21.4644
+Full Scan (Heap),17565,1539,25.2935
+Full Scan (Heap),50937,1539,21.6485
+Full Scan (Heap),24733,1539,21.5427
+Full Scan (Heap),97912,1539,21.5188
+Full Scan (Heap),82552,1539,21.4925
+Full Scan (Heap),1239,1539,21.3005
+Full Scan (Heap),79424,1539,21.6098
+Full Scan (Heap),84907,1539,21.461
+Full Scan (Heap),62917,1539,22.3277
+Full Scan (Heap),55398,1539,22.5281
+Full Scan (Heap),46617,1539,21.6582
+Full Scan (Heap),70435,1539,21.799
+Full Scan (Heap),22399,1539,21.3892
+Full Scan (Heap),94632,1539,21.9892
+Full Scan (Heap),67659,1539,24.0048
+Full Scan (Heap),3869,1539,23.084
+Full Scan (Heap),23544,1539,25.7052
+Full Scan (Heap),41245,1539,22.0165
+Full Scan (Heap),70661,1539,22.775
+Full Scan (Heap),18973,1539,21.751
+Full Scan (Heap),21488,1539,23.7164
+Full Scan (Heap),15296,1539,23.406
+Full Scan (Heap),67502,1539,21.6957
+Full Scan (Heap),87518,1539,21.7322
+Full Scan (Heap),92325,1539,21.8909
+Full Scan (Heap),84333,1539,21.9093
+Full Scan (Heap),262,1539,25.5373
+Full Scan (Heap),49094,1539,22.7763
+Full Scan (Heap),8337,1539,22.7554
+Full Scan (Heap),48235,1539,22.8914
+Full Scan (Heap),39669,1539,23.8496
+Full Scan (Heap),28337,1539,24.0216
+Full Scan (Heap),69748,1539,24.1083
+Full Scan (Heap),20215,1539,23.0478
+Full Scan (Heap),78578,1539,29.6721
+Full Scan (Heap),79957,1539,23.7826
+Full Scan (Heap),32527,1539,22.8053
+Full Scan (Heap),16584,1539,23.8145
+Full Scan (Heap),13929,1539,23.8883
+Full Scan (Heap),42768,1539,22.7296
+Full Scan (Heap),63513,1539,22.2405
+Full Scan (Heap),14077,1539,22.7478
+Full Scan (Heap),95241,1539,22.5965
+Full Scan (Heap),9586,1539,23.6083
+Full Scan (Heap),49965,1539,23.128
+Full Scan (Heap),34416,1539,23.2029
+Full Scan (Heap),80866,1539,22.392
+Full Scan (Heap),39518,1539,22.2101
+Full Scan (Heap),84876,1539,22.3243
+Full Scan (Heap),15408,1539,22.4925
+Full Scan (Heap),45587,1539,22.1365
+Full Scan (Heap),62179,1539,22.2514
+Full Scan (Heap),65373,1539,21.8113
+Full Scan (Heap),15852,1539,21.6762
+Full Scan (Heap),72823,1539,22.5319
+Full Scan (Heap),68020,1539,22.3585
+Full Scan (Heap),32379,1539,21.8841
+Full Scan (Heap),47013,1539,21.6428
+Full Scan (Heap),89593,1539,21.4317
+Full Scan (Heap),59761,1539,21.3963
+Full Scan (Heap),76719,1539,21.7226
+Full Scan (Heap),45236,1539,21.5456
+Full Scan (Heap),10820,1539,21.4483
+Full Scan (Heap),9049,1539,21.4178
+Full Scan (Heap),11517,1539,21.4461
+Full Scan (Heap),64857,1539,21.2706
+Full Scan (Heap),40898,1539,21.3048
+Full Scan (Heap),34774,1539,21.3574
+Full Scan (Heap),98736,1539,21.3681
+Full Scan (Heap),86784,1539,21.3655
+Full Scan (Heap),29629,1539,21.843
+Full Scan (Heap),22065,1539,21.659
+Full Scan (Heap),42599,1539,21.6338
+Full Scan (Heap),56702,1539,21.4936
+Full Scan (Heap),66359,1539,21.7216
+Full Scan (Heap),73607,1539,21.543
+Full Scan (Heap),43479,1539,21.422
+Full Scan (Heap),42297,1539,21.3046
+Full Scan (Heap),94877,1539,21.2128
+Full Scan (Heap),86121,1539,21.4449
+Full Scan (Heap),64644,1539,22.0703
+Full Scan (Heap),52832,1539,21.6659
+Full Scan (Heap),41115,1539,21.5247
+Full Scan (Heap),23167,1539,21.5503
+Full Scan (Heap),25754,1539,21.453
+Full Scan (Heap),60688,1539,21.5454
+Full Scan (Heap),28859,1539,22.2459
+Full Scan (Heap),90330,1539,22.3711
+Full Scan (Heap),45685,1539,25.5553
+Full Scan (Heap),99461,1539,21.6587
+Full Scan (Heap),45889,1539,23.0513
+Full Scan (Heap),53701,1539,21.6088
+Full Scan (Heap),77315,1539,21.473
+Full Scan (Heap),50021,1539,21.4537
+Full Scan (Heap),27903,1539,21.3787
+Full Scan (Heap),20235,1539,21.3524
+Full Scan (Heap),57891,1539,21.4885
+Full Scan (Heap),97391,1539,21.3711
+Full Scan (Heap),74262,1539,21.3315
+Full Scan (Heap),86094,1539,21.3875
+Full Scan (Heap),96484,1539,22.2931
+Full Scan (Heap),16723,1539,21.5688
+Full Scan (Heap),56531,1539,21.3407
+Full Scan (Heap),35079,1539,21.2885
+Full Scan (Heap),43120,1539,21.2927
+Full Scan (Heap),15447,1539,23.0069
+Full Scan (Heap),41948,1539,22.965
+Full Scan (Heap),34925,1539,22.0225
+Full Scan (Heap),58255,1539,21.8711
+Full Scan (Heap),34554,1539,21.9707
+Full Scan (Heap),19053,1539,21.7036
+Full Scan (Heap),71450,1539,21.9593
+Full Scan (Heap),82166,1539,21.5339
+Full Scan (Heap),35151,1539,21.606
+Full Scan (Heap),30710,1539,22.1095
+Full Scan (Heap),43486,1539,22.2434
+Full Scan (Heap),18805,1539,21.7964
+Full Scan (Heap),73571,1539,21.6837
+Full Scan (Heap),16153,1539,21.4949
+Full Scan (Heap),35116,1539,21.5135
+Full Scan (Heap),38466,1539,21.9895
+Full Scan (Heap),75287,1539,21.5921
+Full Scan (Heap),60040,1539,21.9324
+Full Scan (Heap),82994,1539,23.1543
+Full Scan (Heap),52592,1539,22.3139
+Full Scan (Heap),52357,1539,22.653
+Full Scan (Heap),2847,1539,23.7401
+Full Scan (Heap),72055,1539,23.3513
+Full Scan (Heap),93909,1539,23.6239
+Full Scan (Heap),43145,1539,22.8463
+Full Scan (Heap),88358,1539,22.7277
+Full Scan (Heap),53695,1539,22.9319
+Full Scan (Heap),44150,1539,24.6305
+Full Scan (Heap),12453,1539,23.0037
+Full Scan (Heap),89021,1539,22.1592
+Full Scan (Heap),64840,1539,22.5642
+Full Scan (Heap),88894,1539,22.5912
+Full Scan (Heap),82967,1539,22.8193
+Full Scan (Heap),87508,1539,22.4401
+Full Scan (Heap),71620,1539,22.6327
+Full Scan (Heap),67724,1539,22.5151
+Full Scan (Heap),27514,1539,22.4688
+Full Scan (Heap),55632,1539,22.0708
+Full Scan (Heap),46159,1539,22.0862
+Full Scan (Heap),43313,1539,22.4044
+Full Scan (Heap),7869,1539,22.1018
+Full Scan (Heap),52398,1539,21.7637
+Full Scan (Heap),94954,1539,21.7203
+Full Scan (Heap),22672,1539,21.4247
+Full Scan (Heap),1379,1539,21.4455
+Full Scan (Heap),35004,1539,21.3457
+Full Scan (Heap),73259,1539,21.3817
+Full Scan (Heap),91973,1539,21.438
+Full Scan (Heap),33053,1539,21.3695
+Full Scan (Heap),17118,1539,21.5922
+Full Scan (Heap),43780,1539,21.3094
+Full Scan (Heap),75885,1539,22.4783
+Full Scan (Heap),84459,1539,21.7383
+Full Scan (Heap),80179,1539,22.0683
+Full Scan (Heap),54346,1539,21.6861
+Full Scan (Heap),62383,1539,22.1636
+Full Scan (Heap),63297,1539,22.7705
+Full Scan (Heap),44401,1539,22.4238
+Full Scan (Heap),1541,1539,22.2108
+Full Scan (Heap),4915,1539,22.1935
+Full Scan (Heap),99257,1539,21.7277
+Full Scan (Heap),28819,1539,21.7694
+Full Scan (Heap),83398,1539,21.757
+Full Scan (Heap),15839,1539,21.7176
+Full Scan (Heap),86597,1539,21.7855
+Full Scan (Heap),35212,1539,22.9158
+Full Scan (Heap),42810,1539,21.6329
+Full Scan (Heap),2332,1539,21.4103
+Full Scan (Heap),27424,1539,21.4001
+Full Scan (Heap),59918,1539,21.5959
+Full Scan (Heap),67495,1539,21.9632
+Full Scan (Heap),36296,1539,21.8011
+Full Scan (Heap),81636,1539,21.6329
+Full Scan (Heap),82598,1539,21.6135
+Full Scan (Heap),48423,1539,21.4764
+Full Scan (Heap),10354,1539,21.5108
+Full Scan (Heap),72846,1539,21.39
+Full Scan (Heap),90759,1539,21.3859
+Full Scan (Heap),24597,1539,21.9511
+Full Scan (Heap),70643,1539,22.2605
+Full Scan (Heap),1494,1539,22.1817
+Full Scan (Heap),12530,1539,21.9574
+Full Scan (Heap),20425,1539,21.8408
+Full Scan (Heap),43252,1539,21.6177
+Full Scan (Heap),28758,1539,21.5359
+Full Scan (Heap),60748,1539,21.8073
+Full Scan (Heap),27050,1539,21.5353
+Full Scan (Heap),79441,1539,21.4035
+Full Scan (Heap),88231,1539,21.3037
+Full Scan (Heap),22385,1539,21.5903
+Full Scan (Heap),92474,1539,21.5697
+Full Scan (Heap),40560,1539,21.4931
+Full Scan (Heap),11048,1539,21.3854
+Full Scan (Heap),74400,1539,21.3566
+Full Scan (Heap),54663,1539,21.3461
+Full Scan (Heap),93301,1539,21.24
+Full Scan (Heap),68394,1539,21.2672
+Full Scan (Heap),89279,1539,21.1806
+Full Scan (Heap),77210,1539,21.1643
+Full Scan (Heap),73290,1539,21.1877
+Full Scan (Heap),17466,1539,21.2058
+Full Scan (Heap),14164,1539,21.1993
+Full Scan (Heap),3710,1539,21.5098
+Full Scan (Heap),35505,1539,21.6821
+Full Scan (Heap),54990,1539,21.4263
+Full Scan (Heap),5830,1539,21.3443
+Full Scan (Heap),24283,1539,21.3528
+Full Scan (Heap),72121,1539,21.6368
+Full Scan (Heap),96240,1539,21.4174
+Full Scan (Heap),67296,1539,21.3565
+Full Scan (Heap),30325,1539,22.6339
+Full Scan (Heap),61705,1539,23.6053
+Full Scan (Heap),86231,1539,22.1958
+Full Scan (Heap),86908,1539,21.7719
+Full Scan (Heap),44731,1539,21.7947
+Full Scan (Heap),45031,1539,22.3593
+Full Scan (Heap),45537,1539,22.1225
+Full Scan (Heap),41658,1539,21.8174
+Full Scan (Heap),79510,1539,22.7204
+Full Scan (Heap),62875,1539,22.7547
+Full Scan (Heap),33470,1539,22.4911
+Full Scan (Heap),64005,1539,22.2627
+Full Scan (Heap),42865,1539,25.2681
+Full Scan (Heap),32782,1539,22.4373
+Full Scan (Heap),4813,1539,22.2526
+Full Scan (Heap),84358,1539,22.169
+Full Scan (Heap),64226,1539,22.2691
+Full Scan (Heap),17464,1539,22.1468
+Full Scan (Heap),2854,1539,22.2893
+Full Scan (Heap),63004,1539,22.1365
+Full Scan (Heap),47997,1539,22.1622
+Full Scan (Heap),33273,1539,22.3868
+Full Scan (Heap),98955,1539,22.5243
+Full Scan (Heap),61095,1539,22.3167
+Full Scan (Heap),26049,1539,22.1924
+Full Scan (Heap),48175,1539,22.0966
+Full Scan (Heap),35866,1539,22.0988
+Full Scan (Heap),67148,1539,22.2063
+Full Scan (Heap),95964,1539,22.2776
+Full Scan (Heap),52420,1539,22.377
+Full Scan (Heap),39855,1539,23.8441
+Full Scan (Heap),28613,1539,23.8028
+Full Scan (Heap),76251,1539,23.3017
+Full Scan (Heap),7103,1539,22.6615
+Full Scan (Heap),53853,1539,22.624
+Full Scan (Heap),8462,1539,22.518
+Full Scan (Heap),95144,1539,22.5306
+Full Scan (Heap),94643,1539,22.4736
+Full Scan (Heap),84602,1539,22.4801
+Full Scan (Heap),86660,1539,22.4341
+Full Scan (Heap),66711,1539,22.6194
+Full Scan (Heap),89399,1539,24.0413
+Full Scan (Heap),69766,1539,22.5584
+Full Scan (Heap),39139,1539,22.7895
+Full Scan (Heap),63255,1539,22.5428
+Full Scan (Heap),80795,1539,22.7092
+Full Scan (Heap),11891,1539,22.588
+Full Scan (Heap),66799,1539,22.5561
+Full Scan (Heap),68478,1539,22.4903
+Full Scan (Heap),78097,1539,22.6406
+Full Scan (Heap),42612,1539,22.5867
+Full Scan (Heap),64125,1539,22.5007
+Full Scan (Heap),41673,1539,22.9016
+Full Scan (Heap),86581,1539,22.4675
+Full Scan (Heap),44514,1539,22.4114
+Full Scan (Heap),47197,1539,21.7635
+Full Scan (Heap),23746,1539,21.5707
+Full Scan (Heap),10233,1539,21.4216
+Full Scan (Heap),73669,1539,22.3448
+Full Scan (Heap),22853,1539,22.8816
+Full Scan (Heap),99527,1539,22.005
+Full Scan (Heap),33750,1539,22.198
+Full Scan (Heap),69206,1539,24.1621
+Full Scan (Heap),68229,1539,22.5859
+Full Scan (Heap),50179,1539,24.7718
+Full Scan (Heap),82647,1539,29.7277
+Full Scan (Heap),13942,1539,36.3875
+Full Scan (Heap),79870,1539,24.6024
+Full Scan (Heap),28160,1539,21.7135
+Full Scan (Heap),3785,1539,21.7592
+Full Scan (Heap),60793,1539,21.8202
+Full Scan (Heap),31575,1539,21.6576
+Full Scan (Heap),27482,1539,21.6317
+Full Scan (Heap),56229,1539,22.4735
+Full Scan (Heap),66590,1539,22.7654
+Full Scan (Heap),69020,1539,22.4926
+Full Scan (Heap),16579,1539,22.1547
+Full Scan (Heap),67330,1539,23.4254
+Full Scan (Heap),27693,1539,24.0153
+Full Scan (Heap),35479,1539,24.997
+Full Scan (Heap),93899,1539,25.1879
+Full Scan (Heap),64040,1539,27.1305
+Full Scan (Heap),17919,1539,23.2162
+Full Scan (Heap),73255,1539,22.2269
+Full Scan (Heap),88932,1539,22.6574
+Full Scan (Heap),42699,1539,25.723
+Full Scan (Heap),47677,1539,22.3606
+Full Scan (Heap),85312,1539,22.3859
+Full Scan (Heap),51381,1539,22.0069
+Full Scan (Heap),69823,1539,22.4773
+Full Scan (Heap),80641,1539,22.9436
+Full Scan (Heap),95179,1539,22.1725
+Full Scan (Heap),24780,1539,22.311
+Full Scan (Heap),19922,1539,22.7044
+Full Scan (Heap),79531,1539,24.2208
+Full Scan (Heap),72262,1539,24.9345
+Full Scan (Heap),92382,1539,29.033
+Full Scan (Heap),20069,1539,36.4073
+Full Scan (Heap),95518,1539,23.8497
+Full Scan (Heap),18872,1539,23.9974
+Full Scan (Heap),17205,1539,25.4535
+Full Scan (Heap),86112,1539,23.3989
+Full Scan (Heap),75097,1539,23.4955
+Full Scan (Heap),8006,1539,22.8693
+Full Scan (Heap),87379,1539,23.3458
+Full Scan (Heap),4526,1539,23.3668
+Full Scan (Heap),36749,1539,22.3175
+Full Scan (Heap),39236,1539,22.6135
+Full Scan (Heap),23461,1539,21.8774
+Full Scan (Heap),18244,1539,21.5742
+Full Scan (Heap),35070,1539,21.9158
+Full Scan (Heap),70821,1539,21.7681
+Full Scan (Heap),90827,1539,21.6244
+Full Scan (Heap),46747,1539,21.5706
+Full Scan (Heap),16776,1539,21.6701
+Full Scan (Heap),59939,1539,21.5014
+Full Scan (Heap),22059,1539,21.4792
+Full Scan (Heap),24455,1539,21.5865
+Full Scan (Heap),90831,1539,21.4746
+Full Scan (Heap),7032,1539,21.6077
+Full Scan (Heap),98483,1539,21.4026
+Full Scan (Heap),24332,1539,21.337
+Full Scan (Heap),89120,1539,21.4583
+Full Scan (Heap),20172,1539,21.5412
+Full Scan (Heap),54253,1539,21.7024
+Full Scan (Heap),84047,1539,23.5925
+Full Scan (Heap),81632,1539,25.4062
+Full Scan (Heap),64192,1539,21.6151
+Full Scan (Heap),71575,1539,22.148
+Full Scan (Heap),3803,1539,21.9757
+Full Scan (Heap),39407,1539,22.4683
+Full Scan (Heap),28959,1539,21.8688
+Full Scan (Heap),67447,1539,21.8049
+Full Scan (Heap),47731,1539,21.859
+Full Scan (Heap),71139,1539,21.5864
+Full Scan (Heap),12058,1539,21.6132
+Full Scan (Heap),61033,1539,21.5543
+Full Scan (Heap),89181,1539,21.8667
+Full Scan (Heap),97931,1539,22.0265
+Full Scan (Heap),53320,1539,21.8314
+Full Scan (Heap),20319,1539,21.7788
+Full Scan (Heap),42534,1539,21.6362
+Full Scan (Heap),19091,1539,21.648
+Full Scan (Heap),93693,1539,21.3783
+Full Scan (Heap),66616,1539,21.7407
+Full Scan (Heap),5279,1539,22.0254
+Full Scan (Heap),61714,1539,23.0096
+Full Scan (Heap),992,1539,23.638
+Full Scan (Heap),7625,1539,24.2549
+Full Scan (Heap),12407,1539,21.872
+Full Scan (Heap),46272,1539,22.7054
+Full Scan (Heap),76810,1539,21.6771
+Full Scan (Heap),92359,1539,25.6894
+Full Scan (Heap),91550,1539,21.3966
+Full Scan (Heap),33716,1539,21.2925
+Full Scan (Heap),43093,1539,23.7388
+Full Scan (Heap),99190,1539,22.0605
+Full Scan (Heap),3682,1539,23.8089
+Full Scan (Heap),21471,1539,21.5278
+Full Scan (Heap),65964,1539,21.5635
+Full Scan (Heap),25078,1539,24.8409
+Full Scan (Heap),11804,1539,21.6521
+Full Scan (Heap),55423,1539,21.6565
+Full Scan (Heap),86954,1539,21.5987
+Full Scan (Heap),56772,1539,21.6097
+Full Scan (Heap),26141,1539,21.391
+Full Scan (Heap),22370,1539,21.3601
+Full Scan (Heap),31605,1539,21.7178
+Full Scan (Heap),29446,1539,21.4092
+Full Scan (Heap),86721,1539,21.4246
+Full Scan (Heap),64823,1539,21.5375
+Full Scan (Heap),27881,1539,21.4595
+Full Scan (Heap),48805,1539,21.387
+Full Scan (Heap),20777,1539,21.5789
+Full Scan (Heap),70237,1539,21.7788
+Full Scan (Heap),55309,1539,21.4835
+Full Scan (Heap),94518,1539,21.6671
+Full Scan (Heap),55467,1539,21.97
+Full Scan (Heap),60213,1539,21.816
+Full Scan (Heap),47605,1539,21.7651
+Full Scan (Heap),92412,1539,21.6703
+Full Scan (Heap),27418,1539,21.7111
+Full Scan (Heap),40463,1539,21.4323
+Full Scan (Heap),82490,1539,21.4369
+Full Scan (Heap),96785,1539,21.534
+Full Scan (Heap),57735,1539,31.0416
+Full Scan (Heap),73272,1539,23.5002
+Full Scan (Heap),63152,1539,22.0148
+Full Scan (Heap),12028,1539,23.5218
+Full Scan (Heap),27664,1539,23.1031
+Full Scan (Heap),96870,1539,22.2952
+Full Scan (Heap),25618,1539,22.3032
+Full Scan (Heap),15186,1539,21.9873
+Full Scan (Heap),99098,1539,22.23
+Full Scan (Heap),10331,1539,21.9329
+Full Scan (Heap),46392,1539,21.7077
+Full Scan (Heap),93692,1539,21.8509
+Full Scan (Heap),89001,1539,22.2029
+Full Scan (Heap),81552,1539,21.93
+Full Scan (Heap),90166,1539,21.5241
+Full Scan (Heap),20719,1539,21.7104
+Búsqueda binaria (Sequential),15614,11,5.45579
+Búsqueda binaria (Sequential),41876,11,0.7285
+Búsqueda binaria (Sequential),65866,11,0.941666
+Búsqueda binaria (Sequential),67086,11,0.289333
+Búsqueda binaria (Sequential),84830,11,0.696042
+Búsqueda binaria (Sequential),13453,11,0.378666
+Búsqueda binaria (Sequential),29267,11,0.722125
+Búsqueda binaria (Sequential),78779,11,1.00129
+Búsqueda binaria (Sequential),81460,11,0.706791
+Búsqueda binaria (Sequential),72950,11,1.24379
+Búsqueda binaria (Sequential),55131,11,0.814333
+Búsqueda binaria (Sequential),75048,11,0.438708
+Búsqueda binaria (Sequential),71803,12,0.387709
+Búsqueda binaria (Sequential),95754,11,0.542583
+Búsqueda binaria (Sequential),64344,11,0.401125
+Búsqueda binaria (Sequential),98439,12,0.466875
+Búsqueda binaria (Sequential),76877,11,0.314583
+Búsqueda binaria (Sequential),57816,11,0.539708
+Búsqueda binaria (Sequential),31449,11,0.594541
+Búsqueda binaria (Sequential),333,11,0.62675
+Búsqueda binaria (Sequential),80505,11,0.383209
+Búsqueda binaria (Sequential),10581,11,0.56675
+Búsqueda binaria (Sequential),14515,11,0.394667
+Búsqueda binaria (Sequential),37650,11,0.431084
+Búsqueda binaria (Sequential),12852,11,0.239459
+Búsqueda binaria (Sequential),58938,11,0.233208
+Búsqueda binaria (Sequential),1506,11,0.204916
+Búsqueda binaria (Sequential),89808,11,0.490959
+Búsqueda binaria (Sequential),64263,11,0.042541
+Búsqueda binaria (Sequential),89049,11,0.14325
+Búsqueda binaria (Sequential),41188,11,0.212458
+Búsqueda binaria (Sequential),27555,11,0.415708
+Búsqueda binaria (Sequential),52065,11,0.387083
+Búsqueda binaria (Sequential),32967,11,0.323541
+Búsqueda binaria (Sequential),45569,11,0.543083
+Búsqueda binaria (Sequential),46746,11,0.271
+Búsqueda binaria (Sequential),49329,11,0.480625
+Búsqueda binaria (Sequential),97776,11,0.14925
+Búsqueda binaria (Sequential),67317,11,0.374042
+Búsqueda binaria (Sequential),83587,11,0.375583
+Búsqueda binaria (Sequential),10004,11,0.266041
+Búsqueda binaria (Sequential),94780,11,0.342917
+Búsqueda binaria (Sequential),44617,11,0.362708
+Búsqueda binaria (Sequential),11753,11,0.328333
+Búsqueda binaria (Sequential),73067,11,0.143125
+Búsqueda binaria (Sequential),70526,11,0.212667
+Búsqueda binaria (Sequential),38289,11,0.207333
+Búsqueda binaria (Sequential),37697,11,0.0360829
+Búsqueda binaria (Sequential),59959,11,0.355
+Búsqueda binaria (Sequential),18467,11,0.388041
+Búsqueda binaria (Sequential),84515,11,0.148
+Búsqueda binaria (Sequential),92272,11,0.350917
+Búsqueda binaria (Sequential),93902,11,0.211292
+Búsqueda binaria (Sequential),75685,11,0.1215
+Búsqueda binaria (Sequential),40502,11,0.289209
+Búsqueda binaria (Sequential),3243,11,0.358542
+Búsqueda binaria (Sequential),93175,11,0.196208
+Búsqueda binaria (Sequential),48346,12,0.32
+Búsqueda binaria (Sequential),47651,11,0.126209
+Búsqueda binaria (Sequential),60434,11,0.191375
+Búsqueda binaria (Sequential),55341,11,0.044459
+Búsqueda binaria (Sequential),11887,11,0.040167
+Búsqueda binaria (Sequential),52269,11,0.041625
+Búsqueda binaria (Sequential),76772,11,0.037167
+Búsqueda binaria (Sequential),72673,11,0.034333
+Búsqueda binaria (Sequential),65334,11,0.215625
+Búsqueda binaria (Sequential),15264,11,0.206833
+Búsqueda binaria (Sequential),55764,11,0.195834
+Búsqueda binaria (Sequential),66370,11,0.145167
+Búsqueda binaria (Sequential),98324,11,0.03675
+Búsqueda binaria (Sequential),78665,11,0.0417922
+Búsqueda binaria (Sequential),64361,11,0.0399172
+Búsqueda binaria (Sequential),52187,11,0.0342079
+Búsqueda binaria (Sequential),68768,11,0.307333
+Búsqueda binaria (Sequential),33901,11,0.201542
+Búsqueda binaria (Sequential),55046,11,0.137584
+Búsqueda binaria (Sequential),73925,11,0.275875
+Búsqueda binaria (Sequential),62809,11,0.294458
+Búsqueda binaria (Sequential),67234,11,0.04275
+Búsqueda binaria (Sequential),67894,11,0.137166
+Búsqueda binaria (Sequential),3327,11,0.049084
+Búsqueda binaria (Sequential),75435,11,0.0384999
+Búsqueda binaria (Sequential),29429,11,0.143125
+Búsqueda binaria (Sequential),16909,11,0.203792
+Búsqueda binaria (Sequential),6408,11,0.370708
+Búsqueda binaria (Sequential),92362,11,0.0352499
+Búsqueda binaria (Sequential),68580,11,0.215958
+Búsqueda binaria (Sequential),87882,11,0.286458
+Búsqueda binaria (Sequential),13445,11,0.034458
+Búsqueda binaria (Sequential),94019,11,0.0418751
+Búsqueda binaria (Sequential),81568,11,0.036417
+Búsqueda binaria (Sequential),56284,11,0.277
+Búsqueda binaria (Sequential),61610,11,0.312833
+Búsqueda binaria (Sequential),18667,12,0.0446669
+Búsqueda binaria (Sequential),63192,11,0.144959
+Búsqueda binaria (Sequential),30006,11,0.292542
+Búsqueda binaria (Sequential),15993,11,0.134625
+Búsqueda binaria (Sequential),82139,11,0.228042
+Búsqueda binaria (Sequential),91844,11,0.280667
+Búsqueda binaria (Sequential),59874,11,0.036333
+Búsqueda binaria (Sequential),88383,11,0.214583
+Búsqueda binaria (Sequential),61526,11,0.0392499
+Búsqueda binaria (Sequential),93654,12,0.128583
+Búsqueda binaria (Sequential),71518,11,0.041625
+Búsqueda binaria (Sequential),32900,11,0.0363749
+Búsqueda binaria (Sequential),73374,12,0.041208
+Búsqueda binaria (Sequential),52702,11,0.217667
+Búsqueda binaria (Sequential),87786,11,0.039875
+Búsqueda binaria (Sequential),40322,11,0.0347502
+Búsqueda binaria (Sequential),71847,12,0.0419591
+Búsqueda binaria (Sequential),84786,11,0.037333
+Búsqueda binaria (Sequential),65785,11,0.039083
+Búsqueda binaria (Sequential),91531,11,0.133
+Búsqueda binaria (Sequential),62770,11,0.0421249
+Búsqueda binaria (Sequential),52685,11,0.0375421
+Búsqueda binaria (Sequential),56763,11,0.134
+Búsqueda binaria (Sequential),26547,11,0.21575
+Búsqueda binaria (Sequential),38585,11,0.0411249
+Búsqueda binaria (Sequential),35264,11,0.388584
+Búsqueda binaria (Sequential),1216,11,0.0380839
+Búsqueda binaria (Sequential),4340,11,0.208625
+Búsqueda binaria (Sequential),19641,11,0.452958
+Búsqueda binaria (Sequential),85937,11,0.293917
+Búsqueda binaria (Sequential),78286,11,0.139333
+Búsqueda binaria (Sequential),60061,11,0.035584
+Búsqueda binaria (Sequential),68537,11,0.040167
+Búsqueda binaria (Sequential),64163,11,0.038292
+Búsqueda binaria (Sequential),47178,11,0.230583
+Búsqueda binaria (Sequential),26194,11,0.299334
+Búsqueda binaria (Sequential),34094,11,0.133291
+Búsqueda binaria (Sequential),90787,11,0.226458
+Búsqueda binaria (Sequential),63645,11,0.221958
+Búsqueda binaria (Sequential),61166,11,0.114916
+Búsqueda binaria (Sequential),67013,11,0.036042
+Búsqueda binaria (Sequential),65164,11,0.145458
+Búsqueda binaria (Sequential),56916,11,0.038709
+Búsqueda binaria (Sequential),73117,11,0.034167
+Búsqueda binaria (Sequential),87019,11,0.219208
+Búsqueda binaria (Sequential),4407,11,0.040458
+Búsqueda binaria (Sequential),38020,11,0.131125
+Búsqueda binaria (Sequential),41505,11,0.136625
+Búsqueda binaria (Sequential),59986,11,0.0393752
+Búsqueda binaria (Sequential),12895,11,0.136
+Búsqueda binaria (Sequential),57469,11,0.20125
+Búsqueda binaria (Sequential),90353,11,0.210958
+Búsqueda binaria (Sequential),93916,11,0.037791
+Búsqueda binaria (Sequential),67525,11,0.039584
+Búsqueda binaria (Sequential),33926,11,0.0425831
+Búsqueda binaria (Sequential),59366,12,0.141125
+Búsqueda binaria (Sequential),23993,11,0.379042
+Búsqueda binaria (Sequential),55808,11,0.0394578
+Búsqueda binaria (Sequential),95418,11,0.139167
+Búsqueda binaria (Sequential),62803,11,0.0347921
+Búsqueda binaria (Sequential),8428,11,0.310125
+Búsqueda binaria (Sequential),85007,11,0.0423752
+Búsqueda binaria (Sequential),34927,11,0.2135
+Búsqueda binaria (Sequential),65330,11,0.032333
+Búsqueda binaria (Sequential),48514,11,0.227167
+Búsqueda binaria (Sequential),12670,11,0.041334
+Búsqueda binaria (Sequential),25505,11,0.219292
+Búsqueda binaria (Sequential),97984,11,0.036459
+Búsqueda binaria (Sequential),53912,11,0.321
+Búsqueda binaria (Sequential),19184,11,0.203583
+Búsqueda binaria (Sequential),58904,11,0.0355421
+Búsqueda binaria (Sequential),1840,11,0.295792
+Búsqueda binaria (Sequential),12081,11,0.141333
+Búsqueda binaria (Sequential),29,12,0.0435
+Búsqueda binaria (Sequential),59144,11,0.033333
+Búsqueda binaria (Sequential),76106,11,0.211417
+Búsqueda binaria (Sequential),71643,11,0.038167
+Búsqueda binaria (Sequential),10888,11,0.043666
+Búsqueda binaria (Sequential),79972,11,0.231666
+Búsqueda binaria (Sequential),26057,11,0.141292
+Búsqueda binaria (Sequential),32485,11,0.205292
+Búsqueda binaria (Sequential),15836,11,0.0408341
+Búsqueda binaria (Sequential),81406,11,0.0413749
+Búsqueda binaria (Sequential),5854,11,0.296958
+Búsqueda binaria (Sequential),98548,11,0.337917
+Búsqueda binaria (Sequential),71625,11,0.0421249
+Búsqueda binaria (Sequential),35198,11,0.0373751
+Búsqueda binaria (Sequential),87619,11,0.0376252
+Búsqueda binaria (Sequential),99309,11,0.262458
+Búsqueda binaria (Sequential),83285,11,0.2085
+Búsqueda binaria (Sequential),46826,12,0.040709
+Búsqueda binaria (Sequential),20285,11,0.286458
+Búsqueda binaria (Sequential),673,11,0.133417
+Búsqueda binaria (Sequential),41084,11,0.0423749
+Búsqueda binaria (Sequential),87109,11,0.141083
+Búsqueda binaria (Sequential),76424,11,0.115958
+Búsqueda binaria (Sequential),75273,11,0.0343751
+Búsqueda binaria (Sequential),64486,11,0.145667
+Búsqueda binaria (Sequential),90408,11,0.0369581
+Búsqueda binaria (Sequential),94434,11,0.134125
+Búsqueda binaria (Sequential),17677,11,0.21275
+Búsqueda binaria (Sequential),71540,11,0.0353751
+Búsqueda binaria (Sequential),29220,11,0.0403752
+Búsqueda binaria (Sequential),61995,11,0.23175
+Búsqueda binaria (Sequential),77062,11,0.119083
+Búsqueda binaria (Sequential),17199,11,0.172042
+Búsqueda binaria (Sequential),78399,11,0.0351251
+Búsqueda binaria (Sequential),90774,11,0.033292
+Búsqueda binaria (Sequential),66155,11,0.0351251
+Búsqueda binaria (Sequential),38101,11,0.0384999
+Búsqueda binaria (Sequential),11067,11,0.229208
+Búsqueda binaria (Sequential),54760,11,0.0405409
+Búsqueda binaria (Sequential),87629,11,0.036875
+Búsqueda binaria (Sequential),20988,11,0.132292
+Búsqueda binaria (Sequential),17741,11,0.0471659
+Búsqueda binaria (Sequential),76813,11,0.0380001
+Búsqueda binaria (Sequential),40109,11,0.135166
+Búsqueda binaria (Sequential),66546,11,0.140042
+Búsqueda binaria (Sequential),54007,11,0.0335409
+Búsqueda binaria (Sequential),51172,11,0.296708
+Búsqueda binaria (Sequential),19469,11,0.0374578
+Búsqueda binaria (Sequential),68162,11,0.139875
+Búsqueda binaria (Sequential),25782,11,0.0343751
+Búsqueda binaria (Sequential),49284,11,0.043541
+Búsqueda binaria (Sequential),1853,11,0.0375409
+Búsqueda binaria (Sequential),13912,11,0.148292
+Búsqueda binaria (Sequential),51033,11,0.120708
+Búsqueda binaria (Sequential),9626,11,0.145792
+Búsqueda binaria (Sequential),6734,11,0.119792
+Búsqueda binaria (Sequential),45485,11,0.0388331
+Búsqueda binaria (Sequential),84709,11,0.0397919
+Búsqueda binaria (Sequential),46322,11,0.137291
+Búsqueda binaria (Sequential),3381,11,0.0366252
+Búsqueda binaria (Sequential),3354,11,0.0381661
+Búsqueda binaria (Sequential),66898,11,0.038875
+Búsqueda binaria (Sequential),62394,11,0.14525
+Búsqueda binaria (Sequential),42961,11,0.292375
+Búsqueda binaria (Sequential),89496,11,0.0375831
+Búsqueda binaria (Sequential),39803,11,0.0341251
+Búsqueda binaria (Sequential),59001,11,0.03475
+Búsqueda binaria (Sequential),42736,11,0.213583
+Búsqueda binaria (Sequential),15909,11,0.0353749
+Búsqueda binaria (Sequential),65218,11,0.0384168
+Búsqueda binaria (Sequential),61156,11,0.0320419
+Búsqueda binaria (Sequential),74924,11,0.245833
+Búsqueda binaria (Sequential),81082,11,0.142042
+Búsqueda binaria (Sequential),22379,11,0.271375
+Búsqueda binaria (Sequential),20171,11,0.135917
+Búsqueda binaria (Sequential),77498,11,0.211208
+Búsqueda binaria (Sequential),68107,11,0.046042
+Búsqueda binaria (Sequential),27131,11,0.137125
+Búsqueda binaria (Sequential),56834,11,0.0325411
+Búsqueda binaria (Sequential),81703,11,0.142042
+Búsqueda binaria (Sequential),44096,11,0.228042
+Búsqueda binaria (Sequential),60139,11,0.040625
+Búsqueda binaria (Sequential),78410,11,0.036333
+Búsqueda binaria (Sequential),30583,11,0.220708
+Búsqueda binaria (Sequential),88933,11,0.118875
+Búsqueda binaria (Sequential),93177,11,0.034
+Búsqueda binaria (Sequential),9111,11,0.229709
+Búsqueda binaria (Sequential),71743,11,0.0384999
+Búsqueda binaria (Sequential),52319,11,0.0415421
+Búsqueda binaria (Sequential),4477,11,0.034791
+Búsqueda binaria (Sequential),25624,11,0.039292
+Búsqueda binaria (Sequential),84834,11,0.0357919
+Búsqueda binaria (Sequential),22724,11,0.226042
+Búsqueda binaria (Sequential),5930,11,0.0366671
+Búsqueda binaria (Sequential),84965,11,0.03275
+Búsqueda binaria (Sequential),71404,11,0.136708
+Búsqueda binaria (Sequential),6317,11,0.037709
+Búsqueda binaria (Sequential),59222,11,0.038333
+Búsqueda binaria (Sequential),98922,11,0.147834
+Búsqueda binaria (Sequential),83998,11,0.125584
+Búsqueda binaria (Sequential),24711,11,0.208959
+Búsqueda binaria (Sequential),63418,11,0.0342079
+Búsqueda binaria (Sequential),93186,11,0.039292
+Búsqueda binaria (Sequential),88950,11,0.0327909
+Búsqueda binaria (Sequential),2684,11,0.213
+Búsqueda binaria (Sequential),16927,11,0.038167
+Búsqueda binaria (Sequential),84627,11,0.0326252
+Búsqueda binaria (Sequential),69460,11,0.132291
+Búsqueda binaria (Sequential),28669,11,0.22625
+Búsqueda binaria (Sequential),67745,11,0.035583
+Búsqueda binaria (Sequential),18052,11,0.131125
+Búsqueda binaria (Sequential),21023,11,0.0413752
+Búsqueda binaria (Sequential),86668,11,0.134375
+Búsqueda binaria (Sequential),24381,11,0.137833
+Búsqueda binaria (Sequential),51115,11,0.0398748
+Búsqueda binaria (Sequential),35758,11,0.140542
+Búsqueda binaria (Sequential),55753,11,0.0368338
+Búsqueda binaria (Sequential),69863,11,0.217708
+Búsqueda binaria (Sequential),54276,11,0.0383339
+Búsqueda binaria (Sequential),10310,11,0.142875
+Búsqueda binaria (Sequential),50225,11,0.19425
+Búsqueda binaria (Sequential),39966,11,0.037459
+Búsqueda binaria (Sequential),24537,11,0.0338331
+Búsqueda binaria (Sequential),45098,11,0.141334
+Búsqueda binaria (Sequential),22898,11,0.032167
+Búsqueda binaria (Sequential),34531,11,0.143166
+Búsqueda binaria (Sequential),60807,11,0.138584
+Búsqueda binaria (Sequential),65222,11,0.039167
+Búsqueda binaria (Sequential),54492,11,0.13075
+Búsqueda binaria (Sequential),37706,11,0.037208
+Búsqueda binaria (Sequential),61303,11,0.033709
+Búsqueda binaria (Sequential),23195,11,0.131083
+Búsqueda binaria (Sequential),42702,11,0.038333
+Búsqueda binaria (Sequential),68071,11,0.032292
+Búsqueda binaria (Sequential),63184,11,0.03575
+Búsqueda binaria (Sequential),58273,11,0.134167
+Búsqueda binaria (Sequential),15743,11,0.040292
+Búsqueda binaria (Sequential),69108,11,0.038625
+Búsqueda binaria (Sequential),68774,11,0.0384171
+Búsqueda binaria (Sequential),35892,11,0.038042
+Búsqueda binaria (Sequential),12395,12,0.0380001
+Búsqueda binaria (Sequential),28093,12,0.180375
+Búsqueda binaria (Sequential),30322,11,0.137042
+Búsqueda binaria (Sequential),644,11,0.0360829
+Búsqueda binaria (Sequential),12206,11,0.0354589
+Búsqueda binaria (Sequential),59522,11,0.127791
+Búsqueda binaria (Sequential),84631,11,0.033
+Búsqueda binaria (Sequential),43312,11,0.141042
+Búsqueda binaria (Sequential),53478,11,0.197209
+Búsqueda binaria (Sequential),71443,11,0.0361251
+Búsqueda binaria (Sequential),87871,11,0.0384161
+Búsqueda binaria (Sequential),23915,11,0.0342911
+Búsqueda binaria (Sequential),3564,11,0.149125
+Búsqueda binaria (Sequential),46131,11,0.0337909
+Búsqueda binaria (Sequential),20547,11,0.0327909
+Búsqueda binaria (Sequential),46099,11,0.035791
+Búsqueda binaria (Sequential),73663,11,0.1395
+Búsqueda binaria (Sequential),90068,11,0.127666
+Búsqueda binaria (Sequential),75017,12,0.042083
+Búsqueda binaria (Sequential),70567,11,0.0368331
+Búsqueda binaria (Sequential),28383,11,0.140084
+Búsqueda binaria (Sequential),14378,11,0.137834
+Búsqueda binaria (Sequential),81368,11,0.032708
+Búsqueda binaria (Sequential),93850,11,0.0341251
+Búsqueda binaria (Sequential),36763,11,0.290209
+Búsqueda binaria (Sequential),72850,11,0.040459
+Búsqueda binaria (Sequential),98468,11,0.038709
+Búsqueda binaria (Sequential),74455,11,0.135709
+Búsqueda binaria (Sequential),95810,11,0.032291
+Búsqueda binaria (Sequential),28107,12,0.0390839
+Búsqueda binaria (Sequential),74690,11,0.0316671
+Búsqueda binaria (Sequential),38627,11,0.0387919
+Búsqueda binaria (Sequential),73772,11,0.0393339
+Búsqueda binaria (Sequential),35141,11,0.032875
+Búsqueda binaria (Sequential),87859,11,0.0352499
+Búsqueda binaria (Sequential),72842,11,0.0359579
+Búsqueda binaria (Sequential),17383,11,0.0329169
+Búsqueda binaria (Sequential),13299,11,0.0326249
+Búsqueda binaria (Sequential),34566,11,0.0325001
+Búsqueda binaria (Sequential),12640,11,0.0350832
+Búsqueda binaria (Sequential),57155,11,0.188542
+Búsqueda binaria (Sequential),22450,11,0.0386671
+Búsqueda binaria (Sequential),13899,11,0.0365421
+Búsqueda binaria (Sequential),89725,11,0.035208
+Búsqueda binaria (Sequential),7921,11,0.140375
+Búsqueda binaria (Sequential),99499,11,0.040625
+Búsqueda binaria (Sequential),46695,11,0.0386669
+Búsqueda binaria (Sequential),94681,11,0.03675
+Búsqueda binaria (Sequential),24314,11,0.0363751
+Búsqueda binaria (Sequential),84666,11,0.0395409
+Búsqueda binaria (Sequential),82587,11,0.125958
+Búsqueda binaria (Sequential),13936,11,0.0346669
+Búsqueda binaria (Sequential),66405,11,0.0369591
+Búsqueda binaria (Sequential),41098,11,0.0342499
+Búsqueda binaria (Sequential),36279,11,0.220291
+Búsqueda binaria (Sequential),77085,11,0.0405831
+Búsqueda binaria (Sequential),8378,11,0.0370841
+Búsqueda binaria (Sequential),38147,11,0.037875
+Búsqueda binaria (Sequential),41236,11,0.032417
+Búsqueda binaria (Sequential),21154,11,0.214334
+Búsqueda binaria (Sequential),34192,11,0.0358329
+Búsqueda binaria (Sequential),33571,11,0.0357081
+Búsqueda binaria (Sequential),8242,11,0.0380839
+Búsqueda binaria (Sequential),1819,11,0.0394159
+Búsqueda binaria (Sequential),53955,11,0.032708
+Búsqueda binaria (Sequential),33692,11,0.0391249
+Búsqueda binaria (Sequential),54334,11,0.040041
+Búsqueda binaria (Sequential),2023,11,0.182625
+Búsqueda binaria (Sequential),7512,11,0.213542
+Búsqueda binaria (Sequential),12642,11,0.034875
+Búsqueda binaria (Sequential),30832,11,0.144333
+Búsqueda binaria (Sequential),3012,11,0.139209
+Búsqueda binaria (Sequential),40622,11,0.121
+Búsqueda binaria (Sequential),16125,11,0.0407919
+Búsqueda binaria (Sequential),12304,11,0.0350829
+Búsqueda binaria (Sequential),89893,11,0.0400001
+Búsqueda binaria (Sequential),73555,11,0.0357921
+Búsqueda binaria (Sequential),75561,11,0.034167
+Búsqueda binaria (Sequential),45916,11,0.135667
+Búsqueda binaria (Sequential),41285,11,0.0320831
+Búsqueda binaria (Sequential),59775,11,0.03475
+Búsqueda binaria (Sequential),79595,11,0.195666
+Búsqueda binaria (Sequential),82016,11,0.0382909
+Búsqueda binaria (Sequential),85816,11,0.222458
+Búsqueda binaria (Sequential),93614,11,0.0357081
+Búsqueda binaria (Sequential),80629,11,0.0393342
+Búsqueda binaria (Sequential),4983,11,0.243166
+Búsqueda binaria (Sequential),52979,11,0.185167
+Búsqueda binaria (Sequential),41428,11,0.037333
+Búsqueda binaria (Sequential),79664,11,0.0422921
+Búsqueda binaria (Sequential),28264,11,0.0485419
+Búsqueda binaria (Sequential),77865,11,0.139417
+Búsqueda binaria (Sequential),60644,11,0.0373749
+Búsqueda binaria (Sequential),55853,11,0.135833
+Búsqueda binaria (Sequential),88595,11,0.0551669
+Búsqueda binaria (Sequential),15656,11,0.040916
+Búsqueda binaria (Sequential),89977,11,0.0389582
+Búsqueda binaria (Sequential),49041,11,0.142958
+Búsqueda binaria (Sequential),65702,11,0.04075
+Búsqueda binaria (Sequential),89313,11,0.0412918
+Búsqueda binaria (Sequential),32975,11,0.0426669
+Búsqueda binaria (Sequential),50994,11,0.0369581
+Búsqueda binaria (Sequential),38258,11,0.032834
+Búsqueda binaria (Sequential),46704,11,0.042167
+Búsqueda binaria (Sequential),7554,11,0.0488749
+Búsqueda binaria (Sequential),96389,11,0.265958
+Búsqueda binaria (Sequential),93740,12,0.0448751
+Búsqueda binaria (Sequential),57245,11,0.0390001
+Búsqueda binaria (Sequential),3102,12,0.0420001
+Búsqueda binaria (Sequential),36888,11,0.03775
+Búsqueda binaria (Sequential),91135,11,0.158542
+Búsqueda binaria (Sequential),43326,11,0.0395002
+Búsqueda binaria (Sequential),37953,11,0.039625
+Búsqueda binaria (Sequential),95306,11,0.0392918
+Búsqueda binaria (Sequential),16033,11,0.033458
+Búsqueda binaria (Sequential),38921,11,0.135666
+Búsqueda binaria (Sequential),54610,11,0.0387919
+Búsqueda binaria (Sequential),41797,11,0.0405831
+Búsqueda binaria (Sequential),76757,11,0.0334159
+Búsqueda binaria (Sequential),2657,11,0.0429589
+Búsqueda binaria (Sequential),71062,11,0.0372082
+Búsqueda binaria (Sequential),44891,11,0.0385421
+Búsqueda binaria (Sequential),25880,11,0.0345409
+Búsqueda binaria (Sequential),73514,11,0.036875
+Búsqueda binaria (Sequential),7360,11,0.186125
+Búsqueda binaria (Sequential),94592,11,0.0389169
+Búsqueda binaria (Sequential),14759,11,0.0397081
+Búsqueda binaria (Sequential),21250,11,0.0393749
+Búsqueda binaria (Sequential),81130,11,0.0337919
+Búsqueda binaria (Sequential),16081,11,0.0312082
+Búsqueda binaria (Sequential),15504,11,0.0415419
+Búsqueda binaria (Sequential),4892,11,0.0395409
+Búsqueda binaria (Sequential),16474,11,0.1845
+Búsqueda binaria (Sequential),68497,11,0.032583
+Búsqueda binaria (Sequential),46405,11,0.038042
+Búsqueda binaria (Sequential),78244,11,0.0330422
+Búsqueda binaria (Sequential),84921,11,0.0327919
+Búsqueda binaria (Sequential),85957,11,0.0398329
+Búsqueda binaria (Sequential),39616,11,0.208375
+Búsqueda binaria (Sequential),3775,11,0.043792
+Búsqueda binaria (Sequential),55676,11,0.0413749
+Búsqueda binaria (Sequential),75777,11,0.0385409
+Búsqueda binaria (Sequential),16555,11,0.039292
+Búsqueda binaria (Sequential),46658,11,0.031292
+Búsqueda binaria (Sequential),54434,11,0.031583
+Búsqueda binaria (Sequential),50346,11,0.0450001
+Búsqueda binaria (Sequential),49439,11,0.0422921
+Búsqueda binaria (Sequential),31367,11,0.0390841
+Búsqueda binaria (Sequential),55180,11,0.0395421
+Búsqueda binaria (Sequential),86848,11,0.0370829
+Búsqueda binaria (Sequential),28779,11,0.0464171
+Búsqueda binaria (Sequential),16412,11,0.0399579
+Búsqueda binaria (Sequential),24048,11,0.0421668
+Búsqueda binaria (Sequential),71163,11,0.036583
+Búsqueda binaria (Sequential),3725,11,0.036041
+Búsqueda binaria (Sequential),86713,11,0.036417
+Búsqueda binaria (Sequential),94014,11,0.037417
+Búsqueda binaria (Sequential),70954,11,0.184
+Búsqueda binaria (Sequential),89621,11,0.035292
+Búsqueda binaria (Sequential),72732,11,0.0349169
+Búsqueda binaria (Sequential),52018,11,0.0405828
+Búsqueda binaria (Sequential),33420,11,0.1415
+Búsqueda binaria (Sequential),19358,11,0.0357078
+Búsqueda binaria (Sequential),29918,11,0.0354592
+Búsqueda binaria (Sequential),3063,12,0.041042
+Búsqueda binaria (Sequential),2176,11,0.0342079
+Búsqueda binaria (Sequential),36285,11,0.040208
+Búsqueda binaria (Sequential),70930,11,0.037458
+Búsqueda binaria (Sequential),62763,11,0.0371661
+Búsqueda binaria (Sequential),54773,11,0.0336661
+Búsqueda binaria (Sequential),34579,11,0.0351251
+Búsqueda binaria (Sequential),41255,11,0.0361672
+Búsqueda binaria (Sequential),18175,11,0.038167
+Búsqueda binaria (Sequential),82154,11,0.037333
+Búsqueda binaria (Sequential),77811,11,0.032709
+Búsqueda binaria (Sequential),11724,11,0.035333
+Búsqueda binaria (Sequential),23502,11,0.186416
+Búsqueda binaria (Sequential),72481,11,0.205958
+Búsqueda binaria (Sequential),4982,11,0.0384168
+Búsqueda binaria (Sequential),85225,11,0.140041
+Búsqueda binaria (Sequential),67378,11,0.03875
+Búsqueda binaria (Sequential),34764,11,0.0340422
+Búsqueda binaria (Sequential),44658,11,0.0353749
+Búsqueda binaria (Sequential),82970,11,0.146084
+Búsqueda binaria (Sequential),68217,11,0.0333751
+Búsqueda binaria (Sequential),98899,11,0.0526248
+Búsqueda binaria (Sequential),97399,11,0.215709
+Búsqueda binaria (Sequential),41616,11,0.0420839
+Búsqueda binaria (Sequential),7374,11,0.037625
+Búsqueda binaria (Sequential),86229,11,0.0359591
+Búsqueda binaria (Sequential),1496,11,0.0333749
+Búsqueda binaria (Sequential),82295,11,0.0364999
+Búsqueda binaria (Sequential),31826,11,0.131708
+Búsqueda binaria (Sequential),61676,11,0.0404161
+Búsqueda binaria (Sequential),7642,11,0.034041
+Búsqueda binaria (Sequential),29077,11,0.0391661
+Búsqueda binaria (Sequential),89017,11,0.0371661
+Búsqueda binaria (Sequential),66666,11,0.040292
+Búsqueda binaria (Sequential),19772,11,0.0410001
+Búsqueda binaria (Sequential),97674,11,0.040083
+Búsqueda binaria (Sequential),52308,11,0.0381661
+Búsqueda binaria (Sequential),92704,11,0.1845
+Búsqueda binaria (Sequential),47177,11,0.040083
+Búsqueda binaria (Sequential),30476,11,0.0462919
+Búsqueda binaria (Sequential),73609,11,0.0361248
+Búsqueda binaria (Sequential),36145,11,0.0309169
+Búsqueda binaria (Sequential),45048,11,0.0357919
+Búsqueda binaria (Sequential),26343,11,0.03875
+Búsqueda binaria (Sequential),49117,11,0.033292
+Búsqueda binaria (Sequential),47070,11,0.0360841
+Búsqueda binaria (Sequential),60198,11,0.0371248
+Búsqueda binaria (Sequential),83495,11,0.036458
+Búsqueda binaria (Sequential),59974,11,0.0361251
+Búsqueda binaria (Sequential),71932,11,0.195542
+Búsqueda binaria (Sequential),62137,11,0.0370832
+Búsqueda binaria (Sequential),88265,11,0.143667
+Búsqueda binaria (Sequential),76098,11,0.0361251
+Búsqueda binaria (Sequential),40920,11,0.0359591
+Búsqueda binaria (Sequential),24629,11,0.033125
+Búsqueda binaria (Sequential),20748,11,0.034417
+Búsqueda binaria (Sequential),82316,11,0.0395409
+Búsqueda binaria (Sequential),53811,11,0.113709
+Búsqueda binaria (Sequential),20157,11,0.0409998
+Búsqueda binaria (Sequential),63552,11,0.0418751
+Búsqueda binaria (Sequential),697,11,0.036042
+Búsqueda binaria (Sequential),46457,11,0.039791
+Búsqueda binaria (Sequential),68581,11,0.039333
+Búsqueda binaria (Sequential),92059,11,0.0402092
+Búsqueda binaria (Sequential),53521,11,0.0320831
+Búsqueda binaria (Sequential),4917,11,0.035625
+Búsqueda binaria (Sequential),83771,11,0.038167
+Búsqueda binaria (Sequential),22620,11,0.0356252
+Búsqueda binaria (Sequential),11038,11,0.0424171
+Búsqueda binaria (Sequential),39196,11,0.193833
+Búsqueda binaria (Sequential),48863,11,0.0425831
+Búsqueda binaria (Sequential),71661,11,0.040334
+Búsqueda binaria (Sequential),95815,11,0.033125
+Búsqueda binaria (Sequential),34737,11,0.038167
+Búsqueda binaria (Sequential),18083,11,0.038625
+Búsqueda binaria (Sequential),93680,12,0.039709
+Búsqueda binaria (Sequential),96931,11,0.176708
+Búsqueda binaria (Sequential),13206,11,0.0336671
+Búsqueda binaria (Sequential),2406,11,0.0369169
+Búsqueda binaria (Sequential),69916,11,0.143458
+Búsqueda binaria (Sequential),28459,11,0.039292
+Búsqueda binaria (Sequential),91174,11,0.0350829
+Búsqueda binaria (Sequential),76335,11,0.0347092
+Búsqueda binaria (Sequential),40202,11,0.0382911
+Búsqueda binaria (Sequential),75056,11,0.0382501
+Búsqueda binaria (Sequential),5852,11,0.040709
+Búsqueda binaria (Sequential),51548,11,0.043333
+Búsqueda binaria (Sequential),49884,11,0.188084
+Búsqueda binaria (Sequential),70646,11,0.038333
+Búsqueda binaria (Sequential),67712,11,0.0380839
+Búsqueda binaria (Sequential),84417,11,0.037916
+Búsqueda binaria (Sequential),86740,11,0.0315409
+Búsqueda binaria (Sequential),20716,11,0.0369579
+Búsqueda binaria (Sequential),66685,11,0.0341248
+Búsqueda binaria (Sequential),13753,11,0.039875
+Búsqueda binaria (Sequential),11212,11,0.0370832
+Búsqueda binaria (Sequential),18599,11,0.0364159
+Búsqueda binaria (Sequential),96021,11,0.0354159
+Búsqueda binaria (Sequential),51015,11,0.0384159
+Búsqueda binaria (Sequential),43727,12,0.043334
+Búsqueda binaria (Sequential),71761,12,0.035166
+Búsqueda binaria (Sequential),34268,11,0.0399582
+Búsqueda binaria (Sequential),40688,11,0.0373749
+Búsqueda binaria (Sequential),5452,11,0.177334
+Búsqueda binaria (Sequential),96644,11,0.113875
+Búsqueda binaria (Sequential),77690,11,0.036916
+Búsqueda binaria (Sequential),86805,11,0.034333
+Búsqueda binaria (Sequential),24875,11,0.0332089
+Búsqueda binaria (Sequential),21262,11,0.0402911
+Búsqueda binaria (Sequential),38393,11,0.039083
+Búsqueda binaria (Sequential),38705,11,0.0344592
+Búsqueda binaria (Sequential),70932,11,0.037208
+Búsqueda binaria (Sequential),37432,12,0.1825
+Búsqueda binaria (Sequential),46822,12,0.0389579
+Búsqueda binaria (Sequential),17565,11,0.040333
+Búsqueda binaria (Sequential),50937,11,0.033166
+Búsqueda binaria (Sequential),24733,11,0.0332501
+Búsqueda binaria (Sequential),97912,11,0.039791
+Búsqueda binaria (Sequential),82552,11,0.0409579
+Búsqueda binaria (Sequential),1239,11,0.041333
+Búsqueda binaria (Sequential),79424,11,0.038625
+Búsqueda binaria (Sequential),84907,11,0.039083
+Búsqueda binaria (Sequential),62917,11,0.0396671
+Búsqueda binaria (Sequential),55398,11,0.0320419
+Búsqueda binaria (Sequential),46617,11,0.0322498
+Búsqueda binaria (Sequential),70435,11,0.0408341
+Búsqueda binaria (Sequential),22399,11,0.0379169
+Búsqueda binaria (Sequential),94632,11,0.036875
+Búsqueda binaria (Sequential),67659,11,0.035709
+Búsqueda binaria (Sequential),3869,11,0.0373749
+Búsqueda binaria (Sequential),23544,11,0.036041
+Búsqueda binaria (Sequential),41245,11,0.0334999
+Búsqueda binaria (Sequential),70661,11,0.0338752
+Búsqueda binaria (Sequential),18973,11,0.182916
+Búsqueda binaria (Sequential),21488,11,0.130084
+Búsqueda binaria (Sequential),15296,11,0.040167
+Búsqueda binaria (Sequential),67502,11,0.035625
+Búsqueda binaria (Sequential),87518,11,0.0354159
+Búsqueda binaria (Sequential),92325,11,0.0366669
+Búsqueda binaria (Sequential),84333,12,0.043791
+Búsqueda binaria (Sequential),262,11,0.037709
+Búsqueda binaria (Sequential),49094,11,0.0397079
+Búsqueda binaria (Sequential),8337,11,0.039292
+Búsqueda binaria (Sequential),48235,11,0.0409998
+Búsqueda binaria (Sequential),39669,11,0.0415
+Búsqueda binaria (Sequential),28337,11,0.0361251
+Búsqueda binaria (Sequential),69748,11,0.03275
+Búsqueda binaria (Sequential),20215,11,0.0335411
+Búsqueda binaria (Sequential),78578,11,0.033709
+Búsqueda binaria (Sequential),79957,11,0.039083
+Búsqueda binaria (Sequential),32527,11,0.038459
+Búsqueda binaria (Sequential),16584,11,0.0370829
+Búsqueda binaria (Sequential),13929,11,0.0330422
+Búsqueda binaria (Sequential),42768,11,0.041333
+Búsqueda binaria (Sequential),63513,11,0.0334159
+Búsqueda binaria (Sequential),14077,11,0.0347919
+Búsqueda binaria (Sequential),95241,11,0.177666
+Búsqueda binaria (Sequential),9586,11,0.038875
+Búsqueda binaria (Sequential),49965,12,0.042333
+Búsqueda binaria (Sequential),34416,11,0.0407922
+Búsqueda binaria (Sequential),80866,11,0.038042
+Búsqueda binaria (Sequential),39518,11,0.0343341
+Búsqueda binaria (Sequential),84876,11,0.0336252
+Búsqueda binaria (Sequential),15408,11,0.039666
+Búsqueda binaria (Sequential),45587,11,0.0387079
+Búsqueda binaria (Sequential),62179,11,0.0354168
+Búsqueda binaria (Sequential),65373,11,0.040917
+Búsqueda binaria (Sequential),15852,11,0.0340841
+Búsqueda binaria (Sequential),72823,11,0.0327502
+Búsqueda binaria (Sequential),68020,11,0.032333
+Búsqueda binaria (Sequential),32379,11,0.186167
+Búsqueda binaria (Sequential),47013,11,0.0365418
+Búsqueda binaria (Sequential),89593,11,0.0365421
+Búsqueda binaria (Sequential),59761,11,0.032291
+Búsqueda binaria (Sequential),76719,11,0.0345418
+Búsqueda binaria (Sequential),45236,11,0.0351248
+Búsqueda binaria (Sequential),10820,11,0.035916
+Búsqueda binaria (Sequential),9049,11,0.0368331
+Búsqueda binaria (Sequential),11517,11,0.176875
+Búsqueda binaria (Sequential),64857,11,0.0346249
+Búsqueda binaria (Sequential),40898,11,0.0320829
+Búsqueda binaria (Sequential),34774,11,0.0353341
+Búsqueda binaria (Sequential),98736,11,0.0415412
+Búsqueda binaria (Sequential),86784,11,0.0408331
+Búsqueda binaria (Sequential),29629,11,0.0342499
+Búsqueda binaria (Sequential),22065,11,0.133041
+Búsqueda binaria (Sequential),42599,11,0.039709
+Búsqueda binaria (Sequential),56702,11,0.0360829
+Búsqueda binaria (Sequential),66359,11,0.03675
+Búsqueda binaria (Sequential),73607,11,0.0356671
+Búsqueda binaria (Sequential),43479,11,0.0391658
+Búsqueda binaria (Sequential),42297,11,0.144833
+Búsqueda binaria (Sequential),94877,11,0.037834
+Búsqueda binaria (Sequential),86121,11,0.037916
+Búsqueda binaria (Sequential),64644,11,0.0392499
+Búsqueda binaria (Sequential),52832,11,0.038458
+Búsqueda binaria (Sequential),41115,11,0.0368331
+Búsqueda binaria (Sequential),23167,11,0.0415419
+Búsqueda binaria (Sequential),25754,11,0.036875
+Búsqueda binaria (Sequential),60688,11,0.0357921
+Búsqueda binaria (Sequential),28859,11,0.0330419
+Búsqueda binaria (Sequential),90330,11,0.0415
+Búsqueda binaria (Sequential),45685,11,0.0408329
+Búsqueda binaria (Sequential),99461,11,0.033
+Búsqueda binaria (Sequential),45889,11,0.0312079
+Búsqueda binaria (Sequential),53701,11,0.038625
+Búsqueda binaria (Sequential),77315,11,0.0428329
+Búsqueda binaria (Sequential),50021,11,0.0359591
+Búsqueda binaria (Sequential),27903,11,0.038458
+Búsqueda binaria (Sequential),20235,11,0.036208
+Búsqueda binaria (Sequential),57891,11,0.034875
+Búsqueda binaria (Sequential),97391,11,0.04075
+Búsqueda binaria (Sequential),74262,11,0.0347912
+Búsqueda binaria (Sequential),86094,11,0.0381661
+Búsqueda binaria (Sequential),96484,11,0.0351251
+Búsqueda binaria (Sequential),16723,11,0.0355409
+Búsqueda binaria (Sequential),56531,11,0.040333
+Búsqueda binaria (Sequential),35079,11,0.0396669
+Búsqueda binaria (Sequential),43120,11,0.0358329
+Búsqueda binaria (Sequential),15447,11,0.0383749
+Búsqueda binaria (Sequential),41948,11,0.0445829
+Búsqueda binaria (Sequential),34925,11,0.036292
+Búsqueda binaria (Sequential),58255,11,0.0393749
+Búsqueda binaria (Sequential),34554,11,0.0401249
+Búsqueda binaria (Sequential),19053,11,0.039042
+Búsqueda binaria (Sequential),71450,11,0.0363339
+Búsqueda binaria (Sequential),82166,11,0.039292
+Búsqueda binaria (Sequential),35151,11,0.0345421
+Búsqueda binaria (Sequential),30710,11,0.039625
+Búsqueda binaria (Sequential),43486,11,0.0424581
+Búsqueda binaria (Sequential),18805,11,0.041625
+Búsqueda binaria (Sequential),73571,11,0.037292
+Búsqueda binaria (Sequential),16153,11,0.037333
+Búsqueda binaria (Sequential),35116,11,0.036041
+Búsqueda binaria (Sequential),38466,11,0.0362082
+Búsqueda binaria (Sequential),75287,11,0.0670832
+Búsqueda binaria (Sequential),60040,11,0.0437079
+Búsqueda binaria (Sequential),82994,11,0.0361248
+Búsqueda binaria (Sequential),52592,11,0.0384999
+Búsqueda binaria (Sequential),52357,11,0.0387921
+Búsqueda binaria (Sequential),2847,11,0.0357078
+Búsqueda binaria (Sequential),72055,11,0.0334589
+Búsqueda binaria (Sequential),93909,11,0.035791
+Búsqueda binaria (Sequential),43145,11,0.039625
+Búsqueda binaria (Sequential),88358,11,0.040666
+Búsqueda binaria (Sequential),53695,11,0.0400001
+Búsqueda binaria (Sequential),44150,11,0.188375
+Búsqueda binaria (Sequential),12453,12,0.0504169
+Búsqueda binaria (Sequential),89021,11,0.0369998
+Búsqueda binaria (Sequential),64840,11,0.0395409
+Búsqueda binaria (Sequential),88894,11,0.0392499
+Búsqueda binaria (Sequential),82967,11,0.035458
+Búsqueda binaria (Sequential),87508,11,0.0316671
+Búsqueda binaria (Sequential),71620,11,0.0312082
+Búsqueda binaria (Sequential),67724,11,0.040917
+Búsqueda binaria (Sequential),27514,11,0.035167
+Búsqueda binaria (Sequential),55632,11,0.042208
+Búsqueda binaria (Sequential),46159,11,0.0388341
+Búsqueda binaria (Sequential),43313,11,0.034041
+Búsqueda binaria (Sequential),7869,11,0.0450001
+Búsqueda binaria (Sequential),52398,11,0.0363339
+Búsqueda binaria (Sequential),94954,11,0.0345421
+Búsqueda binaria (Sequential),22672,11,0.036
+Búsqueda binaria (Sequential),1379,11,0.0380829
+Búsqueda binaria (Sequential),35004,11,0.035625
+Búsqueda binaria (Sequential),73259,11,0.035916
+Búsqueda binaria (Sequential),91973,11,0.032333
+Búsqueda binaria (Sequential),33053,11,0.0401249
+Búsqueda binaria (Sequential),17118,11,0.0416669
+Búsqueda binaria (Sequential),43780,11,0.033333
+Búsqueda binaria (Sequential),75885,11,0.041666
+Búsqueda binaria (Sequential),84459,11,0.0367081
+Búsqueda binaria (Sequential),80179,11,0.187875
+Búsqueda binaria (Sequential),54346,11,0.0334589
+Búsqueda binaria (Sequential),62383,11,0.036916
+Búsqueda binaria (Sequential),63297,11,0.0375002
+Búsqueda binaria (Sequential),44401,11,0.0316252
+Búsqueda binaria (Sequential),1541,11,0.033
+Búsqueda binaria (Sequential),4915,11,0.034458
+Búsqueda binaria (Sequential),99257,11,0.039625
+Búsqueda binaria (Sequential),28819,11,0.0344999
+Búsqueda binaria (Sequential),83398,11,0.038459
+Búsqueda binaria (Sequential),15839,11,0.039333
+Búsqueda binaria (Sequential),86597,11,0.0346249
+Búsqueda binaria (Sequential),35212,11,0.036167
+Búsqueda binaria (Sequential),42810,11,0.03875
+Búsqueda binaria (Sequential),2332,11,0.038333
+Búsqueda binaria (Sequential),27424,11,0.0345421
+Búsqueda binaria (Sequential),59918,11,0.0337921
+Búsqueda binaria (Sequential),67495,11,0.0318328
+Búsqueda binaria (Sequential),36296,11,0.180459
+Búsqueda binaria (Sequential),81636,11,0.0391661
+Búsqueda binaria (Sequential),82598,11,0.041042
+Búsqueda binaria (Sequential),48423,12,0.041083
+Búsqueda binaria (Sequential),10354,11,0.0417081
+Búsqueda binaria (Sequential),72846,11,0.036625
+Búsqueda binaria (Sequential),90759,11,0.0389169
+Búsqueda binaria (Sequential),24597,11,0.0349581
+Búsqueda binaria (Sequential),70643,11,0.037167
+Búsqueda binaria (Sequential),1494,11,0.0316249
+Búsqueda binaria (Sequential),12530,11,0.0335411
+Búsqueda binaria (Sequential),20425,11,0.0380829
+Búsqueda binaria (Sequential),43252,11,0.031292
+Búsqueda binaria (Sequential),28758,11,0.03275
+Búsqueda binaria (Sequential),60748,11,0.0374999
+Búsqueda binaria (Sequential),27050,11,0.0386669
+Búsqueda binaria (Sequential),79441,11,0.0315411
+Búsqueda binaria (Sequential),88231,11,0.0327912
+Búsqueda binaria (Sequential),22385,11,0.0342079
+Búsqueda binaria (Sequential),92474,11,0.0389591
+Búsqueda binaria (Sequential),40560,12,0.0467091
+Búsqueda binaria (Sequential),11048,11,0.037292
+Búsqueda binaria (Sequential),74400,11,0.0395412
+Búsqueda binaria (Sequential),54663,11,0.0475
+Búsqueda binaria (Sequential),93301,11,0.0383749
+Búsqueda binaria (Sequential),68394,11,0.0400832
+Búsqueda binaria (Sequential),89279,11,0.039875
+Búsqueda binaria (Sequential),77210,11,0.0368338
+Búsqueda binaria (Sequential),73290,11,0.0385419
+Búsqueda binaria (Sequential),17466,11,0.0396662
+Búsqueda binaria (Sequential),14164,11,0.032709
+Búsqueda binaria (Sequential),3710,11,0.0341251
+Búsqueda binaria (Sequential),35505,11,0.0382911
+Búsqueda binaria (Sequential),54990,11,0.037709
+Búsqueda binaria (Sequential),5830,11,0.034916
+Búsqueda binaria (Sequential),24283,11,0.039875
+Búsqueda binaria (Sequential),72121,11,0.0361248
+Búsqueda binaria (Sequential),96240,11,0.041791
+Búsqueda binaria (Sequential),67296,11,0.0410839
+Búsqueda binaria (Sequential),30325,11,0.0393749
+Búsqueda binaria (Sequential),61705,11,0.0371248
+Búsqueda binaria (Sequential),86231,11,0.0353749
+Búsqueda binaria (Sequential),86908,11,0.036625
+Búsqueda binaria (Sequential),44731,11,0.0397081
+Búsqueda binaria (Sequential),45031,11,0.032291
+Búsqueda binaria (Sequential),45537,11,0.037042
+Búsqueda binaria (Sequential),41658,11,0.038916
+Búsqueda binaria (Sequential),79510,11,0.035
+Búsqueda binaria (Sequential),62875,11,0.039167
+Búsqueda binaria (Sequential),33470,11,0.0340419
+Búsqueda binaria (Sequential),64005,11,0.198667
+Búsqueda binaria (Sequential),42865,11,0.032291
+Búsqueda binaria (Sequential),32782,11,0.0403749
+Búsqueda binaria (Sequential),4813,11,0.0340829
+Búsqueda binaria (Sequential),84358,12,0.0382082
+Búsqueda binaria (Sequential),64226,11,0.032417
+Búsqueda binaria (Sequential),17464,11,0.0383751
+Búsqueda binaria (Sequential),2854,11,0.034834
+Búsqueda binaria (Sequential),63004,11,0.0366252
+Búsqueda binaria (Sequential),47997,11,0.045584
+Búsqueda binaria (Sequential),33273,11,0.0334999
+Búsqueda binaria (Sequential),98955,11,0.0376671
+Búsqueda binaria (Sequential),61095,11,0.0391661
+Búsqueda binaria (Sequential),26049,11,0.0377081
+Búsqueda binaria (Sequential),48175,11,0.0372918
+Búsqueda binaria (Sequential),35866,11,0.0337919
+Búsqueda binaria (Sequential),67148,11,0.0397922
+Búsqueda binaria (Sequential),95964,11,0.033125
+Búsqueda binaria (Sequential),52420,11,0.032542
+Búsqueda binaria (Sequential),39855,11,0.0345411
+Búsqueda binaria (Sequential),28613,11,0.0320831
+Búsqueda binaria (Sequential),76251,11,0.041917
+Búsqueda binaria (Sequential),7103,11,0.041333
+Búsqueda binaria (Sequential),53853,11,0.039916
+Búsqueda binaria (Sequential),8462,11,0.034292
+Búsqueda binaria (Sequential),95144,11,0.0326249
+Búsqueda binaria (Sequential),94643,11,0.0376659
+Búsqueda binaria (Sequential),84602,11,0.0365002
+Búsqueda binaria (Sequential),86660,11,0.034875
+Búsqueda binaria (Sequential),66711,11,0.0384159
+Búsqueda binaria (Sequential),89399,11,0.040333
+Búsqueda binaria (Sequential),69766,11,0.0349591
+Búsqueda binaria (Sequential),39139,11,0.0347502
+Búsqueda binaria (Sequential),63255,11,0.0397919
+Búsqueda binaria (Sequential),80795,11,0.0375409
+Búsqueda binaria (Sequential),11891,11,0.0395
+Búsqueda binaria (Sequential),66799,11,0.0410832
+Búsqueda binaria (Sequential),68478,11,0.036709
+Búsqueda binaria (Sequential),78097,12,0.035292
+Búsqueda binaria (Sequential),42612,11,0.038292
+Búsqueda binaria (Sequential),64125,11,0.043584
+Búsqueda binaria (Sequential),41673,11,0.0342082
+Búsqueda binaria (Sequential),86581,11,0.0415421
+Búsqueda binaria (Sequential),44514,11,0.035
+Búsqueda binaria (Sequential),47197,11,0.0353341
+Búsqueda binaria (Sequential),23746,11,0.0388331
+Búsqueda binaria (Sequential),10233,11,0.033167
+Búsqueda binaria (Sequential),73669,11,0.038625
+Búsqueda binaria (Sequential),22853,11,0.0337502
+Búsqueda binaria (Sequential),99527,11,0.0353339
+Búsqueda binaria (Sequential),33750,11,0.0336671
+Búsqueda binaria (Sequential),69206,11,0.0417922
+Búsqueda binaria (Sequential),68229,11,0.035
+Búsqueda binaria (Sequential),50179,11,0.0342501
+Búsqueda binaria (Sequential),82647,11,0.041083
+Búsqueda binaria (Sequential),13942,11,0.034709
+Búsqueda binaria (Sequential),79870,11,0.0412499
+Búsqueda binaria (Sequential),28160,11,0.0392499
+Búsqueda binaria (Sequential),3785,11,0.0399172
+Búsqueda binaria (Sequential),60793,11,0.035791
+Búsqueda binaria (Sequential),31575,11,0.039167
+Búsqueda binaria (Sequential),27482,11,0.0353339
+Búsqueda binaria (Sequential),56229,12,0.040333
+Búsqueda binaria (Sequential),66590,11,0.033458
+Búsqueda binaria (Sequential),69020,11,0.041917
+Búsqueda binaria (Sequential),16579,11,0.0341251
+Búsqueda binaria (Sequential),67330,11,0.0377081
+Búsqueda binaria (Sequential),27693,11,0.0412499
+Búsqueda binaria (Sequential),35479,11,0.03175
+Búsqueda binaria (Sequential),93899,11,0.0326671
+Búsqueda binaria (Sequential),64040,11,0.0373749
+Búsqueda binaria (Sequential),17919,11,0.0344589
+Búsqueda binaria (Sequential),73255,11,0.032125
+Búsqueda binaria (Sequential),88932,11,0.0379588
+Búsqueda binaria (Sequential),42699,11,0.035875
+Búsqueda binaria (Sequential),47677,11,0.033875
+Búsqueda binaria (Sequential),85312,11,0.0340829
+Búsqueda binaria (Sequential),51381,11,0.0357078
+Búsqueda binaria (Sequential),69823,11,0.0366252
+Búsqueda binaria (Sequential),80641,11,0.0312501
+Búsqueda binaria (Sequential),95179,11,0.0387081
+Búsqueda binaria (Sequential),24780,11,0.033333
+Búsqueda binaria (Sequential),19922,11,0.032166
+Búsqueda binaria (Sequential),79531,11,0.038666
+Búsqueda binaria (Sequential),72262,11,0.035208
+Búsqueda binaria (Sequential),92382,11,0.036458
+Búsqueda binaria (Sequential),20069,11,0.032166
+Búsqueda binaria (Sequential),95518,11,0.040292
+Búsqueda binaria (Sequential),18872,11,0.0322079
+Búsqueda binaria (Sequential),17205,11,0.0344161
+Búsqueda binaria (Sequential),86112,11,0.039625
+Búsqueda binaria (Sequential),75097,11,0.0363751
+Búsqueda binaria (Sequential),8006,11,0.0392501
+Búsqueda binaria (Sequential),87379,11,0.0354161
+Búsqueda binaria (Sequential),4526,11,0.0341251
+Búsqueda binaria (Sequential),36749,11,0.0370841
+Búsqueda binaria (Sequential),39236,11,0.0410001
+Búsqueda binaria (Sequential),23461,11,0.039167
+Búsqueda binaria (Sequential),18244,11,0.032125
+Búsqueda binaria (Sequential),35070,11,0.037
+Búsqueda binaria (Sequential),70821,11,0.035709
+Búsqueda binaria (Sequential),90827,11,0.0349579
+Búsqueda binaria (Sequential),46747,11,0.0395828
+Búsqueda binaria (Sequential),16776,11,0.036791
+Búsqueda binaria (Sequential),59939,11,0.0387081
+Búsqueda binaria (Sequential),22059,11,0.037167
+Búsqueda binaria (Sequential),24455,11,0.03575
+Búsqueda binaria (Sequential),90831,11,0.0339171
+Búsqueda binaria (Sequential),7032,11,0.0360829
+Búsqueda binaria (Sequential),98483,11,0.03875
+Búsqueda binaria (Sequential),24332,11,0.039625
+Búsqueda binaria (Sequential),89120,11,0.037875
+Búsqueda binaria (Sequential),20172,11,0.033
+Búsqueda binaria (Sequential),54253,11,0.0342501
+Búsqueda binaria (Sequential),84047,11,0.0402499
+Búsqueda binaria (Sequential),81632,11,0.0371248
+Búsqueda binaria (Sequential),64192,11,0.0340829
+Búsqueda binaria (Sequential),71575,11,0.0326252
+Búsqueda binaria (Sequential),3803,11,0.032875
+Búsqueda binaria (Sequential),39407,11,0.040041
+Búsqueda binaria (Sequential),28959,11,0.0337912
+Búsqueda binaria (Sequential),67447,11,0.0322501
+Búsqueda binaria (Sequential),47731,11,0.03475
+Búsqueda binaria (Sequential),71139,11,0.0315411
+Búsqueda binaria (Sequential),12058,11,0.0332501
+Búsqueda binaria (Sequential),61033,11,0.0359581
+Búsqueda binaria (Sequential),89181,11,0.0392499
+Búsqueda binaria (Sequential),97931,11,0.0332911
+Búsqueda binaria (Sequential),53320,11,0.0391251
+Búsqueda binaria (Sequential),20319,11,0.0345409
+Búsqueda binaria (Sequential),42534,11,0.03175
+Búsqueda binaria (Sequential),19091,11,0.0371251
+Búsqueda binaria (Sequential),93693,12,0.041292
+Búsqueda binaria (Sequential),66616,11,0.0382499
+Búsqueda binaria (Sequential),5279,11,0.195541
+Búsqueda binaria (Sequential),61714,11,0.0386252
+Búsqueda binaria (Sequential),992,11,0.14975
+Búsqueda binaria (Sequential),7625,11,0.0404159
+Búsqueda binaria (Sequential),12407,12,0.0385831
+Búsqueda binaria (Sequential),46272,11,0.0412499
+Búsqueda binaria (Sequential),76810,11,0.033916
+Búsqueda binaria (Sequential),92359,11,0.032708
+Búsqueda binaria (Sequential),91550,11,0.0343749
+Búsqueda binaria (Sequential),33716,11,0.035208
+Búsqueda binaria (Sequential),43093,11,0.0381251
+Búsqueda binaria (Sequential),99190,11,0.0356669
+Búsqueda binaria (Sequential),3682,11,0.037625
+Búsqueda binaria (Sequential),21471,11,0.035
+Búsqueda binaria (Sequential),65964,11,0.0350419
+Búsqueda binaria (Sequential),25078,11,0.202291
+Búsqueda binaria (Sequential),11804,11,0.0404578
+Búsqueda binaria (Sequential),55423,11,0.0379579
+Búsqueda binaria (Sequential),86954,11,0.0363751
+Búsqueda binaria (Sequential),56772,11,0.0383751
+Búsqueda binaria (Sequential),26141,11,0.0415
+Búsqueda binaria (Sequential),22370,11,0.031458
+Búsqueda binaria (Sequential),31605,11,0.0349591
+Búsqueda binaria (Sequential),29446,11,0.0351658
+Búsqueda binaria (Sequential),86721,11,0.036916
+Búsqueda binaria (Sequential),64823,11,0.0355002
+Búsqueda binaria (Sequential),27881,11,0.0389582
+Búsqueda binaria (Sequential),48805,11,0.0381658
+Búsqueda binaria (Sequential),20777,11,0.0389589
+Búsqueda binaria (Sequential),70237,11,0.0344161
+Búsqueda binaria (Sequential),55309,11,0.0332501
+Búsqueda binaria (Sequential),94518,11,0.032041
+Búsqueda binaria (Sequential),55467,11,0.0366659
+Búsqueda binaria (Sequential),60213,11,0.0355002
+Búsqueda binaria (Sequential),47605,11,0.196375
+Búsqueda binaria (Sequential),92412,11,0.033916
+Búsqueda binaria (Sequential),27418,11,0.033542
+Búsqueda binaria (Sequential),40463,11,0.0413749
+Búsqueda binaria (Sequential),82490,11,0.0382082
+Búsqueda binaria (Sequential),96785,12,0.037875
+Búsqueda binaria (Sequential),57735,11,0.040167
+Búsqueda binaria (Sequential),73272,11,0.035333
+Búsqueda binaria (Sequential),63152,11,0.0378329
+Búsqueda binaria (Sequential),12028,11,0.0371248
+Búsqueda binaria (Sequential),27664,11,0.0340419
+Búsqueda binaria (Sequential),96870,11,0.036
+Búsqueda binaria (Sequential),25618,11,0.0381249
+Búsqueda binaria (Sequential),15186,11,0.0352911
+Búsqueda binaria (Sequential),99098,11,0.0368331
+Búsqueda binaria (Sequential),10331,11,0.0341251
+Búsqueda binaria (Sequential),46392,11,0.0360408
+Búsqueda binaria (Sequential),93692,12,0.0422089
+Búsqueda binaria (Sequential),89001,11,0.032583
+Búsqueda binaria (Sequential),81552,11,0.040458
+Búsqueda binaria (Sequential),90166,11,0.0369579
+Búsqueda binaria (Sequential),20719,11,0.0374578
+B+ (IndexScan),15614,3,0.518792
+B+ (IndexScan),41876,3,0.0735831
+B+ (IndexScan),65866,3,0.0860421
+B+ (IndexScan),67086,3,0.0655411
+B+ (IndexScan),84830,3,0.070875
+B+ (IndexScan),13453,3,0.0461249
+B+ (IndexScan),29267,3,0.0655421
+B+ (IndexScan),78779,3,0.0435838
+B+ (IndexScan),81460,3,0.054583
+B+ (IndexScan),72950,3,0.0501669
+B+ (IndexScan),55131,3,0.0535841
+B+ (IndexScan),75048,3,0.0627078
+B+ (IndexScan),71803,3,0.0530831
+B+ (IndexScan),95754,3,0.052708
+B+ (IndexScan),64344,3,0.0419582
+B+ (IndexScan),98439,3,0.0440001
+B+ (IndexScan),76877,3,0.0406671
+B+ (IndexScan),57816,3,0.048334
+B+ (IndexScan),31449,3,0.0514588
+B+ (IndexScan),333,3,0.0509999
+B+ (IndexScan),80505,3,0.043083
+B+ (IndexScan),10581,3,0.0569578
+B+ (IndexScan),14515,3,0.0461251
+B+ (IndexScan),37650,3,0.0537909
+B+ (IndexScan),12852,3,0.0504171
+B+ (IndexScan),58938,3,0.0560421
+B+ (IndexScan),1506,3,0.051917
+B+ (IndexScan),89808,3,0.0548339
+B+ (IndexScan),64263,3,0.0332082
+B+ (IndexScan),89049,3,0.0396671
+B+ (IndexScan),41188,3,0.0416669
+B+ (IndexScan),27555,3,0.033875
+B+ (IndexScan),52065,3,0.051375
+B+ (IndexScan),32967,3,0.0438751
+B+ (IndexScan),45569,3,0.0484588
+B+ (IndexScan),46746,3,0.0550421
+B+ (IndexScan),49329,3,0.0450839
+B+ (IndexScan),97776,3,0.039917
+B+ (IndexScan),67317,3,0.0475419
+B+ (IndexScan),83587,3,0.040208
+B+ (IndexScan),10004,3,0.0384171
+B+ (IndexScan),94780,3,0.052833
+B+ (IndexScan),44617,3,0.05125
+B+ (IndexScan),11753,3,0.038625
+B+ (IndexScan),73067,3,0.039292
+B+ (IndexScan),70526,3,0.0404161
+B+ (IndexScan),38289,3,0.0458329
+B+ (IndexScan),37697,3,0.040292
+B+ (IndexScan),59959,3,0.0445
+B+ (IndexScan),18467,3,0.0494998
+B+ (IndexScan),84515,3,0.039625
+B+ (IndexScan),92272,3,0.0412499
+B+ (IndexScan),93902,3,0.041083
+B+ (IndexScan),75685,3,0.0384159
+B+ (IndexScan),40502,3,0.0544169
+B+ (IndexScan),3243,3,0.0552922
+B+ (IndexScan),93175,3,0.0504579
+B+ (IndexScan),48346,3,0.039333
+B+ (IndexScan),47651,3,0.0566251
+B+ (IndexScan),60434,3,0.0494579
+B+ (IndexScan),55341,3,0.0397919
+B+ (IndexScan),11887,3,0.0443331
+B+ (IndexScan),52269,3,0.043334
+B+ (IndexScan),76772,3,0.037208
+B+ (IndexScan),72673,3,0.0418751
+B+ (IndexScan),65334,3,0.0534591
+B+ (IndexScan),15264,3,0.0511669
+B+ (IndexScan),55764,3,0.0472921
+B+ (IndexScan),66370,3,0.0447091
+B+ (IndexScan),98324,3,0.0516251
+B+ (IndexScan),78665,3,0.0327919
+B+ (IndexScan),64361,3,0.0324999
+B+ (IndexScan),52187,3,0.039208
+B+ (IndexScan),68768,3,0.0334161
+B+ (IndexScan),33901,3,0.036709
+B+ (IndexScan),55046,3,0.039167
+B+ (IndexScan),73925,3,0.039333
+B+ (IndexScan),62809,3,0.0392911
+B+ (IndexScan),67234,3,0.0411251
+B+ (IndexScan),67894,3,0.054667
+B+ (IndexScan),3327,3,0.0410411
+B+ (IndexScan),75435,3,0.056667
+B+ (IndexScan),29429,3,0.0402499
+B+ (IndexScan),16909,3,0.043083
+B+ (IndexScan),6408,3,0.033834
+B+ (IndexScan),92362,3,0.0396669
+B+ (IndexScan),68580,3,0.0341251
+B+ (IndexScan),87882,3,0.0461251
+B+ (IndexScan),13445,3,0.0349581
+B+ (IndexScan),94019,3,0.040916
+B+ (IndexScan),81568,3,0.0440001
+B+ (IndexScan),56284,3,0.0524169
+B+ (IndexScan),61610,3,0.0533329
+B+ (IndexScan),18667,3,0.043042
+B+ (IndexScan),63192,3,0.0466669
+B+ (IndexScan),30006,3,0.04175
+B+ (IndexScan),15993,3,0.0333339
+B+ (IndexScan),82139,3,0.0418751
+B+ (IndexScan),91844,3,0.0382089
+B+ (IndexScan),59874,3,0.0362499
+B+ (IndexScan),88383,3,0.0541671
+B+ (IndexScan),61526,3,0.0366669
+B+ (IndexScan),93654,3,0.048917
+B+ (IndexScan),71518,3,0.0467079
+B+ (IndexScan),32900,3,0.036292
+B+ (IndexScan),73374,3,0.0563331
+B+ (IndexScan),52702,3,0.0405828
+B+ (IndexScan),87786,3,0.0333751
+B+ (IndexScan),40322,3,0.0373751
+B+ (IndexScan),71847,3,0.040625
+B+ (IndexScan),84786,3,0.033041
+B+ (IndexScan),65785,3,0.043333
+B+ (IndexScan),91531,3,0.0537499
+B+ (IndexScan),62770,3,0.034167
+B+ (IndexScan),52685,3,0.0363339
+B+ (IndexScan),56763,3,0.050792
+B+ (IndexScan),26547,3,0.0410841
+B+ (IndexScan),38585,3,0.0362501
+B+ (IndexScan),35264,3,0.0541662
+B+ (IndexScan),1216,3,0.049666
+B+ (IndexScan),4340,3,0.03975
+B+ (IndexScan),19641,3,0.047958
+B+ (IndexScan),85937,3,0.0482081
+B+ (IndexScan),78286,3,0.0342499
+B+ (IndexScan),60061,3,0.0419579
+B+ (IndexScan),68537,3,0.031875
+B+ (IndexScan),64163,3,0.0336671
+B+ (IndexScan),47178,3,0.0405831
+B+ (IndexScan),26194,3,0.036292
+B+ (IndexScan),34094,3,0.043459
+B+ (IndexScan),90787,3,0.045917
+B+ (IndexScan),63645,3,0.044375
+B+ (IndexScan),61166,3,0.0458341
+B+ (IndexScan),67013,3,0.039041
+B+ (IndexScan),65164,3,0.0346249
+B+ (IndexScan),56916,3,0.0404161
+B+ (IndexScan),73117,3,0.041625
+B+ (IndexScan),87019,3,0.0448751
+B+ (IndexScan),4407,3,0.038666
+B+ (IndexScan),38020,3,0.033875
+B+ (IndexScan),41505,3,0.0394161
+B+ (IndexScan),59986,3,0.0362091
+B+ (IndexScan),12895,3,0.0402089
+B+ (IndexScan),57469,3,0.047917
+B+ (IndexScan),90353,3,0.047917
+B+ (IndexScan),93916,3,0.0319579
+B+ (IndexScan),67525,3,0.0717922
+B+ (IndexScan),33926,3,0.032458
+B+ (IndexScan),59366,3,0.0377919
+B+ (IndexScan),23993,3,0.0540831
+B+ (IndexScan),55808,3,0.03875
+B+ (IndexScan),95418,3,0.0436669
+B+ (IndexScan),62803,3,0.032292
+B+ (IndexScan),8428,3,0.0354999
+B+ (IndexScan),85007,3,0.037042
+B+ (IndexScan),34927,3,0.0334999
+B+ (IndexScan),65330,3,0.0379591
+B+ (IndexScan),48514,3,0.0363339
+B+ (IndexScan),12670,3,0.038208
+B+ (IndexScan),25505,3,0.0394168
+B+ (IndexScan),97984,3,0.037875
+B+ (IndexScan),53912,3,0.0489999
+B+ (IndexScan),19184,3,0.0322501
+B+ (IndexScan),58904,3,0.0391251
+B+ (IndexScan),1840,3,0.0389172
+B+ (IndexScan),12081,3,0.0402909
+B+ (IndexScan),29,3,0.0401661
+B+ (IndexScan),59144,3,0.035333
+B+ (IndexScan),76106,3,0.035208
+B+ (IndexScan),71643,3,0.037625
+B+ (IndexScan),10888,3,0.0406669
+B+ (IndexScan),79972,3,0.051958
+B+ (IndexScan),26057,3,0.0313332
+B+ (IndexScan),32485,3,0.0319171
+B+ (IndexScan),15836,3,0.0396669
+B+ (IndexScan),81406,3,0.0487498
+B+ (IndexScan),5854,3,0.048375
+B+ (IndexScan),98548,3,0.031834
+B+ (IndexScan),71625,3,0.0372499
+B+ (IndexScan),35198,3,0.039709
+B+ (IndexScan),87619,3,0.0325411
+B+ (IndexScan),99309,3,0.039083
+B+ (IndexScan),83285,3,0.0401251
+B+ (IndexScan),46826,3,0.043958
+B+ (IndexScan),20285,3,0.0486251
+B+ (IndexScan),673,3,0.0412501
+B+ (IndexScan),41084,3,0.039041
+B+ (IndexScan),87109,3,0.0319162
+B+ (IndexScan),76424,3,0.0332498
+B+ (IndexScan),75273,3,0.0330419
+B+ (IndexScan),64486,3,0.0393749
+B+ (IndexScan),90408,3,0.0368331
+B+ (IndexScan),94434,3,0.0406671
+B+ (IndexScan),17677,3,0.031875
+B+ (IndexScan),71540,3,0.039916
+B+ (IndexScan),29220,3,0.0397922
+B+ (IndexScan),61995,3,0.033834
+B+ (IndexScan),77062,3,0.0455
+B+ (IndexScan),17199,3,0.0468339
+B+ (IndexScan),78399,3,0.0330829
+B+ (IndexScan),90774,3,0.0355828
+B+ (IndexScan),66155,3,0.0489999
+B+ (IndexScan),38101,3,0.0310419
+B+ (IndexScan),11067,3,0.0314582
+B+ (IndexScan),54760,3,0.038875
+B+ (IndexScan),87629,3,0.031333
+B+ (IndexScan),20988,3,0.0498751
+B+ (IndexScan),17741,3,0.031875
+B+ (IndexScan),76813,3,0.032292
+B+ (IndexScan),40109,3,0.0458329
+B+ (IndexScan),66546,3,0.039292
+B+ (IndexScan),54007,3,0.0377079
+B+ (IndexScan),51172,3,0.0368331
+B+ (IndexScan),19469,3,0.036041
+B+ (IndexScan),68162,3,0.0389169
+B+ (IndexScan),25782,3,0.0388338
+B+ (IndexScan),49284,3,0.032417
+B+ (IndexScan),1853,3,0.038292
+B+ (IndexScan),13912,3,0.0322079
+B+ (IndexScan),51033,3,0.0377919
+B+ (IndexScan),9626,3,0.0405
+B+ (IndexScan),6734,3,0.0322091
+B+ (IndexScan),45485,3,0.0400841
+B+ (IndexScan),84709,3,0.0406669
+B+ (IndexScan),46322,3,0.0395831
+B+ (IndexScan),3381,3,0.0572081
+B+ (IndexScan),3354,3,0.037625
+B+ (IndexScan),66898,3,0.038916
+B+ (IndexScan),62394,3,0.0442499
+B+ (IndexScan),42961,3,0.0422499
+B+ (IndexScan),89496,3,0.0403749
+B+ (IndexScan),39803,3,0.0419579
+B+ (IndexScan),59001,3,0.0390839
+B+ (IndexScan),42736,3,0.039625
+B+ (IndexScan),15909,3,0.0400001
+B+ (IndexScan),65218,3,0.0398331
+B+ (IndexScan),61156,3,0.040709
+B+ (IndexScan),74924,3,0.03375
+B+ (IndexScan),81082,3,0.0412092
+B+ (IndexScan),22379,3,0.0390001
+B+ (IndexScan),20171,3,0.0382499
+B+ (IndexScan),77498,3,0.044375
+B+ (IndexScan),68107,3,0.0387919
+B+ (IndexScan),27131,3,0.032125
+B+ (IndexScan),56834,3,0.0385409
+B+ (IndexScan),81703,3,0.0383749
+B+ (IndexScan),44096,3,0.038292
+B+ (IndexScan),60139,3,0.037292
+B+ (IndexScan),78410,3,0.031834
+B+ (IndexScan),30583,3,0.0495
+B+ (IndexScan),88933,3,0.038916
+B+ (IndexScan),93177,3,0.037875
+B+ (IndexScan),9111,3,0.0554998
+B+ (IndexScan),71743,3,0.036042
+B+ (IndexScan),52319,3,0.040042
+B+ (IndexScan),4477,3,0.041292
+B+ (IndexScan),25624,3,0.039208
+B+ (IndexScan),84834,3,0.031834
+B+ (IndexScan),22724,3,0.0384578
+B+ (IndexScan),5930,3,0.03975
+B+ (IndexScan),84965,3,0.0334589
+B+ (IndexScan),71404,3,0.0391251
+B+ (IndexScan),6317,3,0.0322501
+B+ (IndexScan),59222,3,0.035041
+B+ (IndexScan),98922,3,0.030542
+B+ (IndexScan),83998,3,0.037042
+B+ (IndexScan),24711,3,0.0485422
+B+ (IndexScan),63418,3,0.040625
+B+ (IndexScan),93186,3,0.0375411
+B+ (IndexScan),88950,3,0.037584
+B+ (IndexScan),2684,3,0.0422909
+B+ (IndexScan),16927,3,0.0410001
+B+ (IndexScan),84627,3,0.038625
+B+ (IndexScan),69460,3,0.0320419
+B+ (IndexScan),28669,3,0.038208
+B+ (IndexScan),67745,3,0.0385421
+B+ (IndexScan),18052,3,0.0335001
+B+ (IndexScan),21023,3,0.043375
+B+ (IndexScan),86668,3,0.0375409
+B+ (IndexScan),24381,3,0.0395002
+B+ (IndexScan),51115,3,0.037625
+B+ (IndexScan),35758,3,0.049958
+B+ (IndexScan),55753,3,0.038458
+B+ (IndexScan),69863,3,0.033292
+B+ (IndexScan),54276,3,0.0401251
+B+ (IndexScan),10310,3,0.0349998
+B+ (IndexScan),50225,3,0.0501669
+B+ (IndexScan),39966,3,0.0379172
+B+ (IndexScan),24537,3,0.0369998
+B+ (IndexScan),45098,3,0.0400001
+B+ (IndexScan),22898,3,0.0424159
+B+ (IndexScan),34531,3,0.033542
+B+ (IndexScan),60807,3,0.0507501
+B+ (IndexScan),65222,3,0.0382911
+B+ (IndexScan),54492,3,0.0391251
+B+ (IndexScan),37706,3,0.0427079
+B+ (IndexScan),61303,3,0.0375421
+B+ (IndexScan),23195,3,0.0414578
+B+ (IndexScan),42702,3,0.0381249
+B+ (IndexScan),68071,3,0.0405412
+B+ (IndexScan),63184,3,0.0369169
+B+ (IndexScan),58273,3,0.0545001
+B+ (IndexScan),15743,3,0.042625
+B+ (IndexScan),69108,3,0.040292
+B+ (IndexScan),68774,3,0.0324592
+B+ (IndexScan),35892,3,0.0415829
+B+ (IndexScan),12395,3,0.0353339
+B+ (IndexScan),28093,3,0.0330419
+B+ (IndexScan),30322,3,0.0421659
+B+ (IndexScan),644,3,0.04075
+B+ (IndexScan),12206,3,0.037333
+B+ (IndexScan),59522,3,0.041584
+B+ (IndexScan),84631,3,0.0395002
+B+ (IndexScan),43312,3,0.0414171
+B+ (IndexScan),53478,3,0.0353339
+B+ (IndexScan),71443,3,0.0406671
+B+ (IndexScan),87871,3,0.045375
+B+ (IndexScan),23915,3,0.0312501
+B+ (IndexScan),3564,3,0.039167
+B+ (IndexScan),46131,3,0.036834
+B+ (IndexScan),20547,3,0.0576659
+B+ (IndexScan),46099,3,0.0354159
+B+ (IndexScan),73663,3,0.0348331
+B+ (IndexScan),90068,3,0.0512502
+B+ (IndexScan),75017,3,0.0342501
+B+ (IndexScan),70567,3,0.0339171
+B+ (IndexScan),28383,3,0.0504171
+B+ (IndexScan),14378,3,0.0327921
+B+ (IndexScan),81368,3,0.0401661
+B+ (IndexScan),93850,3,0.0339581
+B+ (IndexScan),36763,3,0.034
+B+ (IndexScan),72850,3,0.039625
+B+ (IndexScan),98468,3,0.0312091
+B+ (IndexScan),74455,3,0.044625
+B+ (IndexScan),95810,3,0.0319581
+B+ (IndexScan),28107,3,0.03275
+B+ (IndexScan),74690,3,0.035208
+B+ (IndexScan),38627,3,0.0389591
+B+ (IndexScan),73772,3,0.033417
+B+ (IndexScan),35141,3,0.0398329
+B+ (IndexScan),87859,3,0.0318328
+B+ (IndexScan),72842,3,0.0371251
+B+ (IndexScan),17383,3,0.033959
+B+ (IndexScan),13299,3,0.0334999
+B+ (IndexScan),34566,3,0.0420841
+B+ (IndexScan),12640,3,0.0419589
+B+ (IndexScan),57155,3,0.0391249
+B+ (IndexScan),22450,3,0.0387919
+B+ (IndexScan),13899,3,0.0306661
+B+ (IndexScan),89725,3,0.0391661
+B+ (IndexScan),7921,3,0.0356669
+B+ (IndexScan),99499,3,0.04175
+B+ (IndexScan),46695,3,0.0430839
+B+ (IndexScan),94681,3,0.0430411
+B+ (IndexScan),24314,3,0.0368331
+B+ (IndexScan),84666,3,0.0390839
+B+ (IndexScan),82587,3,0.0501659
+B+ (IndexScan),13936,3,0.0432502
+B+ (IndexScan),66405,3,0.0387919
+B+ (IndexScan),41098,3,0.03975
+B+ (IndexScan),36279,3,0.0320841
+B+ (IndexScan),77085,3,0.032875
+B+ (IndexScan),8378,3,0.030875
+B+ (IndexScan),38147,3,0.0303749
+B+ (IndexScan),41236,3,0.037292
+B+ (IndexScan),21154,3,0.0307499
+B+ (IndexScan),34192,3,0.031959
+B+ (IndexScan),33571,3,0.0401661
+B+ (IndexScan),8242,3,0.031166
+B+ (IndexScan),1819,3,0.0389169
+B+ (IndexScan),53955,3,0.0381251
+B+ (IndexScan),33692,3,0.0309581
+B+ (IndexScan),54334,3,0.0384999
+B+ (IndexScan),2023,3,0.031583
+B+ (IndexScan),7512,3,0.041208
+B+ (IndexScan),12642,3,0.0391251
+B+ (IndexScan),30832,3,0.039916
+B+ (IndexScan),3012,3,0.040458
+B+ (IndexScan),40622,3,0.0363751
+B+ (IndexScan),16125,3,0.0320422
+B+ (IndexScan),12304,3,0.0306671
+B+ (IndexScan),89893,3,0.037459
+B+ (IndexScan),73555,3,0.030875
+B+ (IndexScan),75561,3,0.0340419
+B+ (IndexScan),45916,3,0.0473331
+B+ (IndexScan),41285,3,0.037042
+B+ (IndexScan),59775,3,0.037042
+B+ (IndexScan),79595,3,0.0323341
+B+ (IndexScan),82016,3,0.0401661
+B+ (IndexScan),85816,3,0.0389172
+B+ (IndexScan),93614,3,0.0382499
+B+ (IndexScan),80629,3,0.0317919
+B+ (IndexScan),4983,3,0.0378748
+B+ (IndexScan),52979,3,0.0315839
+B+ (IndexScan),41428,3,0.0372501
+B+ (IndexScan),79664,3,0.0324999
+B+ (IndexScan),28264,3,0.0399172
+B+ (IndexScan),77865,3,0.0394168
+B+ (IndexScan),60644,3,0.036292
+B+ (IndexScan),55853,3,0.036292
+B+ (IndexScan),88595,3,0.036875
+B+ (IndexScan),15656,3,0.0423749
+B+ (IndexScan),89977,3,0.0355421
+B+ (IndexScan),49041,3,0.032167
+B+ (IndexScan),65702,3,0.0390832
+B+ (IndexScan),89313,3,0.0388341
+B+ (IndexScan),32975,3,0.033
+B+ (IndexScan),50994,3,0.0365828
+B+ (IndexScan),38258,3,0.0366671
+B+ (IndexScan),46704,3,0.039625
+B+ (IndexScan),7554,3,0.0394592
+B+ (IndexScan),96389,3,0.039292
+B+ (IndexScan),93740,3,0.0308331
+B+ (IndexScan),57245,3,0.0382499
+B+ (IndexScan),3102,3,0.03875
+B+ (IndexScan),36888,3,0.0320831
+B+ (IndexScan),91135,3,0.0446669
+B+ (IndexScan),43326,3,0.0384161
+B+ (IndexScan),37953,3,0.0312091
+B+ (IndexScan),95306,3,0.0307499
+B+ (IndexScan),16033,3,0.0307921
+B+ (IndexScan),38921,3,0.0379581
+B+ (IndexScan),54610,3,0.0391251
+B+ (IndexScan),41797,3,0.043167
+B+ (IndexScan),76757,3,0.0380839
+B+ (IndexScan),2657,3,0.036583
+B+ (IndexScan),71062,3,0.0317502
+B+ (IndexScan),44891,3,0.0393749
+B+ (IndexScan),25880,3,0.038709
+B+ (IndexScan),73514,3,0.0306251
+B+ (IndexScan),7360,3,0.0385409
+B+ (IndexScan),94592,3,0.0401251
+B+ (IndexScan),14759,3,0.03175
+B+ (IndexScan),21250,3,0.03
+B+ (IndexScan),81130,3,0.0458329
+B+ (IndexScan),16081,3,0.0311658
+B+ (IndexScan),15504,3,0.0395002
+B+ (IndexScan),4892,3,0.0375421
+B+ (IndexScan),16474,3,0.0322079
+B+ (IndexScan),68497,3,0.0310841
+B+ (IndexScan),46405,3,0.0377919
+B+ (IndexScan),78244,3,0.0434171
+B+ (IndexScan),84921,3,0.0320831
+B+ (IndexScan),85957,3,0.03875
+B+ (IndexScan),39616,3,0.038875
+B+ (IndexScan),3775,3,0.0309579
+B+ (IndexScan),55676,3,0.036875
+B+ (IndexScan),75777,3,0.0318328
+B+ (IndexScan),16555,3,0.0322091
+B+ (IndexScan),46658,3,0.0358331
+B+ (IndexScan),54434,3,0.0439161
+B+ (IndexScan),50346,3,0.0392501
+B+ (IndexScan),49439,3,0.0348329
+B+ (IndexScan),31367,3,0.0409998
+B+ (IndexScan),55180,3,0.0414171
+B+ (IndexScan),86848,3,0.033125
+B+ (IndexScan),28779,3,0.0405421
+B+ (IndexScan),16412,3,0.030708
+B+ (IndexScan),24048,3,0.03875
+B+ (IndexScan),71163,3,0.0381251
+B+ (IndexScan),3725,3,0.041167
+B+ (IndexScan),86713,3,0.035041
+B+ (IndexScan),94014,3,0.0339171
+B+ (IndexScan),70954,3,0.036
+B+ (IndexScan),89621,3,0.037875
+B+ (IndexScan),72732,3,0.0375421
+B+ (IndexScan),52018,3,0.0413749
+B+ (IndexScan),33420,3,0.0352911
+B+ (IndexScan),19358,3,0.033125
+B+ (IndexScan),29918,3,0.0412501
+B+ (IndexScan),3063,3,0.040041
+B+ (IndexScan),2176,3,0.0316252
+B+ (IndexScan),36285,3,0.0314999
+B+ (IndexScan),70930,3,0.033292
+B+ (IndexScan),62763,3,0.032875
+B+ (IndexScan),54773,3,0.038042
+B+ (IndexScan),34579,3,0.0346249
+B+ (IndexScan),41255,3,0.0405831
+B+ (IndexScan),18175,3,0.0342501
+B+ (IndexScan),82154,3,0.0397081
+B+ (IndexScan),77811,3,0.0330829
+B+ (IndexScan),11724,3,0.031166
+B+ (IndexScan),23502,3,0.0397079
+B+ (IndexScan),72481,3,0.039292
+B+ (IndexScan),4982,3,0.036417
+B+ (IndexScan),85225,3,0.0326661
+B+ (IndexScan),67378,3,0.0372911
+B+ (IndexScan),34764,3,0.0313751
+B+ (IndexScan),44658,3,0.038459
+B+ (IndexScan),82970,3,0.0393749
+B+ (IndexScan),68217,3,0.0398331
+B+ (IndexScan),98899,3,0.0306671
+B+ (IndexScan),97399,3,0.030709
+B+ (IndexScan),41616,3,0.0366669
+B+ (IndexScan),7374,3,0.039042
+B+ (IndexScan),86229,3,0.0436669
+B+ (IndexScan),1496,3,0.0386671
+B+ (IndexScan),82295,3,0.047083
+B+ (IndexScan),31826,3,0.0415
+B+ (IndexScan),61676,3,0.032709
+B+ (IndexScan),7642,3,0.037875
+B+ (IndexScan),29077,3,0.039625
+B+ (IndexScan),89017,3,0.039208
+B+ (IndexScan),66666,3,0.038875
+B+ (IndexScan),19772,3,0.042042
+B+ (IndexScan),97674,3,0.0402501
+B+ (IndexScan),52308,3,0.0397919
+B+ (IndexScan),92704,3,0.039666
+B+ (IndexScan),47177,3,0.038875
+B+ (IndexScan),30476,3,0.040041
+B+ (IndexScan),73609,3,0.0304999
+B+ (IndexScan),36145,3,0.0310841
+B+ (IndexScan),45048,3,0.037459
+B+ (IndexScan),26343,3,0.0315001
+B+ (IndexScan),49117,3,0.033
+B+ (IndexScan),47070,3,0.039875
+B+ (IndexScan),60198,3,0.0375831
+B+ (IndexScan),83495,3,0.0392091
+B+ (IndexScan),59974,3,0.0371251
+B+ (IndexScan),71932,3,0.0378748
+B+ (IndexScan),62137,3,0.033041
+B+ (IndexScan),88265,3,0.03775
+B+ (IndexScan),76098,3,0.0327921
+B+ (IndexScan),40920,3,0.036834
+B+ (IndexScan),24629,3,0.037625
+B+ (IndexScan),20748,3,0.039333
+B+ (IndexScan),82316,3,0.0370829
+B+ (IndexScan),53811,3,0.0385421
+B+ (IndexScan),20157,3,0.039083
+B+ (IndexScan),63552,3,0.0326668
+B+ (IndexScan),697,3,0.039333
+B+ (IndexScan),46457,3,0.0360422
+B+ (IndexScan),68581,3,0.031166
+B+ (IndexScan),92059,3,0.037791
+B+ (IndexScan),53521,3,0.0310829
+B+ (IndexScan),4917,3,0.0361251
+B+ (IndexScan),83771,3,0.0370841
+B+ (IndexScan),22620,3,0.0377921
+B+ (IndexScan),11038,3,0.0316668
+B+ (IndexScan),39196,3,0.0392499
+B+ (IndexScan),48863,3,0.0323339
+B+ (IndexScan),71661,3,0.0373342
+B+ (IndexScan),95815,3,0.0310419
+B+ (IndexScan),34737,3,0.0313339
+B+ (IndexScan),18083,3,0.0332498
+B+ (IndexScan),93680,3,0.038458
+B+ (IndexScan),96931,3,0.039042
+B+ (IndexScan),13206,3,0.032333
+B+ (IndexScan),2406,3,0.0428329
+B+ (IndexScan),69916,3,0.0308331
+B+ (IndexScan),28459,3,0.039459
+B+ (IndexScan),91174,3,0.039042
+B+ (IndexScan),76335,3,0.0354999
+B+ (IndexScan),40202,3,0.0372499
+B+ (IndexScan),75056,3,0.0344589
+B+ (IndexScan),5852,3,0.0419999
+B+ (IndexScan),51548,3,0.041292
+B+ (IndexScan),49884,3,0.033875
+B+ (IndexScan),70646,3,0.0332501
+B+ (IndexScan),67712,3,0.0394168
+B+ (IndexScan),84417,3,0.0379169
+B+ (IndexScan),86740,3,0.0337502
+B+ (IndexScan),20716,3,0.0395
+B+ (IndexScan),66685,3,0.0418329
+B+ (IndexScan),13753,3,0.036
+B+ (IndexScan),11212,3,0.0351658
+B+ (IndexScan),18599,3,0.043334
+B+ (IndexScan),96021,3,0.0316671
+B+ (IndexScan),51015,3,0.0404168
+B+ (IndexScan),43727,3,0.063167
+B+ (IndexScan),71761,3,0.0380839
+B+ (IndexScan),34268,3,0.0322501
+B+ (IndexScan),40688,3,0.036625
+B+ (IndexScan),5452,3,0.0465829
+B+ (IndexScan),96644,3,0.102375
+B+ (IndexScan),77690,3,0.0336668
+B+ (IndexScan),86805,3,0.0387921
+B+ (IndexScan),24875,3,0.0371251
+B+ (IndexScan),21262,3,0.0301669
+B+ (IndexScan),38393,3,0.0363749
+B+ (IndexScan),38705,3,0.0369579
+B+ (IndexScan),70932,3,0.0311669
+B+ (IndexScan),37432,3,0.039666
+B+ (IndexScan),46822,3,0.0390001
+B+ (IndexScan),17565,3,0.031959
+B+ (IndexScan),50937,3,0.0365002
+B+ (IndexScan),24733,3,0.0362501
+B+ (IndexScan),97912,3,0.0385421
+B+ (IndexScan),82552,3,0.037875
+B+ (IndexScan),1239,3,0.0382089
+B+ (IndexScan),79424,3,0.032834
+B+ (IndexScan),84907,3,0.0312091
+B+ (IndexScan),62917,3,0.031875
+B+ (IndexScan),55398,3,0.0384171
+B+ (IndexScan),46617,3,0.0362501
+B+ (IndexScan),70435,3,0.040042
+B+ (IndexScan),22399,3,0.037333
+B+ (IndexScan),94632,3,0.0390422
+B+ (IndexScan),67659,3,0.0379588
+B+ (IndexScan),3869,3,0.0306249
+B+ (IndexScan),23544,3,0.0308331
+B+ (IndexScan),41245,3,0.037625
+B+ (IndexScan),70661,3,0.0311672
+B+ (IndexScan),18973,3,0.039208
+B+ (IndexScan),21488,3,0.030875
+B+ (IndexScan),15296,3,0.0381661
+B+ (IndexScan),67502,3,0.036709
+B+ (IndexScan),87518,3,0.0313341
+B+ (IndexScan),92325,3,0.0375831
+B+ (IndexScan),84333,3,0.039083
+B+ (IndexScan),262,3,0.037458
+B+ (IndexScan),49094,3,0.0313749
+B+ (IndexScan),8337,3,0.030875
+B+ (IndexScan),48235,3,0.0495831
+B+ (IndexScan),39669,3,0.0372909
+B+ (IndexScan),28337,3,0.0392501
+B+ (IndexScan),69748,3,0.0317921
+B+ (IndexScan),20215,3,0.0393749
+B+ (IndexScan),78578,3,0.034
+B+ (IndexScan),79957,3,0.0394159
+B+ (IndexScan),32527,3,0.031125
+B+ (IndexScan),16584,3,0.030875
+B+ (IndexScan),13929,3,0.0304589
+B+ (IndexScan),42768,3,0.037208
+B+ (IndexScan),63513,3,0.0324999
+B+ (IndexScan),14077,3,0.030125
+B+ (IndexScan),95241,3,0.0488749
+B+ (IndexScan),9586,3,0.0409172
+B+ (IndexScan),49965,3,0.033
+B+ (IndexScan),34416,3,0.032708
+B+ (IndexScan),80866,3,0.0393749
+B+ (IndexScan),39518,3,0.0385831
+B+ (IndexScan),84876,3,0.031333
+B+ (IndexScan),15408,3,0.0378338
+B+ (IndexScan),45587,3,0.0379172
+B+ (IndexScan),62179,3,0.0376252
+B+ (IndexScan),65373,3,0.038875
+B+ (IndexScan),15852,3,0.0386671
+B+ (IndexScan),72823,3,0.039917
+B+ (IndexScan),68020,3,0.0412918
+B+ (IndexScan),32379,3,0.0308331
+B+ (IndexScan),47013,3,0.0405
+B+ (IndexScan),89593,3,0.037
+B+ (IndexScan),59761,3,0.0363751
+B+ (IndexScan),76719,3,0.032834
+B+ (IndexScan),45236,3,0.037208
+B+ (IndexScan),10820,3,0.0401251
+B+ (IndexScan),9049,3,0.0382082
+B+ (IndexScan),11517,3,0.0325001
+B+ (IndexScan),64857,3,0.0312091
+B+ (IndexScan),40898,3,0.0362089
+B+ (IndexScan),34774,3,0.0312501
+B+ (IndexScan),98736,3,0.0312501
+B+ (IndexScan),86784,3,0.032417
+B+ (IndexScan),29629,3,0.037709
+B+ (IndexScan),22065,3,0.0395831
+B+ (IndexScan),42599,3,0.0374999
+B+ (IndexScan),56702,3,0.0386669
+B+ (IndexScan),66359,3,0.0399998
+B+ (IndexScan),73607,3,0.0310831
+B+ (IndexScan),43479,3,0.0379172
+B+ (IndexScan),42297,3,0.051792
+B+ (IndexScan),94877,3,0.0416669
+B+ (IndexScan),86121,3,0.0402499
+B+ (IndexScan),64644,3,0.0410001
+B+ (IndexScan),52832,3,0.038458
+B+ (IndexScan),41115,3,0.0373751
+B+ (IndexScan),23167,3,0.0403749
+B+ (IndexScan),25754,3,0.037625
+B+ (IndexScan),60688,3,0.0363751
+B+ (IndexScan),28859,3,0.0381251
+B+ (IndexScan),90330,3,0.0405002
+B+ (IndexScan),45685,3,0.0373749
+B+ (IndexScan),99461,3,0.0414159
+B+ (IndexScan),45889,3,0.0366671
+B+ (IndexScan),53701,3,0.032875
+B+ (IndexScan),77315,3,0.035041
+B+ (IndexScan),50021,3,0.0373749
+B+ (IndexScan),27903,3,0.0312501
+B+ (IndexScan),20235,3,0.0384999
+B+ (IndexScan),57891,3,0.042042
+B+ (IndexScan),97391,3,0.034
+B+ (IndexScan),74262,3,0.042042
+B+ (IndexScan),86094,3,0.0383749
+B+ (IndexScan),96484,3,0.0384159
+B+ (IndexScan),16723,3,0.0347081
+B+ (IndexScan),56531,3,0.038292
+B+ (IndexScan),35079,3,0.041333
+B+ (IndexScan),43120,3,0.0412501
+B+ (IndexScan),15447,3,0.0382501
+B+ (IndexScan),41948,3,0.041167
+B+ (IndexScan),34925,3,0.034333
+B+ (IndexScan),58255,3,0.0437088
+B+ (IndexScan),34554,3,0.0313341
+B+ (IndexScan),19053,3,0.0313341
+B+ (IndexScan),71450,3,0.0402911
+B+ (IndexScan),82166,3,0.0400001
+B+ (IndexScan),35151,3,0.03875
+B+ (IndexScan),30710,3,0.0419582
+B+ (IndexScan),43486,3,0.039083
+B+ (IndexScan),18805,3,0.0394159
+B+ (IndexScan),73571,3,0.0323339
+B+ (IndexScan),16153,3,0.0337081
+B+ (IndexScan),35116,3,0.0387079
+B+ (IndexScan),38466,3,0.0386669
+B+ (IndexScan),75287,3,0.034875
+B+ (IndexScan),60040,3,0.040625
+B+ (IndexScan),82994,3,0.0418329
+B+ (IndexScan),52592,3,0.0395
+B+ (IndexScan),52357,3,0.0401249
+B+ (IndexScan),2847,3,0.042333
+B+ (IndexScan),72055,3,0.041042
+B+ (IndexScan),93909,3,0.03275
+B+ (IndexScan),43145,3,0.0405419
+B+ (IndexScan),88358,3,0.038875
+B+ (IndexScan),53695,3,0.0316671
+B+ (IndexScan),44150,3,0.038875
+B+ (IndexScan),12453,3,0.0304158
+B+ (IndexScan),89021,3,0.038292
+B+ (IndexScan),64840,3,0.0302079
+B+ (IndexScan),88894,3,0.0380832
+B+ (IndexScan),82967,3,0.0380001
+B+ (IndexScan),87508,3,0.0316671
+B+ (IndexScan),71620,3,0.03675
+B+ (IndexScan),67724,3,0.0431251
+B+ (IndexScan),27514,3,0.0339579
+B+ (IndexScan),55632,3,0.036834
+B+ (IndexScan),46159,3,0.0383342
+B+ (IndexScan),43313,3,0.0379172
+B+ (IndexScan),7869,3,0.036042
+B+ (IndexScan),52398,3,0.0395
+B+ (IndexScan),94954,3,0.0445419
+B+ (IndexScan),22672,3,0.0375421
+B+ (IndexScan),1379,3,0.0377079
+B+ (IndexScan),35004,3,0.032417
+B+ (IndexScan),73259,3,0.045625
+B+ (IndexScan),91973,3,0.037875
+B+ (IndexScan),33053,3,0.0373749
+B+ (IndexScan),17118,3,0.0419589
+B+ (IndexScan),43780,3,0.040333
+B+ (IndexScan),75885,3,0.0366659
+B+ (IndexScan),84459,3,0.0393749
+B+ (IndexScan),80179,3,0.0404159
+B+ (IndexScan),54346,3,0.0395412
+B+ (IndexScan),62383,3,0.0345842
+B+ (IndexScan),63297,3,0.0348329
+B+ (IndexScan),44401,3,0.039292
+B+ (IndexScan),1541,3,0.0425831
+B+ (IndexScan),4915,3,0.0391658
+B+ (IndexScan),99257,3,0.038584
+B+ (IndexScan),28819,3,0.037208
+B+ (IndexScan),83398,3,0.04075
+B+ (IndexScan),15839,3,0.0391251
+B+ (IndexScan),86597,3,0.0336668
+B+ (IndexScan),35212,3,0.0402499
+B+ (IndexScan),42810,3,0.03875
+B+ (IndexScan),2332,3,0.037292
+B+ (IndexScan),27424,3,0.0323751
+B+ (IndexScan),59918,3,0.0363751
+B+ (IndexScan),67495,3,0.041292
+B+ (IndexScan),36296,3,0.0312079
+B+ (IndexScan),81636,3,0.0395421
+B+ (IndexScan),82598,3,0.0388341
+B+ (IndexScan),48423,3,0.032417
+B+ (IndexScan),10354,3,0.0329581
+B+ (IndexScan),72846,3,0.038167
+B+ (IndexScan),90759,3,0.0422921
+B+ (IndexScan),24597,3,0.0383339
+B+ (IndexScan),70643,3,0.0365409
+B+ (IndexScan),1494,3,0.0372499
+B+ (IndexScan),12530,3,0.0313749
+B+ (IndexScan),20425,3,0.0372499
+B+ (IndexScan),43252,3,0.0385421
+B+ (IndexScan),28758,3,0.0373749
+B+ (IndexScan),60748,3,0.0390001
+B+ (IndexScan),27050,3,0.033959
+B+ (IndexScan),79441,3,0.0362499
+B+ (IndexScan),88231,3,0.037459
+B+ (IndexScan),22385,3,0.037916
+B+ (IndexScan),92474,3,0.038916
+B+ (IndexScan),40560,3,0.038292
+B+ (IndexScan),11048,3,0.031583
+B+ (IndexScan),74400,3,0.0403749
+B+ (IndexScan),54663,3,0.040917
+B+ (IndexScan),93301,3,0.0405
+B+ (IndexScan),68394,3,0.0346249
+B+ (IndexScan),89279,3,0.040208
+B+ (IndexScan),77210,3,0.043167
+B+ (IndexScan),73290,3,0.0611669
+B+ (IndexScan),17466,3,0.0315001
+B+ (IndexScan),14164,3,0.0314161
+B+ (IndexScan),3710,3,0.0389169
+B+ (IndexScan),35505,3,0.037333
+B+ (IndexScan),54990,3,0.03875
+B+ (IndexScan),5830,3,0.0390408
+B+ (IndexScan),24283,3,0.0352501
+B+ (IndexScan),72121,3,0.0395828
+B+ (IndexScan),96240,3,0.0386669
+B+ (IndexScan),67296,3,0.0372082
+B+ (IndexScan),30325,3,0.040875
+B+ (IndexScan),61705,3,0.0323341
+B+ (IndexScan),86231,3,0.0371251
+B+ (IndexScan),86908,3,0.0321248
+B+ (IndexScan),44731,3,0.0378331
+B+ (IndexScan),45031,3,0.037459
+B+ (IndexScan),45537,3,0.0368329
+B+ (IndexScan),41658,3,0.0367081
+B+ (IndexScan),79510,3,0.031166
+B+ (IndexScan),62875,3,0.0323749
+B+ (IndexScan),33470,3,0.031875
+B+ (IndexScan),64005,3,0.030875
+B+ (IndexScan),42865,3,0.0377919
+B+ (IndexScan),32782,3,0.0321248
+B+ (IndexScan),4813,3,0.043625
+B+ (IndexScan),84358,3,0.039584
+B+ (IndexScan),64226,3,0.031959
+B+ (IndexScan),17464,3,0.031291
+B+ (IndexScan),2854,3,0.035875
+B+ (IndexScan),63004,3,0.0312079
+B+ (IndexScan),47997,3,0.0402089
+B+ (IndexScan),33273,3,0.0317912
+B+ (IndexScan),98955,3,0.0306671
+B+ (IndexScan),61095,3,0.035791
+B+ (IndexScan),26049,3,0.0313749
+B+ (IndexScan),48175,3,0.038292
+B+ (IndexScan),35866,3,0.0312079
+B+ (IndexScan),67148,3,0.0362501
+B+ (IndexScan),95964,3,0.0310419
+B+ (IndexScan),52420,3,0.0417919
+B+ (IndexScan),39855,3,0.0393749
+B+ (IndexScan),28613,3,0.0378329
+B+ (IndexScan),76251,3,0.0343749
+B+ (IndexScan),7103,3,0.0400422
+B+ (IndexScan),53853,3,0.0380841
+B+ (IndexScan),8462,3,0.033542
+B+ (IndexScan),95144,3,0.0388329
+B+ (IndexScan),94643,3,0.040083
+B+ (IndexScan),84602,3,0.0390001
+B+ (IndexScan),86660,3,0.031583
+B+ (IndexScan),66711,3,0.0465419
+B+ (IndexScan),89399,3,0.0389998
+B+ (IndexScan),69766,3,0.030959
+B+ (IndexScan),39139,3,0.038458
+B+ (IndexScan),63255,3,0.033875
+B+ (IndexScan),80795,3,0.041625
+B+ (IndexScan),11891,3,0.0405421
+B+ (IndexScan),66799,3,0.037916
+B+ (IndexScan),68478,3,0.031458
+B+ (IndexScan),78097,3,0.032959
+B+ (IndexScan),42612,3,0.03775
+B+ (IndexScan),64125,3,0.0307921
+B+ (IndexScan),41673,3,0.037
+B+ (IndexScan),86581,3,0.0316671
+B+ (IndexScan),44514,3,0.038625
+B+ (IndexScan),47197,3,0.0396671
+B+ (IndexScan),23746,3,0.0310412
+B+ (IndexScan),10233,3,0.0305001
+B+ (IndexScan),73669,3,0.0310841
+B+ (IndexScan),22853,3,0.0391249
+B+ (IndexScan),99527,3,0.0385831
+B+ (IndexScan),33750,3,0.031125
+B+ (IndexScan),69206,3,0.0384171
+B+ (IndexScan),68229,3,0.031875
+B+ (IndexScan),50179,3,0.0373749
+B+ (IndexScan),82647,3,0.037709
+B+ (IndexScan),13942,3,0.031417
+B+ (IndexScan),79870,3,0.0390839
+B+ (IndexScan),28160,3,0.0406669
+B+ (IndexScan),3785,3,0.0306249
+B+ (IndexScan),60793,3,0.035292
+B+ (IndexScan),31575,3,0.0399579
+B+ (IndexScan),27482,3,0.032292
+B+ (IndexScan),56229,3,0.0395421
+B+ (IndexScan),66590,3,0.038458
+B+ (IndexScan),69020,3,0.031
+B+ (IndexScan),16579,3,0.031
+B+ (IndexScan),67330,3,0.0357919
+B+ (IndexScan),27693,3,0.0303751
+B+ (IndexScan),35479,3,0.0370829
+B+ (IndexScan),93899,3,0.0318328
+B+ (IndexScan),64040,3,0.0306671
+B+ (IndexScan),17919,3,0.033
+B+ (IndexScan),73255,3,0.039875
+B+ (IndexScan),88932,3,0.038458
+B+ (IndexScan),42699,3,0.0377912
+B+ (IndexScan),47677,3,0.0419999
+B+ (IndexScan),85312,3,0.0353332
+B+ (IndexScan),51381,3,0.038292
+B+ (IndexScan),69823,3,0.0318328
+B+ (IndexScan),80641,3,0.0352911
+B+ (IndexScan),95179,3,0.037459
+B+ (IndexScan),24780,3,0.0374999
+B+ (IndexScan),19922,3,0.0373339
+B+ (IndexScan),79531,3,0.032125
+B+ (IndexScan),72262,3,0.04075
+B+ (IndexScan),92382,3,0.0532079
+B+ (IndexScan),20069,3,0.047625
+B+ (IndexScan),95518,3,0.0358331
+B+ (IndexScan),18872,3,0.0450001
+B+ (IndexScan),17205,3,0.040917
+B+ (IndexScan),86112,3,0.0385002
+B+ (IndexScan),75097,3,0.0336671
+B+ (IndexScan),8006,3,0.0368748
+B+ (IndexScan),87379,3,0.0340841
+B+ (IndexScan),4526,3,0.0379172
+B+ (IndexScan),36749,3,0.035041
+B+ (IndexScan),39236,3,0.0398341
+B+ (IndexScan),23461,3,0.040709
+B+ (IndexScan),18244,3,0.0358329
+B+ (IndexScan),35070,3,0.0424581
+B+ (IndexScan),70821,3,0.033292
+B+ (IndexScan),90827,3,0.0353339
+B+ (IndexScan),46747,3,0.0395
+B+ (IndexScan),16776,3,0.0326671
+B+ (IndexScan),59939,3,0.043792
+B+ (IndexScan),22059,3,0.0397919
+B+ (IndexScan),24455,3,0.035834
+B+ (IndexScan),90831,3,0.0347502
+B+ (IndexScan),7032,3,0.032458
+B+ (IndexScan),98483,3,0.0320419
+B+ (IndexScan),24332,3,0.034417
+B+ (IndexScan),89120,3,0.038458
+B+ (IndexScan),20172,3,0.0379579
+B+ (IndexScan),54253,3,0.0385409
+B+ (IndexScan),84047,3,0.038458
+B+ (IndexScan),81632,3,0.040625
+B+ (IndexScan),64192,3,0.0327502
+B+ (IndexScan),71575,3,0.0461249
+B+ (IndexScan),3803,3,0.0303751
+B+ (IndexScan),39407,3,0.038584
+B+ (IndexScan),28959,3,0.040709
+B+ (IndexScan),67447,3,0.0396671
+B+ (IndexScan),47731,3,0.041167
+B+ (IndexScan),71139,3,0.032166
+B+ (IndexScan),12058,3,0.040458
+B+ (IndexScan),61033,3,0.0375002
+B+ (IndexScan),89181,3,0.0370841
+B+ (IndexScan),97931,3,0.038625
+B+ (IndexScan),53320,3,0.0312079
+B+ (IndexScan),20319,3,0.03875
+B+ (IndexScan),42534,3,0.0373749
+B+ (IndexScan),19091,3,0.032417
+B+ (IndexScan),93693,3,0.0389998
+B+ (IndexScan),66616,3,0.040041
+B+ (IndexScan),5279,3,0.043375
+B+ (IndexScan),61714,3,0.0342908
+B+ (IndexScan),992,3,0.0418751
+B+ (IndexScan),7625,3,0.0394171
+B+ (IndexScan),12407,3,0.031875
+B+ (IndexScan),46272,3,0.0427079
+B+ (IndexScan),76810,3,0.0344999
+B+ (IndexScan),92359,3,0.0367919
+B+ (IndexScan),91550,3,0.0394171
+B+ (IndexScan),33716,3,0.033167
+B+ (IndexScan),43093,3,0.0386671
+B+ (IndexScan),99190,3,0.0339169
+B+ (IndexScan),3682,3,0.0395
+B+ (IndexScan),21471,3,0.0332091
+B+ (IndexScan),65964,3,0.040292
+B+ (IndexScan),25078,3,0.046917
+B+ (IndexScan),11804,3,0.0389169
+B+ (IndexScan),55423,3,0.0401251
+B+ (IndexScan),86954,3,0.032542
+B+ (IndexScan),56772,3,0.038458
+B+ (IndexScan),26141,3,0.0309579
+B+ (IndexScan),22370,3,0.0379579
+B+ (IndexScan),31605,3,0.041042
+B+ (IndexScan),29446,3,0.039042
+B+ (IndexScan),86721,3,0.0312082
+B+ (IndexScan),64823,3,0.0302081
+B+ (IndexScan),27881,3,0.0322082
+B+ (IndexScan),48805,3,0.0324582
+B+ (IndexScan),20777,3,0.039333
+B+ (IndexScan),70237,3,0.031
+B+ (IndexScan),55309,3,0.0392499
+B+ (IndexScan),94518,3,0.0415419
+B+ (IndexScan),55467,3,0.037458
+B+ (IndexScan),60213,3,0.037292
+B+ (IndexScan),47605,3,0.039208
+B+ (IndexScan),92412,3,0.038333
+B+ (IndexScan),27418,3,0.0336659
+B+ (IndexScan),40463,3,0.0352499
+B+ (IndexScan),82490,3,0.0414171
+B+ (IndexScan),96785,3,0.0399579
+B+ (IndexScan),57735,3,0.0385828
+B+ (IndexScan),73272,3,0.040333
+B+ (IndexScan),63152,3,0.0320829
+B+ (IndexScan),12028,3,0.0384999
+B+ (IndexScan),27664,3,0.031542
+B+ (IndexScan),96870,3,0.0391249
+B+ (IndexScan),25618,3,0.0397919
+B+ (IndexScan),15186,3,0.0405828
+B+ (IndexScan),99098,3,0.0309169
+B+ (IndexScan),10331,3,0.03
+B+ (IndexScan),46392,3,0.0370841
+B+ (IndexScan),93692,3,0.0373751
+B+ (IndexScan),89001,3,0.0382091
+B+ (IndexScan),81552,3,0.038459
+B+ (IndexScan),90166,3,0.0360841
+B+ (IndexScan),20719,3,0.0375421
+Hash (IndexScan),15614,3,0.127708
+Hash (IndexScan),41876,3,0.0196251
+Hash (IndexScan),65866,3,0.0141251
+Hash (IndexScan),67086,3,0.0148751
+Hash (IndexScan),84830,3,0.0162909
+Hash (IndexScan),13453,3,0.0124169
+Hash (IndexScan),29267,3,0.011042
+Hash (IndexScan),78779,3,0.015083
+Hash (IndexScan),81460,3,0.011333
+Hash (IndexScan),72950,3,0.014459
+Hash (IndexScan),55131,3,0.014083
+Hash (IndexScan),75048,3,0.0153328
+Hash (IndexScan),71803,3,0.0148341
+Hash (IndexScan),95754,3,0.0104581
+Hash (IndexScan),64344,3,0.012167
+Hash (IndexScan),98439,3,0.0124578
+Hash (IndexScan),76877,3,0.0138751
+Hash (IndexScan),57816,3,0.013167
+Hash (IndexScan),31449,3,0.0114171
+Hash (IndexScan),333,3,0.0149158
+Hash (IndexScan),80505,3,0.013083
+Hash (IndexScan),10581,3,0.014791
+Hash (IndexScan),14515,3,0.0118748
+Hash (IndexScan),37650,3,0.0145
+Hash (IndexScan),12852,3,0.0122909
+Hash (IndexScan),58938,3,0.012208
+Hash (IndexScan),1506,3,0.0131249
+Hash (IndexScan),89808,3,0.0143328
+Hash (IndexScan),64263,3,0.014167
+Hash (IndexScan),89049,3,0.0151249
+Hash (IndexScan),41188,3,0.0164169
+Hash (IndexScan),27555,3,0.013584
+Hash (IndexScan),52065,3,0.013792
+Hash (IndexScan),32967,3,0.0145
+Hash (IndexScan),45569,3,0.016958
+Hash (IndexScan),46746,3,0.0135419
+Hash (IndexScan),49329,3,0.0145421
+Hash (IndexScan),97776,3,0.0116669
+Hash (IndexScan),67317,3,0.0132921
+Hash (IndexScan),83587,3,0.0152921
+Hash (IndexScan),10004,3,0.0125
+Hash (IndexScan),94780,3,0.015625
+Hash (IndexScan),44617,3,0.014625
+Hash (IndexScan),11753,3,0.010917
+Hash (IndexScan),73067,3,0.0119999
+Hash (IndexScan),70526,3,0.0105412
+Hash (IndexScan),38289,3,0.013375
+Hash (IndexScan),37697,3,0.0147079
+Hash (IndexScan),59959,3,0.0134169
+Hash (IndexScan),18467,3,0.012083
+Hash (IndexScan),84515,3,0.0128341
+Hash (IndexScan),92272,3,0.0157089
+Hash (IndexScan),93902,3,0.0137079
+Hash (IndexScan),75685,3,0.0156248
+Hash (IndexScan),40502,3,0.0150411
+Hash (IndexScan),3243,3,0.0157091
+Hash (IndexScan),93175,3,0.0158751
+Hash (IndexScan),48346,3,0.013666
+Hash (IndexScan),47651,3,0.012666
+Hash (IndexScan),60434,3,0.012625
+Hash (IndexScan),55341,3,0.011791
+Hash (IndexScan),11887,3,0.0109999
+Hash (IndexScan),52269,3,0.0137091
+Hash (IndexScan),76772,3,0.0140411
+Hash (IndexScan),72673,3,0.0157922
+Hash (IndexScan),65334,3,0.0148749
+Hash (IndexScan),15264,3,0.014625
+Hash (IndexScan),55764,3,0.0132911
+Hash (IndexScan),66370,3,0.0103342
+Hash (IndexScan),98324,3,0.0137081
+Hash (IndexScan),78665,3,0.011459
+Hash (IndexScan),64361,3,0.0121251
+Hash (IndexScan),52187,3,0.014917
+Hash (IndexScan),68768,3,0.016042
+Hash (IndexScan),33901,3,0.01075
+Hash (IndexScan),55046,3,0.0128751
+Hash (IndexScan),73925,3,0.013083
+Hash (IndexScan),62809,3,0.013958
+Hash (IndexScan),67234,3,0.0120001
+Hash (IndexScan),67894,3,0.013958
+Hash (IndexScan),3327,3,0.0105831
+Hash (IndexScan),75435,3,0.0117922
+Hash (IndexScan),29429,3,0.0169589
+Hash (IndexScan),16909,3,0.0165
+Hash (IndexScan),6408,3,0.0120001
+Hash (IndexScan),92362,3,0.0108329
+Hash (IndexScan),68580,3,0.014459
+Hash (IndexScan),87882,3,0.0165829
+Hash (IndexScan),13445,3,0.0096669
+Hash (IndexScan),94019,3,0.0162499
+Hash (IndexScan),81568,3,0.015625
+Hash (IndexScan),56284,3,0.0155831
+Hash (IndexScan),61610,3,0.0161671
+Hash (IndexScan),18667,3,0.0125
+Hash (IndexScan),63192,3,0.0139582
+Hash (IndexScan),30006,3,0.016792
+Hash (IndexScan),15993,3,0.013958
+Hash (IndexScan),82139,3,0.0121661
+Hash (IndexScan),91844,3,0.0143331
+Hash (IndexScan),59874,3,0.0151661
+Hash (IndexScan),88383,3,0.0145831
+Hash (IndexScan),61526,3,0.012334
+Hash (IndexScan),93654,3,0.0121251
+Hash (IndexScan),71518,3,0.013167
+Hash (IndexScan),32900,3,0.014917
+Hash (IndexScan),73374,3,0.0153328
+Hash (IndexScan),52702,3,0.012083
+Hash (IndexScan),87786,3,0.012917
+Hash (IndexScan),40322,3,0.0142502
+Hash (IndexScan),71847,3,0.011625
+Hash (IndexScan),84786,3,0.0122089
+Hash (IndexScan),65785,3,0.013958
+Hash (IndexScan),91531,3,0.0164579
+Hash (IndexScan),62770,3,0.010208
+Hash (IndexScan),52685,3,0.0141249
+Hash (IndexScan),56763,3,0.0101661
+Hash (IndexScan),26547,3,0.013958
+Hash (IndexScan),38585,3,0.012584
+Hash (IndexScan),35264,3,0.011917
+Hash (IndexScan),1216,3,0.0140001
+Hash (IndexScan),4340,3,0.0138751
+Hash (IndexScan),19641,3,0.0126669
+Hash (IndexScan),85937,3,0.0139589
+Hash (IndexScan),78286,3,0.0103752
+Hash (IndexScan),60061,3,0.0122909
+Hash (IndexScan),68537,3,0.0124159
+Hash (IndexScan),64163,3,0.012917
+Hash (IndexScan),47178,3,0.01275
+Hash (IndexScan),26194,3,0.00979193
+Hash (IndexScan),34094,3,0.012917
+Hash (IndexScan),90787,3,0.0144581
+Hash (IndexScan),63645,3,0.013625
+Hash (IndexScan),61166,3,0.0131251
+Hash (IndexScan),67013,3,0.0114581
+Hash (IndexScan),65164,3,0.0112501
+Hash (IndexScan),56916,3,0.012167
+Hash (IndexScan),73117,3,0.014625
+Hash (IndexScan),87019,3,0.013625
+Hash (IndexScan),4407,3,0.0140411
+Hash (IndexScan),38020,3,0.0147498
+Hash (IndexScan),41505,3,0.0136669
+Hash (IndexScan),59986,3,0.0125829
+Hash (IndexScan),12895,3,0.0129591
+Hash (IndexScan),57469,3,0.012791
+Hash (IndexScan),90353,3,0.0131659
+Hash (IndexScan),93916,3,0.010916
+Hash (IndexScan),67525,3,0.01175
+Hash (IndexScan),33926,3,0.014666
+Hash (IndexScan),59366,3,0.00954117
+Hash (IndexScan),23993,3,0.013958
+Hash (IndexScan),55808,3,0.0144581
+Hash (IndexScan),95418,3,0.0138332
+Hash (IndexScan),62803,3,0.00999984
+Hash (IndexScan),8428,3,0.0131659
+Hash (IndexScan),85007,3,0.0118748
+Hash (IndexScan),34927,3,0.0112918
+Hash (IndexScan),65330,3,0.0118339
+Hash (IndexScan),48514,3,0.0128329
+Hash (IndexScan),12670,3,0.0112921
+Hash (IndexScan),25505,3,0.0112499
+Hash (IndexScan),97984,3,0.0129591
+Hash (IndexScan),53912,3,0.0118329
+Hash (IndexScan),19184,3,0.0102499
+Hash (IndexScan),58904,3,0.0141251
+Hash (IndexScan),1840,3,0.0101249
+Hash (IndexScan),12081,3,0.012083
+Hash (IndexScan),29,3,0.0118332
+Hash (IndexScan),59144,3,0.013459
+Hash (IndexScan),76106,3,0.01175
+Hash (IndexScan),71643,3,0.014625
+Hash (IndexScan),10888,3,0.0122499
+Hash (IndexScan),79972,3,0.014209
+Hash (IndexScan),26057,3,0.0105002
+Hash (IndexScan),32485,3,0.0117081
+Hash (IndexScan),15836,3,0.00954187
+Hash (IndexScan),81406,3,0.0122499
+Hash (IndexScan),5854,3,0.00979193
+Hash (IndexScan),98548,3,0.0141249
+Hash (IndexScan),71625,3,0.0130001
+Hash (IndexScan),35198,3,0.0148751
+Hash (IndexScan),87619,3,0.0124581
+Hash (IndexScan),99309,3,0.013791
+Hash (IndexScan),83285,3,0.0144159
+Hash (IndexScan),46826,3,0.0132909
+Hash (IndexScan),20285,3,0.0136669
+Hash (IndexScan),673,3,0.0105
+Hash (IndexScan),41084,3,0.0108748
+Hash (IndexScan),87109,3,0.0111251
+Hash (IndexScan),76424,3,0.0117079
+Hash (IndexScan),75273,3,0.012958
+Hash (IndexScan),64486,3,0.013208
+Hash (IndexScan),90408,3,0.0121251
+Hash (IndexScan),94434,3,0.00991696
+Hash (IndexScan),17677,3,0.0104581
+Hash (IndexScan),71540,3,0.0132921
+Hash (IndexScan),29220,3,0.014375
+Hash (IndexScan),61995,3,0.013625
+Hash (IndexScan),77062,3,0.014625
+Hash (IndexScan),17199,3,0.011459
+Hash (IndexScan),78399,3,0.014208
+Hash (IndexScan),90774,3,0.0105412
+Hash (IndexScan),66155,3,0.0098329
+Hash (IndexScan),38101,3,0.01275
+Hash (IndexScan),11067,3,0.012625
+Hash (IndexScan),54760,3,0.011042
+Hash (IndexScan),87629,3,0.0131251
+Hash (IndexScan),20988,3,0.014167
+Hash (IndexScan),17741,3,0.0110411
+Hash (IndexScan),76813,3,0.0148751
+Hash (IndexScan),40109,3,0.0115421
+Hash (IndexScan),66546,3,0.011625
+Hash (IndexScan),54007,3,0.0115
+Hash (IndexScan),51172,3,0.0132921
+Hash (IndexScan),19469,3,0.01175
+Hash (IndexScan),68162,3,0.0105831
+Hash (IndexScan),25782,3,0.0103749
+Hash (IndexScan),49284,3,0.0119579
+Hash (IndexScan),1853,3,0.0117919
+Hash (IndexScan),13912,3,0.0138332
+Hash (IndexScan),51033,3,0.0128329
+Hash (IndexScan),9626,3,0.0129999
+Hash (IndexScan),6734,3,0.0110001
+Hash (IndexScan),45485,3,0.010333
+Hash (IndexScan),84709,3,0.0123749
+Hash (IndexScan),46322,3,0.011334
+Hash (IndexScan),3381,3,0.0106669
+Hash (IndexScan),3354,3,0.0122499
+Hash (IndexScan),66898,3,0.0134581
+Hash (IndexScan),62394,3,0.0134581
+Hash (IndexScan),42961,3,0.0131661
+Hash (IndexScan),89496,3,0.0111251
+Hash (IndexScan),39803,3,0.0130001
+Hash (IndexScan),59001,3,0.0134578
+Hash (IndexScan),42736,3,0.011666
+Hash (IndexScan),15909,3,0.0119579
+Hash (IndexScan),65218,3,0.0125
+Hash (IndexScan),61156,3,0.0119591
+Hash (IndexScan),74924,3,0.0117079
+Hash (IndexScan),81082,3,0.013083
+Hash (IndexScan),22379,3,0.0132911
+Hash (IndexScan),20171,3,0.00966596
+Hash (IndexScan),77498,3,0.0115421
+Hash (IndexScan),68107,3,0.0132499
+Hash (IndexScan),27131,3,0.0120839
+Hash (IndexScan),56834,3,0.0105409
+Hash (IndexScan),81703,3,0.0122921
+Hash (IndexScan),44096,3,0.0173752
+Hash (IndexScan),60139,3,0.015334
+Hash (IndexScan),78410,3,0.0125829
+Hash (IndexScan),30583,3,0.014083
+Hash (IndexScan),88933,3,0.0109579
+Hash (IndexScan),93177,3,0.00958308
+Hash (IndexScan),9111,3,0.011208
+Hash (IndexScan),71743,3,0.013541
+Hash (IndexScan),52319,3,0.0107922
+Hash (IndexScan),4477,3,0.0128332
+Hash (IndexScan),25624,3,0.0136672
+Hash (IndexScan),84834,3,0.015625
+Hash (IndexScan),22724,3,0.01175
+Hash (IndexScan),5930,3,0.0141249
+Hash (IndexScan),84965,3,0.0117081
+Hash (IndexScan),71404,3,0.012916
+Hash (IndexScan),6317,3,0.0108329
+Hash (IndexScan),59222,3,0.011459
+Hash (IndexScan),98922,3,0.01275
+Hash (IndexScan),83998,3,0.0115
+Hash (IndexScan),24711,3,0.0142911
+Hash (IndexScan),63418,3,0.012958
+Hash (IndexScan),93186,3,0.0137498
+Hash (IndexScan),88950,3,0.013208
+Hash (IndexScan),2684,3,0.0127079
+Hash (IndexScan),16927,3,0.0148749
+Hash (IndexScan),84627,3,0.0140839
+Hash (IndexScan),69460,3,0.014208
+Hash (IndexScan),28669,3,0.0140409
+Hash (IndexScan),67745,3,0.0138748
+Hash (IndexScan),18052,3,0.0152502
+Hash (IndexScan),21023,3,0.011625
+Hash (IndexScan),86668,3,0.014459
+Hash (IndexScan),24381,3,0.013625
+Hash (IndexScan),51115,3,0.0112092
+Hash (IndexScan),35758,3,0.010917
+Hash (IndexScan),55753,3,0.013958
+Hash (IndexScan),69863,3,0.0099591
+Hash (IndexScan),54276,3,0.010625
+Hash (IndexScan),10310,3,0.0103749
+Hash (IndexScan),50225,3,0.0160409
+Hash (IndexScan),39966,3,0.014666
+Hash (IndexScan),24537,3,0.013541
+Hash (IndexScan),45098,3,0.0117079
+Hash (IndexScan),22898,3,0.0122499
+Hash (IndexScan),34531,3,0.0124581
+Hash (IndexScan),60807,3,0.0135831
+Hash (IndexScan),65222,3,0.013584
+Hash (IndexScan),54492,3,0.0106671
+Hash (IndexScan),37706,3,0.012333
+Hash (IndexScan),61303,3,0.01275
+Hash (IndexScan),23195,3,0.011333
+Hash (IndexScan),42702,3,0.014209
+Hash (IndexScan),68071,3,0.013792
+Hash (IndexScan),63184,3,0.0145
+Hash (IndexScan),58273,3,0.0112501
+Hash (IndexScan),15743,3,0.0103749
+Hash (IndexScan),69108,3,0.013083
+Hash (IndexScan),68774,3,0.0118332
+Hash (IndexScan),35892,3,0.01275
+Hash (IndexScan),12395,3,0.0100832
+Hash (IndexScan),28093,3,0.00983384
+Hash (IndexScan),30322,3,0.0128332
+Hash (IndexScan),644,3,0.0167079
+Hash (IndexScan),12206,3,0.0139589
+Hash (IndexScan),59522,3,0.013042
+Hash (IndexScan),84631,3,0.0142499
+Hash (IndexScan),43312,3,0.013584
+Hash (IndexScan),53478,3,0.0152921
+Hash (IndexScan),71443,3,0.013666
+Hash (IndexScan),87871,3,0.00975002
+Hash (IndexScan),23915,3,0.0138751
+Hash (IndexScan),3564,3,0.0095421
+Hash (IndexScan),46131,3,0.0127498
+Hash (IndexScan),20547,3,0.012958
+Hash (IndexScan),46099,3,0.012625
+Hash (IndexScan),73663,3,0.0112921
+Hash (IndexScan),90068,3,0.0142502
+Hash (IndexScan),75017,3,0.0124171
+Hash (IndexScan),70567,3,0.0112909
+Hash (IndexScan),28383,3,0.0135
+Hash (IndexScan),14378,3,0.010625
+Hash (IndexScan),81368,3,0.012334
+Hash (IndexScan),93850,3,0.012917
+Hash (IndexScan),36763,3,0.011917
+Hash (IndexScan),72850,3,0.010917
+Hash (IndexScan),98468,3,0.0118748
+Hash (IndexScan),74455,3,0.011208
+Hash (IndexScan),95810,3,0.0147501
+Hash (IndexScan),28107,3,0.0104592
+Hash (IndexScan),74690,3,0.011167
+Hash (IndexScan),38627,3,0.015042
+Hash (IndexScan),73772,3,0.0122918
+Hash (IndexScan),35141,3,0.012958
+Hash (IndexScan),87859,3,0.0129999
+Hash (IndexScan),72842,3,0.0152499
+Hash (IndexScan),17383,3,0.01275
+Hash (IndexScan),13299,3,0.012083
+Hash (IndexScan),34566,3,0.0121661
+Hash (IndexScan),12640,3,0.0121668
+Hash (IndexScan),57155,3,0.0161668
+Hash (IndexScan),22450,3,0.0139158
+Hash (IndexScan),13899,3,0.01075
+Hash (IndexScan),89725,3,0.00987505
+Hash (IndexScan),7921,3,0.011167
+Hash (IndexScan),99499,3,0.0107919
+Hash (IndexScan),46695,3,0.0126669
+Hash (IndexScan),94681,3,0.00962499
+Hash (IndexScan),24314,3,0.0113749
+Hash (IndexScan),84666,3,0.00966596
+Hash (IndexScan),82587,3,0.0127079
+Hash (IndexScan),13936,3,0.0150001
+Hash (IndexScan),66405,3,0.0156248
+Hash (IndexScan),41098,3,0.012625
+Hash (IndexScan),36279,3,0.0115419
+Hash (IndexScan),77085,3,0.00962499
+Hash (IndexScan),8378,3,0.0126669
+Hash (IndexScan),38147,3,0.0112499
+Hash (IndexScan),41236,3,0.0134578
+Hash (IndexScan),21154,3,0.0131251
+Hash (IndexScan),34192,3,0.0134159
+Hash (IndexScan),33571,3,0.0137081
+Hash (IndexScan),8242,3,0.00991602
+Hash (IndexScan),1819,3,0.01375
+Hash (IndexScan),53955,3,0.014792
+Hash (IndexScan),33692,3,0.0134581
+Hash (IndexScan),54334,3,0.012333
+Hash (IndexScan),2023,3,0.0119591
+Hash (IndexScan),7512,3,0.010083
+Hash (IndexScan),12642,3,0.0101249
+Hash (IndexScan),30832,3,0.01375
+Hash (IndexScan),3012,3,0.0111661
+Hash (IndexScan),40622,3,0.0105412
+Hash (IndexScan),16125,3,0.0130001
+Hash (IndexScan),12304,3,0.01075
+Hash (IndexScan),89893,3,0.0132921
+Hash (IndexScan),73555,3,0.0126669
+Hash (IndexScan),75561,3,0.0122499
+Hash (IndexScan),45916,3,0.011042
+Hash (IndexScan),41285,3,0.010917
+Hash (IndexScan),59775,3,0.01075
+Hash (IndexScan),79595,3,0.0117081
+Hash (IndexScan),82016,3,0.0115
+Hash (IndexScan),85816,3,0.00979216
+Hash (IndexScan),93614,3,0.01275
+Hash (IndexScan),80629,3,0.0115
+Hash (IndexScan),4983,3,0.0143328
+Hash (IndexScan),52979,3,0.013917
+Hash (IndexScan),41428,3,0.01175
+Hash (IndexScan),79664,3,0.0125421
+Hash (IndexScan),28264,3,0.0128751
+Hash (IndexScan),77865,3,0.01175
+Hash (IndexScan),60644,3,0.0142921
+Hash (IndexScan),55853,3,0.012459
+Hash (IndexScan),88595,3,0.013083
+Hash (IndexScan),15656,3,0.0151671
+Hash (IndexScan),89977,3,0.0113749
+Hash (IndexScan),49041,3,0.0119579
+Hash (IndexScan),65702,3,0.014459
+Hash (IndexScan),89313,3,0.0095421
+Hash (IndexScan),32975,3,0.0128748
+Hash (IndexScan),50994,3,0.0115
+Hash (IndexScan),38258,3,0.00962499
+Hash (IndexScan),46704,3,0.011167
+Hash (IndexScan),7554,3,0.014958
+Hash (IndexScan),96389,3,0.0112909
+Hash (IndexScan),93740,3,0.0105
+Hash (IndexScan),57245,3,0.0117498
+Hash (IndexScan),3102,3,0.0145831
+Hash (IndexScan),36888,3,0.0125
+Hash (IndexScan),91135,3,0.014083
+Hash (IndexScan),43326,3,0.013083
+Hash (IndexScan),37953,3,0.0101251
+Hash (IndexScan),95306,3,0.01375
+Hash (IndexScan),16033,3,0.00962499
+Hash (IndexScan),38921,3,0.013584
+Hash (IndexScan),54610,3,0.0101659
+Hash (IndexScan),41797,3,0.0132499
+Hash (IndexScan),76757,3,0.0135831
+Hash (IndexScan),2657,3,0.0127919
+Hash (IndexScan),71062,3,0.013541
+Hash (IndexScan),44891,3,0.0101249
+Hash (IndexScan),25880,3,0.00975002
+Hash (IndexScan),73514,3,0.00945805
+Hash (IndexScan),7360,3,0.0105419
+Hash (IndexScan),94592,3,0.012791
+Hash (IndexScan),14759,3,0.012958
+Hash (IndexScan),21250,3,0.0150409
+Hash (IndexScan),81130,3,0.012208
+Hash (IndexScan),16081,3,0.0143331
+Hash (IndexScan),15504,3,0.012083
+Hash (IndexScan),4892,3,0.01275
+Hash (IndexScan),16474,3,0.0118751
+Hash (IndexScan),68497,3,0.012916
+Hash (IndexScan),46405,3,0.013791
+Hash (IndexScan),78244,3,0.00995817
+Hash (IndexScan),84921,3,0.0109591
+Hash (IndexScan),85957,3,0.0115
+Hash (IndexScan),39616,3,0.0124581
+Hash (IndexScan),3775,3,0.0139158
+Hash (IndexScan),55676,3,0.0140411
+Hash (IndexScan),75777,3,0.0135831
+Hash (IndexScan),16555,3,0.0135
+Hash (IndexScan),46658,3,0.0127081
+Hash (IndexScan),54434,3,0.0181668
+Hash (IndexScan),50346,3,0.01175
+Hash (IndexScan),49439,3,0.0129582
+Hash (IndexScan),31367,3,0.00979099
+Hash (IndexScan),55180,3,0.014791
+Hash (IndexScan),86848,3,0.0118748
+Hash (IndexScan),28779,3,0.012042
+Hash (IndexScan),16412,3,0.0117091
+Hash (IndexScan),24048,3,0.0101659
+Hash (IndexScan),71163,3,0.0124581
+Hash (IndexScan),3725,3,0.0115831
+Hash (IndexScan),86713,3,0.0110411
+Hash (IndexScan),94014,3,0.0127079
+Hash (IndexScan),70954,3,0.012334
+Hash (IndexScan),89621,3,0.0115419
+Hash (IndexScan),72732,3,0.013625
+Hash (IndexScan),52018,3,0.0140839
+Hash (IndexScan),33420,3,0.0145
+Hash (IndexScan),19358,3,0.0118332
+Hash (IndexScan),29918,3,0.0135419
+Hash (IndexScan),3063,3,0.012459
+Hash (IndexScan),2176,3,0.0109999
+Hash (IndexScan),36285,3,0.011334
+Hash (IndexScan),70930,3,0.0106669
+Hash (IndexScan),62763,3,0.0109999
+Hash (IndexScan),54773,3,0.0142092
+Hash (IndexScan),34579,3,0.013917
+Hash (IndexScan),41255,3,0.0141251
+Hash (IndexScan),18175,3,0.01075
+Hash (IndexScan),82154,3,0.0102501
+Hash (IndexScan),77811,3,0.0154579
+Hash (IndexScan),11724,3,0.0132499
+Hash (IndexScan),23502,3,0.01075
+Hash (IndexScan),72481,3,0.0129999
+Hash (IndexScan),4982,3,0.0125
+Hash (IndexScan),85225,3,0.0101659
+Hash (IndexScan),67378,3,0.0131249
+Hash (IndexScan),34764,3,0.0135421
+Hash (IndexScan),44658,3,0.0142921
+Hash (IndexScan),82970,3,0.0135
+Hash (IndexScan),68217,3,0.013375
+Hash (IndexScan),98899,3,0.010625
+Hash (IndexScan),97399,3,0.0141251
+Hash (IndexScan),41616,3,0.0135838
+Hash (IndexScan),7374,3,0.0130411
+Hash (IndexScan),86229,3,0.0125829
+Hash (IndexScan),1496,3,0.0140001
+Hash (IndexScan),82295,3,0.011167
+Hash (IndexScan),31826,3,0.0111251
+Hash (IndexScan),61676,3,0.0140001
+Hash (IndexScan),7642,3,0.0148339
+Hash (IndexScan),29077,3,0.0130001
+Hash (IndexScan),89017,3,0.0151251
+Hash (IndexScan),66666,3,0.015083
+Hash (IndexScan),19772,3,0.010083
+Hash (IndexScan),97674,3,0.010167
+Hash (IndexScan),52308,3,0.0132918
+Hash (IndexScan),92704,3,0.011042
+Hash (IndexScan),47177,3,0.0120001
+Hash (IndexScan),30476,3,0.014167
+Hash (IndexScan),73609,3,0.0152499
+Hash (IndexScan),36145,3,0.0137081
+Hash (IndexScan),45048,3,0.012541
+Hash (IndexScan),26343,3,0.0157082
+Hash (IndexScan),49117,3,0.0130842
+Hash (IndexScan),47070,3,0.0142499
+Hash (IndexScan),60198,3,0.0132921
+Hash (IndexScan),83495,3,0.0125831
+Hash (IndexScan),59974,3,0.0130001
+Hash (IndexScan),71932,3,0.0127081
+Hash (IndexScan),62137,3,0.0102089
+Hash (IndexScan),88265,3,0.011791
+Hash (IndexScan),76098,3,0.0115409
+Hash (IndexScan),40920,3,0.013541
+Hash (IndexScan),24629,3,0.0157908
+Hash (IndexScan),20748,3,0.013042
+Hash (IndexScan),82316,3,0.0133752
+Hash (IndexScan),53811,3,0.0132909
+Hash (IndexScan),20157,3,0.01275
+Hash (IndexScan),63552,3,0.0113749
+Hash (IndexScan),697,3,0.013792
+Hash (IndexScan),46457,3,0.00999984
+Hash (IndexScan),68581,3,0.0109999
+Hash (IndexScan),92059,3,0.0115831
+Hash (IndexScan),53521,3,0.011791
+Hash (IndexScan),4917,3,0.013208
+Hash (IndexScan),83771,3,0.0112921
+Hash (IndexScan),22620,3,0.0134162
+Hash (IndexScan),11038,3,0.00970811
+Hash (IndexScan),39196,3,0.013375
+Hash (IndexScan),48863,3,0.0121668
+Hash (IndexScan),71661,3,0.015042
+Hash (IndexScan),95815,3,0.0128329
+Hash (IndexScan),34737,3,0.0142499
+Hash (IndexScan),18083,3,0.012042
+Hash (IndexScan),93680,3,0.012042
+Hash (IndexScan),96931,3,0.0120001
+Hash (IndexScan),13206,3,0.0136669
+Hash (IndexScan),2406,3,0.0119999
+Hash (IndexScan),69916,3,0.0117091
+Hash (IndexScan),28459,3,0.01175
+Hash (IndexScan),91174,3,0.015083
+Hash (IndexScan),76335,3,0.00975002
+Hash (IndexScan),40202,3,0.0116662
+Hash (IndexScan),75056,3,0.0135419
+Hash (IndexScan),5852,3,0.0129582
+Hash (IndexScan),51548,3,0.0122911
+Hash (IndexScan),49884,3,0.0125
+Hash (IndexScan),70646,3,0.0145
+Hash (IndexScan),67712,3,0.0137091
+Hash (IndexScan),84417,3,0.010916
+Hash (IndexScan),86740,3,0.0123328
+Hash (IndexScan),20716,3,0.013917
+Hash (IndexScan),66685,3,0.013625
+Hash (IndexScan),13753,3,0.010625
+Hash (IndexScan),11212,3,0.0145829
+Hash (IndexScan),18599,3,0.011625
+Hash (IndexScan),96021,3,0.012208
+Hash (IndexScan),51015,3,0.0131251
+Hash (IndexScan),43727,3,0.0124162
+Hash (IndexScan),71761,3,0.013167
+Hash (IndexScan),34268,3,0.0127081
+Hash (IndexScan),40688,3,0.0148751
+Hash (IndexScan),5452,3,0.0139161
+Hash (IndexScan),96644,3,0.011083
+Hash (IndexScan),77690,3,0.0110839
+Hash (IndexScan),86805,3,0.0094159
+Hash (IndexScan),24875,3,0.0144169
+Hash (IndexScan),21262,3,0.0115002
+Hash (IndexScan),38393,3,0.012625
+Hash (IndexScan),38705,3,0.013375
+Hash (IndexScan),70932,3,0.014541
+Hash (IndexScan),37432,3,0.013958
+Hash (IndexScan),46822,3,0.0115002
+Hash (IndexScan),17565,3,0.011916
+Hash (IndexScan),50937,3,0.0116671
+Hash (IndexScan),24733,3,0.0121251
+Hash (IndexScan),97912,3,0.015334
+Hash (IndexScan),82552,3,0.011208
+Hash (IndexScan),1239,3,0.0170001
+Hash (IndexScan),79424,3,0.0145421
+Hash (IndexScan),84907,3,0.0129589
+Hash (IndexScan),62917,3,0.0129591
+Hash (IndexScan),55398,3,0.00995793
+Hash (IndexScan),46617,3,0.0143328
+Hash (IndexScan),70435,3,0.0098329
+Hash (IndexScan),22399,3,0.013541
+Hash (IndexScan),94632,3,0.0139158
+Hash (IndexScan),67659,3,0.014083
+Hash (IndexScan),3869,3,0.011334
+Hash (IndexScan),23544,3,0.0118332
+Hash (IndexScan),41245,3,0.0101251
+Hash (IndexScan),70661,3,0.0134581
+Hash (IndexScan),18973,3,0.0142502
+Hash (IndexScan),21488,3,0.010917
+Hash (IndexScan),15296,3,0.0116669
+Hash (IndexScan),67502,3,0.0123749
+Hash (IndexScan),87518,3,0.0108329
+Hash (IndexScan),92325,3,0.0118751
+Hash (IndexScan),84333,3,0.014083
+Hash (IndexScan),262,3,0.0145419
+Hash (IndexScan),49094,3,0.0139589
+Hash (IndexScan),8337,3,0.012666
+Hash (IndexScan),48235,3,0.013333
+Hash (IndexScan),39669,3,0.011459
+Hash (IndexScan),28337,3,0.0135419
+Hash (IndexScan),69748,3,0.013541
+Hash (IndexScan),20215,3,0.0143331
+Hash (IndexScan),78578,3,0.012666
+Hash (IndexScan),79957,3,0.0106671
+Hash (IndexScan),32527,3,0.013625
+Hash (IndexScan),16584,3,0.0141251
+Hash (IndexScan),13929,3,0.0144171
+Hash (IndexScan),42768,3,0.00995817
+Hash (IndexScan),63513,3,0.0114581
+Hash (IndexScan),14077,3,0.0143752
+Hash (IndexScan),95241,3,0.01075
+Hash (IndexScan),9586,3,0.0115412
+Hash (IndexScan),49965,3,0.0113749
+Hash (IndexScan),34416,3,0.0119589
+Hash (IndexScan),80866,3,0.013208
+Hash (IndexScan),39518,3,0.0122911
+Hash (IndexScan),84876,3,0.0131251
+Hash (IndexScan),15408,3,0.0117919
+Hash (IndexScan),45587,3,0.010625
+Hash (IndexScan),62179,3,0.01175
+Hash (IndexScan),65373,3,0.00987505
+Hash (IndexScan),15852,3,0.010666
+Hash (IndexScan),72823,3,0.00979193
+Hash (IndexScan),68020,3,0.014042
+Hash (IndexScan),32379,3,0.0135831
+Hash (IndexScan),47013,3,0.0139999
+Hash (IndexScan),89593,3,0.0111251
+Hash (IndexScan),59761,3,0.0116669
+Hash (IndexScan),76719,3,0.0139999
+Hash (IndexScan),45236,3,0.011917
+Hash (IndexScan),10820,3,0.017459
+Hash (IndexScan),9049,3,0.0123749
+Hash (IndexScan),11517,3,0.0111249
+Hash (IndexScan),64857,3,0.014042
+Hash (IndexScan),40898,3,0.0136669
+Hash (IndexScan),34774,3,0.01275
+Hash (IndexScan),98736,3,0.0107081
+Hash (IndexScan),86784,3,0.014625
+Hash (IndexScan),29629,3,0.0198751
+Hash (IndexScan),22065,3,0.0132921
+Hash (IndexScan),42599,3,0.013333
+Hash (IndexScan),56702,3,0.0115
+Hash (IndexScan),66359,3,0.0112499
+Hash (IndexScan),73607,3,0.011916
+Hash (IndexScan),43479,3,0.0138751
+Hash (IndexScan),42297,3,0.0151671
+Hash (IndexScan),94877,3,0.0128748
+Hash (IndexScan),86121,3,0.010208
+Hash (IndexScan),64644,3,0.0117091
+Hash (IndexScan),52832,3,0.0103749
+Hash (IndexScan),41115,3,0.0146669
+Hash (IndexScan),23167,3,0.012083
+Hash (IndexScan),25754,3,0.0115829
+Hash (IndexScan),60688,3,0.013333
+Hash (IndexScan),28859,3,0.011917
+Hash (IndexScan),90330,3,0.00945805
+Hash (IndexScan),45685,3,0.010208
+Hash (IndexScan),99461,3,0.0107919
+Hash (IndexScan),45889,3,0.0127919
+Hash (IndexScan),53701,3,0.0145
+Hash (IndexScan),77315,3,0.010666
+Hash (IndexScan),50021,3,0.0115
+Hash (IndexScan),27903,3,0.0110001
+Hash (IndexScan),20235,3,0.010916
+Hash (IndexScan),57891,3,0.0104159
+Hash (IndexScan),97391,3,0.0135831
+Hash (IndexScan),74262,3,0.0137081
+Hash (IndexScan),86094,3,0.0138341
+Hash (IndexScan),96484,3,0.010625
+Hash (IndexScan),16723,3,0.0138751
+Hash (IndexScan),56531,3,0.014167
+Hash (IndexScan),35079,3,0.01275
+Hash (IndexScan),43120,3,0.012334
+Hash (IndexScan),15447,3,0.010083
+Hash (IndexScan),41948,3,0.0146669
+Hash (IndexScan),34925,3,0.0122499
+Hash (IndexScan),58255,3,0.0126669
+Hash (IndexScan),34554,3,0.0110001
+Hash (IndexScan),19053,3,0.0113752
+Hash (IndexScan),71450,3,0.0136669
+Hash (IndexScan),82166,3,0.011625
+Hash (IndexScan),35151,3,0.0108751
+Hash (IndexScan),30710,3,0.010791
+Hash (IndexScan),43486,3,0.0120411
+Hash (IndexScan),18805,3,0.0118329
+Hash (IndexScan),73571,3,0.0105
+Hash (IndexScan),16153,3,0.0141249
+Hash (IndexScan),35116,3,0.011666
+Hash (IndexScan),38466,3,0.0151671
+Hash (IndexScan),75287,3,0.0115412
+Hash (IndexScan),60040,3,0.0112499
+Hash (IndexScan),82994,3,0.0143328
+Hash (IndexScan),52592,3,0.010208
+Hash (IndexScan),52357,3,0.013083
+Hash (IndexScan),2847,3,0.011625
+Hash (IndexScan),72055,3,0.012958
+Hash (IndexScan),93909,3,0.012334
+Hash (IndexScan),43145,3,0.0102499
+Hash (IndexScan),88358,3,0.0122911
+Hash (IndexScan),53695,3,0.00933302
+Hash (IndexScan),44150,3,0.0133752
+Hash (IndexScan),12453,3,0.0106669
+Hash (IndexScan),89021,3,0.00966713
+Hash (IndexScan),64840,3,0.00962499
+Hash (IndexScan),88894,3,0.0132918
+Hash (IndexScan),82967,3,0.0115409
+Hash (IndexScan),87508,3,0.012208
+Hash (IndexScan),71620,3,0.0114171
+Hash (IndexScan),67724,3,0.0111249
+Hash (IndexScan),27514,3,0.012333
+Hash (IndexScan),55632,3,0.0119999
+Hash (IndexScan),46159,3,0.0125831
+Hash (IndexScan),43313,3,0.012167
+Hash (IndexScan),7869,3,0.0122089
+Hash (IndexScan),52398,3,0.014375
+Hash (IndexScan),94954,3,0.012625
+Hash (IndexScan),22672,3,0.0138329
+Hash (IndexScan),1379,3,0.011625
+Hash (IndexScan),35004,3,0.0154169
+Hash (IndexScan),73259,3,0.0144579
+Hash (IndexScan),91973,3,0.0115829
+Hash (IndexScan),33053,3,0.01075
+Hash (IndexScan),17118,3,0.0151668
+Hash (IndexScan),43780,3,0.0134159
+Hash (IndexScan),75885,3,0.0144171
+Hash (IndexScan),84459,3,0.01375
+Hash (IndexScan),80179,3,0.012917
+Hash (IndexScan),54346,3,0.0111661
+Hash (IndexScan),62383,3,0.0112911
+Hash (IndexScan),63297,3,0.0132911
+Hash (IndexScan),44401,3,0.0120839
+Hash (IndexScan),1541,3,0.0136672
+Hash (IndexScan),4915,3,0.0122499
+Hash (IndexScan),99257,3,0.0118751
+Hash (IndexScan),28819,3,0.013958
+Hash (IndexScan),83398,3,0.0136669
+Hash (IndexScan),15839,3,0.01175
+Hash (IndexScan),86597,3,0.0131668
+Hash (IndexScan),35212,3,0.0131661
+Hash (IndexScan),42810,3,0.013791
+Hash (IndexScan),2332,3,0.011333
+Hash (IndexScan),27424,3,0.0152502
+Hash (IndexScan),59918,3,0.0135831
+Hash (IndexScan),67495,3,0.0103749
+Hash (IndexScan),36296,3,0.0105421
+Hash (IndexScan),81636,3,0.011042
+Hash (IndexScan),82598,3,0.010208
+Hash (IndexScan),48423,3,0.0153328
+Hash (IndexScan),10354,3,0.014375
+Hash (IndexScan),72846,3,0.0144171
+Hash (IndexScan),90759,3,0.0114581
+Hash (IndexScan),24597,3,0.0138751
+Hash (IndexScan),70643,3,0.0142502
+Hash (IndexScan),1494,3,0.0143331
+Hash (IndexScan),12530,3,0.0118751
+Hash (IndexScan),20425,3,0.00987505
+Hash (IndexScan),43252,3,0.0108329
+Hash (IndexScan),28758,3,0.014625
+Hash (IndexScan),60748,3,0.0141249
+Hash (IndexScan),27050,3,0.0130411
+Hash (IndexScan),79441,3,0.013666
+Hash (IndexScan),88231,3,0.0127922
+Hash (IndexScan),22385,3,0.0124162
+Hash (IndexScan),92474,3,0.0107919
+Hash (IndexScan),40560,3,0.011083
+Hash (IndexScan),11048,3,0.010625
+Hash (IndexScan),74400,3,0.0132918
+Hash (IndexScan),54663,3,0.0123749
+Hash (IndexScan),93301,3,0.0132911
+Hash (IndexScan),68394,3,0.0105829
+Hash (IndexScan),89279,3,0.012208
+Hash (IndexScan),77210,3,0.0149161
+Hash (IndexScan),73290,3,0.013208
+Hash (IndexScan),17466,3,0.00937516
+Hash (IndexScan),14164,3,0.00941614
+Hash (IndexScan),3710,3,0.0126669
+Hash (IndexScan),35505,3,0.0125829
+Hash (IndexScan),54990,3,0.012791
+Hash (IndexScan),5830,3,0.010666
+Hash (IndexScan),24283,3,0.0117498
+Hash (IndexScan),72121,3,0.013541
+Hash (IndexScan),96240,3,0.00991719
+Hash (IndexScan),67296,3,0.014792
+Hash (IndexScan),30325,3,0.012208
+Hash (IndexScan),61705,3,0.0127498
+Hash (IndexScan),86231,3,0.0128341
+Hash (IndexScan),86908,3,0.0110001
+Hash (IndexScan),44731,3,0.010625
+Hash (IndexScan),45031,3,0.0132911
+Hash (IndexScan),45537,3,0.012083
+Hash (IndexScan),41658,3,0.012666
+Hash (IndexScan),79510,3,0.0117081
+Hash (IndexScan),62875,3,0.01375
+Hash (IndexScan),33470,3,0.0140411
+Hash (IndexScan),64005,3,0.0149591
+Hash (IndexScan),42865,3,0.0113752
+Hash (IndexScan),32782,3,0.0123749
+Hash (IndexScan),4813,3,0.0127081
+Hash (IndexScan),84358,3,0.0114171
+Hash (IndexScan),64226,3,0.011083
+Hash (IndexScan),17464,3,0.0135
+Hash (IndexScan),2854,3,0.0138329
+Hash (IndexScan),63004,3,0.0130839
+Hash (IndexScan),47997,3,0.0131249
+Hash (IndexScan),33273,3,0.0128341
+Hash (IndexScan),98955,3,0.00970811
+Hash (IndexScan),61095,3,0.00966596
+Hash (IndexScan),26049,3,0.011333
+Hash (IndexScan),48175,3,0.014375
+Hash (IndexScan),35866,3,0.0133328
+Hash (IndexScan),67148,3,0.0141249
+Hash (IndexScan),95964,3,0.012042
+Hash (IndexScan),52420,3,0.012791
+Hash (IndexScan),39855,3,0.0150411
+Hash (IndexScan),28613,3,0.0125
+Hash (IndexScan),76251,3,0.011666
+Hash (IndexScan),7103,3,0.00954093
+Hash (IndexScan),53853,3,0.015792
+Hash (IndexScan),8462,3,0.011625
+Hash (IndexScan),95144,3,0.0143331
+Hash (IndexScan),94643,3,0.0112911
+Hash (IndexScan),84602,3,0.012333
+Hash (IndexScan),86660,3,0.013541
+Hash (IndexScan),66711,3,0.0107079
+Hash (IndexScan),89399,3,0.010167
+Hash (IndexScan),69766,3,0.013042
+Hash (IndexScan),39139,3,0.0117081
+Hash (IndexScan),63255,3,0.0138751
+Hash (IndexScan),80795,3,0.0114578
+Hash (IndexScan),11891,3,0.0141249
+Hash (IndexScan),66799,3,0.00954187
+Hash (IndexScan),68478,3,0.013208
+Hash (IndexScan),78097,3,0.0126669
+Hash (IndexScan),42612,3,0.0147922
+Hash (IndexScan),64125,3,0.01375
+Hash (IndexScan),41673,3,0.011666
+Hash (IndexScan),86581,3,0.0132499
+Hash (IndexScan),44514,3,0.0125412
+Hash (IndexScan),47197,3,0.0115
+Hash (IndexScan),23746,3,0.0125829
+Hash (IndexScan),10233,3,0.0111249
+Hash (IndexScan),73669,3,0.0138751
+Hash (IndexScan),22853,3,0.0134171
+Hash (IndexScan),99527,3,0.0106671
+Hash (IndexScan),33750,3,0.0185829
+Hash (IndexScan),69206,3,0.0118748
+Hash (IndexScan),68229,3,0.0102499
+Hash (IndexScan),50179,3,0.0112499
+Hash (IndexScan),82647,3,0.0118748
+Hash (IndexScan),13942,3,0.014083
+Hash (IndexScan),79870,3,0.0145
+Hash (IndexScan),28160,3,0.014958
+Hash (IndexScan),3785,3,0.0150411
+Hash (IndexScan),60793,3,0.012916
+Hash (IndexScan),31575,3,0.013917
+Hash (IndexScan),27482,3,0.0152502
+Hash (IndexScan),56229,3,0.0136669
+Hash (IndexScan),66590,3,0.0125831
+Hash (IndexScan),69020,3,0.013334
+Hash (IndexScan),16579,3,0.0141251
+Hash (IndexScan),67330,3,0.0151249
+Hash (IndexScan),27693,3,0.0132921
+Hash (IndexScan),35479,3,0.0113752
+Hash (IndexScan),93899,3,0.010584
+Hash (IndexScan),64040,3,0.012333
+Hash (IndexScan),17919,3,0.0126669
+Hash (IndexScan),73255,3,0.014042
+Hash (IndexScan),88932,3,0.0148749
+Hash (IndexScan),42699,3,0.0130411
+Hash (IndexScan),47677,3,0.0134171
+Hash (IndexScan),85312,3,0.0114581
+Hash (IndexScan),51381,3,0.0115
+Hash (IndexScan),69823,3,0.0162078
+Hash (IndexScan),80641,3,0.0131668
+Hash (IndexScan),95179,3,0.0135829
+Hash (IndexScan),24780,3,0.00970787
+Hash (IndexScan),19922,3,0.012459
+Hash (IndexScan),79531,3,0.0114159
+Hash (IndexScan),72262,3,0.011625
+Hash (IndexScan),92382,3,0.0137081
+Hash (IndexScan),20069,3,0.0108329
+Hash (IndexScan),95518,3,0.0149999
+Hash (IndexScan),18872,3,0.013625
+Hash (IndexScan),17205,3,0.011666
+Hash (IndexScan),86112,3,0.0132499
+Hash (IndexScan),75097,3,0.0127091
+Hash (IndexScan),8006,3,0.0120001
+Hash (IndexScan),87379,3,0.0128751
+Hash (IndexScan),4526,3,0.0092499
+Hash (IndexScan),36749,3,0.012958
+Hash (IndexScan),39236,3,0.0146248
+Hash (IndexScan),23461,3,0.0102911
+Hash (IndexScan),18244,3,0.0115
+Hash (IndexScan),35070,3,0.010625
+Hash (IndexScan),70821,3,0.0123328
+Hash (IndexScan),90827,3,0.0136248
+Hash (IndexScan),46747,3,0.0145419
+Hash (IndexScan),16776,3,0.010625
+Hash (IndexScan),59939,3,0.0113749
+Hash (IndexScan),22059,3,0.0137081
+Hash (IndexScan),24455,3,0.0134171
+Hash (IndexScan),90831,3,0.010666
+Hash (IndexScan),7032,3,0.0134581
+Hash (IndexScan),98483,3,0.01175
+Hash (IndexScan),24332,3,0.0166669
+Hash (IndexScan),89120,3,0.00958308
+Hash (IndexScan),20172,3,0.0107081
+Hash (IndexScan),54253,3,0.011625
+Hash (IndexScan),84047,3,0.0127498
+Hash (IndexScan),81632,3,0.014083
+Hash (IndexScan),64192,3,0.0114578
+Hash (IndexScan),71575,3,0.0114581
+Hash (IndexScan),3803,3,0.0105
+Hash (IndexScan),39407,3,0.0122911
+Hash (IndexScan),28959,3,0.0125
+Hash (IndexScan),67447,3,0.0120839
+Hash (IndexScan),47731,3,0.0102918
+Hash (IndexScan),71139,3,0.0128329
+Hash (IndexScan),12058,3,0.0136669
+Hash (IndexScan),61033,3,0.0144171
+Hash (IndexScan),89181,3,0.015666
+Hash (IndexScan),97931,3,0.013666
+Hash (IndexScan),53320,3,0.012958
+Hash (IndexScan),20319,3,0.0122909
+Hash (IndexScan),42534,3,0.011916
+Hash (IndexScan),19091,3,0.0127079
+Hash (IndexScan),93693,3,0.0135421
+Hash (IndexScan),66616,3,0.0122502
+Hash (IndexScan),5279,3,0.00949996
+Hash (IndexScan),61714,3,0.0124162
+Hash (IndexScan),992,3,0.0115409
+Hash (IndexScan),7625,3,0.011208
+Hash (IndexScan),12407,3,0.0114578
+Hash (IndexScan),46272,3,0.013167
+Hash (IndexScan),76810,3,0.0112089
+Hash (IndexScan),92359,3,0.0186248
+Hash (IndexScan),91550,3,0.0100839
+Hash (IndexScan),33716,3,0.010292
+Hash (IndexScan),43093,3,0.013167
+Hash (IndexScan),99190,3,0.0144581
+Hash (IndexScan),3682,3,0.0143328
+Hash (IndexScan),21471,3,0.0137498
+Hash (IndexScan),65964,3,0.0106671
+Hash (IndexScan),25078,3,0.0122502
+Hash (IndexScan),11804,3,0.0124162
+Hash (IndexScan),55423,3,0.0146672
+Hash (IndexScan),86954,3,0.012333
+Hash (IndexScan),56772,3,0.0131661
+Hash (IndexScan),26141,3,0.0159158
+Hash (IndexScan),22370,3,0.0105
+Hash (IndexScan),31605,3,0.0149589
+Hash (IndexScan),29446,3,0.0136669
+Hash (IndexScan),86721,3,0.0122092
+Hash (IndexScan),64823,3,0.010333
+Hash (IndexScan),27881,3,0.0119591
+Hash (IndexScan),48805,3,0.0141661
+Hash (IndexScan),20777,3,0.0120001
+Hash (IndexScan),70237,3,0.014208
+Hash (IndexScan),55309,3,0.0128332
+Hash (IndexScan),94518,3,0.0102911
+Hash (IndexScan),55467,3,0.0138329
+Hash (IndexScan),60213,3,0.01375
+Hash (IndexScan),47605,3,0.010791
+Hash (IndexScan),92412,3,0.0128332
+Hash (IndexScan),27418,3,0.010042
+Hash (IndexScan),40463,3,0.0120001
+Hash (IndexScan),82490,3,0.0138332
+Hash (IndexScan),96785,3,0.0114578
+Hash (IndexScan),57735,3,0.0106669
+Hash (IndexScan),73272,3,0.012666
+Hash (IndexScan),63152,3,0.0112909
+Hash (IndexScan),12028,3,0.013541
+Hash (IndexScan),27664,3,0.0128332
+Hash (IndexScan),96870,3,0.013958
+Hash (IndexScan),25618,3,0.011625
+Hash (IndexScan),15186,3,0.011083
+Hash (IndexScan),99098,3,0.014459
+Hash (IndexScan),10331,3,0.013625
+Hash (IndexScan),46392,3,0.0132502
+Hash (IndexScan),93692,3,0.011791
+Hash (IndexScan),89001,3,0.012541
+Hash (IndexScan),81552,3,0.0120001
+Hash (IndexScan),90166,3,0.00970787
+Hash (IndexScan),20719,3,0.013083

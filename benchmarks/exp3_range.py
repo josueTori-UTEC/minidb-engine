@@ -22,7 +22,7 @@ from typing import Any, Callable
 
 from benchmarks.common import (
     COLORS,
-    log2_ceil,
+    load_csv,
     mean_std,
     new_figure,
     no_gc,
@@ -77,8 +77,10 @@ def run(quick: bool = False) -> list[dict[str, Any]]:
                     assert got == k, (method, a, b, got)
                     raw.append((method, sel, a, b, reads[-1], mss[-1]))
                 theory = {
+                    # h para bajar + hojas adicionales + 1 lectura por registro (no agrupado)
                     "B+": st.bpt.height + math.ceil(k / per_leaf) - 1 + k,
-                    "Sequential": log2_ceil(st.seq.main_pages) + math.ceil(k / rpp),
+                    # bisección (log2 M en promedio) + k/r páginas contiguas (la primera ya se leyó)
+                    "Sequential": round(math.log2(st.seq.main_pages) + k / rpp, 1),
                     "Full Scan (Heap)": st.heap.page_count,
                 }[method]
                 mr, sr = mean_std(reads)
@@ -123,6 +125,13 @@ def plot(summary: list[dict[str, Any]], info: dict[str, Any]) -> None:
     axes[0].legend(fontsize=7)
     axes[1].legend(fontsize=8)
     save_figure(fig, "exp3_range.png")
+
+
+def replot() -> None:
+    summary = load_csv("exp3_range.csv")
+    full = next(s for s in summary if s["method"] == "Full Scan (Heap)")
+    n = round(full["k"] / full["selectivity"])
+    plot(summary, {"n": n, "P": full["theoretical_reads"]})
 
 
 def main() -> None:

@@ -137,6 +137,23 @@ def write_csv(name: str, header: Sequence[str], data: Iterable[Sequence[Any]]) -
     return path
 
 
+def load_csv(name: str) -> list[dict[str, Any]]:
+    """Lee un CSV de resultados convirtiendo números (para regenerar gráficos sin re-medir)."""
+
+    def conv(v: str) -> Any:
+        if v == "" or v == "None":
+            return None
+        for cast in (int, float):
+            try:
+                return cast(v)
+            except ValueError:
+                pass
+        return v
+
+    with open(RESULTS_DIR / name, newline="", encoding="utf-8") as fh:
+        return [{k: conv(v) for k, v in row.items()} for row in csv.DictReader(fh)]
+
+
 def _fmt(value: Any) -> Any:
     if isinstance(value, float):
         return f"{value:.6g}" if abs(value) >= 1e-3 or value == 0 else f"{value:.3e}"

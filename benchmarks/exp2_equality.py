@@ -16,6 +16,7 @@ Uso: ``python -m benchmarks.exp2_equality [--quick]``
 from __future__ import annotations
 
 import argparse
+import math
 import random
 import struct
 import time
@@ -32,7 +33,7 @@ from benchmarks.common import (
     ID_COLUMN,
     cleanup,
     fresh_dir,
-    log2_ceil,
+    load_csv,
     mean_std,
     new_figure,
     no_gc,
@@ -109,7 +110,8 @@ def run(quick: bool = False) -> list[dict[str, Any]]:
                 raw.append((method, k, reads, ms))
     theory = {
         "Full Scan (Heap)": st.heap.page_count,
-        "Búsqueda binaria (Sequential)": log2_ceil(st.seq.main_pages),
+        # La bisección sobre M páginas hace ⌊log2 M⌋ o ⌈log2 M⌉ sondeos: en promedio log2 M.
+        "Búsqueda binaria (Sequential)": round(math.log2(st.seq.main_pages), 2),
         "B+ (IndexScan)": st.bpt.height + 1,
         "Hash (IndexScan)": 3,
     }
@@ -164,6 +166,10 @@ def plot(summary: list[dict[str, Any]]) -> None:
         ax.set_xticklabels(labels, fontsize=8)
     axes[0].legend(fontsize=8)
     save_figure(fig, "exp2_equality.png")
+
+
+def replot() -> None:
+    plot(load_csv("exp2_equality.csv"))
 
 
 def main() -> None:

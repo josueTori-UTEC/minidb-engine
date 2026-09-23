@@ -38,6 +38,7 @@ from benchmarks.common import (
     Measure,
     cleanup,
     fresh_dir,
+    load_csv,
     log2_ceil,
     new_figure,
     no_gc,
@@ -225,10 +226,15 @@ def plot(results: list[dict[str, Any]]) -> None:
     axes[0].plot([r["n"] for r in seq], [log2_ceil(max(r["main_pages"], 1)) for r in seq], ":", color="gray",
                  label="⌈log2 M⌉ (con reorg)")
     style_axis(axes[0], "Búsqueda puntual tras la carga", "N", "lecturas promedio", logx=True, logy=True)
-    style_axis(axes[1], "Páginas de overflow al final", "N", "páginas de overflow", logx=True, logy=True)
+    style_axis(axes[1], "Páginas de overflow al final", "N", "páginas de overflow", logx=True)
+    axes[1].set_yscale("symlog", linthresh=1)  # con reorganización puede quedar en 0
     axes[0].legend(fontsize=8)
     axes[1].legend(fontsize=8)
     save_figure(fig, "exp1_sequential_reorg.png")
+
+
+def replot() -> None:
+    plot(load_csv("exp1_insert.csv"))
 
 
 def main() -> None:

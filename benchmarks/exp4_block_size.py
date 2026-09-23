@@ -28,6 +28,7 @@ from benchmarks.common import (
     ID_COLUMN,
     cleanup,
     fresh_dir,
+    load_csv,
     log2_ceil,
     new_figure,
     no_gc,
@@ -194,6 +195,10 @@ def plot(results: list[dict[str, Any]]) -> None:
                "lecturas promedio")
     ax.legend(fontsize=8)
     save_figure(fig, "exp4_search_reads.png")
+
+
+def replot() -> None:
+    plot(load_csv("exp4_block_size.csv"))
 
 
 def main() -> None:
