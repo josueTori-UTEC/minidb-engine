@@ -65,7 +65,7 @@ costo por inserción aproximadamente constante.}
   1\,000 registros, 13.0 con 500\,000): cada inserción paga la búsqueda binaria de su página. Las
   reorganizaciones (35 en total para 500\,000 registros) suman solo $\approx 0.1$ escrituras por
   inserción, porque el archivo crece geométricamente entre una y otra (con fill factor 0.75 cada página
-  admite $\approx 35\,\%$ más registros antes de desbordar: pasa de 48 a 65). A cambio, al terminar la carga la búsqueda
+  admite $\approx 35$\,\% más registros antes de desbordar: pasa de 48 a 65). A cambio, al terminar la carga la búsqueda
   cuesta $\lceil\log_2 M\rceil\approx 13$ lecturas.
 \item \textbf{B$^+$}: el índice solo cuesta $h$R + 1W: 3.0 I/O por inserción mientras $h=2$ y 3.7 con
   500\,000 claves, cuando la altura pasa a 3 (tabla~\ref{tab:exp1forma}); los splits agregan poco
@@ -86,7 +86,7 @@ promedio de una búsqueda puntual posterior (100 claves aleatorias).}
 \end{table}
 
 \begin{table}[H]
-\centering\small
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
 \input{tablas/exp1_forma.tex}
 \caption{Forma final de los índices en el Experimento 1.}
 \label{tab:exp1forma}
@@ -107,7 +107,7 @@ Con $N=100\,000$ registros ($B=4096$) se ejecutan 1\,000 búsquedas de claves al
 cada estructura. Las lecturas incluyen traer el registro por RID en los índices.
 
 \begin{table}[H]
-\centering\small
+\centering\footnotesize\setlength{\tabcolsep}{4pt}
 \input{tablas/exp2.tex}
 \caption{Experimento 2: 1\,000 búsquedas de igualdad sobre 100\,000 registros.}
 \label{tab:exp2}
@@ -157,7 +157,7 @@ el cruce teórico entre el B$^+$ no agrupado y el full scan ($k\approx P$).}
 \begin{itemize}
 \item \textbf{B$^+$ (no agrupado)}: cuesta $\approx k$ lecturas (una por registro, porque cada RID apunta
   a una página distinta del Heap) más $h$ y las hojas recorridas (1 hoja cada $\approx 290$ entradas).
-  Supera al full scan cuando $k > P$, es decir, con selectividad mayor a $P/N = 1.5\,\%$: con 25\,\%
+  Supera al full scan cuando $k > P$, es decir, con selectividad mayor a $P/N = 1.5$\,\%: con 25\,\%
   hace 25\,088 lecturas, 16 veces más que el full scan. Este es el cruce que justifica que un
   optimizador basado en costos (modo \code{cost} de nuestro planner) elija el full scan para rangos
   amplios.
@@ -167,7 +167,7 @@ el cruce teórico entre el B$^+$ no agrupado y el full scan ($k\approx P$).}
   coincide con la fórmula a la décima.
 \item \textbf{Full scan}: $P=1\,539$ lecturas constantes; solo crece el tiempo de CPU (filtrar y
   decodificar más filas).
-\item \textbf{Tiempo vs I/O}: en tiempo el B$^+$ le gana al full scan hasta $\approx 5\,\%$ aunque ya lea
+\item \textbf{Tiempo vs I/O}: en tiempo el B$^+$ le gana al full scan hasta $\approx 5$\,\% aunque ya lea
   3 veces más páginas, porque sus lecturas aleatorias caen en la caché del sistema operativo y cuestan
   poco; en un disco real, donde una lectura aleatoria cuesta de 0.1\,ms (SSD) a varios ms (HDD), el cruce
   se acerca al que predice el conteo de I/O (1.5\,\%).

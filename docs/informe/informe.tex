@@ -301,7 +301,7 @@ en la lista si y solo si tiene espacio, y siempre se inserta en la cabeza.
 \draw[arr] (m2) -- node[right, font=\scriptsize]{\code{aux\_page\_id}} (o1);
 \draw[arr] (o1) -- node[right, font=\scriptsize]{\code{next\_page\_id}} (o2);
 \draw[arr] (m4) -- (o3);
-\node[font=\scriptsize, align=left, anchor=west] at ($(o2.east)+(0.4,0.3)$) {área de overflow (\code{.ovf}):\\cada página principal apunta a su\\cadena; los registros de la cadena\\caen en el rango de su página};
+\node[font=\scriptsize, align=right, anchor=east] at ($(o1.west)!0.5!(o2.west)-(0.5,0)$) {área de overflow (\code{.ovf}):\\cada página principal apunta a su\\cadena; los registros de la cadena\\caen en el rango de su página};
 \end{tikzpicture}
 \caption{Sequential File: área principal ordenada por rango de PK y cadenas de overflow por página.}
 \label{fig:sequential}
@@ -372,8 +372,8 @@ fan-out ($m+1$) & 125 & 253 & 509 & 1021 \\
 \begin{itemize}
 \item \textbf{Nodo interno} (\code{BTREE\_INTERNAL}): $\langle P_0, K_1, P_1, \dots, K_m, P_m\rangle$
   empaquetado como \code{'<i' + (kfmt + 'i')$\cdot m$}; \code{record\_count} $=m$.
-\item \textbf{Hoja} (\code{BTREE\_LEAF}): pares ordenados $\langle K_i, RID_i\rangle$ y
-  \code{next\_page\_id}/\code{prev\_page\_id} como \code{next\_leaf}/\code{prev\_leaf}.
+\item \textbf{Hoja} (\code{BTREE\_LEAF}): pares ordenados $\langle K_i, RID_i\rangle$; en el header,
+  \code{next\_page\_id} y \code{prev\_page\_id} hacen de \code{next\_leaf} y \code{prev\_leaf}.
 \item \textbf{Inserción}: descenso guardando el camino en una pila (no hay punteros al padre); si la
   hoja desborda se divide al 50\,\% (la clave frontera se \emph{copia} al padre), si un interno desborda
   se divide al 50\,\% (la clave del medio \emph{sube}), y si la raíz desborda se crea una nueva raíz.
