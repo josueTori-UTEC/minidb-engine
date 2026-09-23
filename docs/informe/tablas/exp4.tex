@@ -1,0 +1,21 @@
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+$B$ (bytes) & 1\,024 & 2\,048 & 4\,096 & 8\,192 \\
+\midrule
+registros por página del heap & 16 & 32 & 65 & 131 \\
+páginas del heap ($P$) & 6\,250 & 3\,125 & 1\,539 & 764 \\
+entradas por hoja ($L$) & 100 & 202 & 407 & 816 \\
+fan-out del interno ($m+1$) & 125 & 253 & 509 & 1\,021 \\
+altura $h$ medida & 3 & 3 & 2 & 2 \\
+altura teórica [mín, máx] & [3, 3] & [3, 3] & [2, 3] & [2, 2] \\
+hojas / internos & 1\,422 / 17 & 714 / 5 & 341 / 1 & 161 / 1 \\
+I/O de inserción (heap + B$^+$) & 591\,248 & 563\,984 & 499\,396 & 499\,046 \\
+\quad de los cuales en el B$^+$ & 397\,497 & 367\,108 & 300\,934 & 299\,809 \\
+lecturas por búsqueda ($h+1$) & 4.00 & 4.00 & 3.00 & 3.00 \\
+I/O total (inserción + 1000 búsquedas) & 595\,248 & 567\,984 & 502\,396 & 502\,046 \\
+MB transferidos (I/O $\times B$) & 581.3 & 1\,109.3 & 1\,962.5 & 3\,922.2 \\
+tiempo de inserción (s) & 3.95 & 5.50 & 8.03 & 13.03 \\
+Sequential: $M$ / lecturas por búsqueda & 8\,334 / 13.04 & 4\,167 / 12.03 & 2\,084 / 11.04 & 1\,021 / 10.00 \\
+Hash: profundidad global / buckets & 10 / 1\,024 & 9 / 512 & 8 / 256 & 7 / 128 \\
+\bottomrule
+\end{tabular}

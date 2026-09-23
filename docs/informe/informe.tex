@@ -1,0 +1,574 @@
+% Informe del Proyecto 1 (Entregable 1) — MiniDB
+% Compilar:  cd docs/informe && tectonic informe.tex      (o latexmk -pdf informe.tex, o Overleaf)
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+\fi
+\usepackage[spanish,es-noshorthands,es-tabla,es-nodecimaldot]{babel}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc,fit}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{figuras/}}
+\setlength{\parskip}{0.35em}
+\setlist{itemsep=0.15em,topsep=0.3em}
+\captionsetup{font=small,labelfont=bf}
+
+\definecolor{codebg}{RGB}{246,248,250}
+\definecolor{kw}{RGB}{0,92,197}
+\lstdefinestyle{sql}{
+  language=SQL, basicstyle=\ttfamily\small, keywordstyle=\color{kw}\bfseries,
+  backgroundcolor=\color{codebg}, frame=single, rulecolor=\color{black!15},
+  columns=fullflexible, breaklines=true, morekeywords={USING,HEAP,SEQUENTIAL,BTREE,HASH,COPY,EXPLAIN,BETWEEN,INDEX}
+}
+\lstdefinestyle{txt}{basicstyle=\ttfamily\small, backgroundcolor=\color{codebg}, frame=single,
+  rulecolor=\color{black!15}, columns=fullflexible, breaklines=true}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\title{\textbf{MiniDB: gestor de bases de datos relacional en disco}\\[0.3em]
+\large Proyecto 1 (Entregable 1) --- Base de Datos II (CS2042) --- UTEC 2026-II\\
+\normalsize Docente: Percy Lovon Ramos}
+\author{Renzo Acervo \and Josué Toribio \and \emph{(integrante 3)} \and \emph{(integrante 4)}}
+\date{Septiembre de 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent MiniDB es un gestor de bases de datos relacional construido desde cero en Python que opera
+directamente sobre memoria secundaria. Todo dato e índice vive en archivos binarios organizados en
+páginas de tamaño fijo que se transfieren de a una con \code{seek} + \code{read}/\code{write} y se
+serializan con \code{struct}. Implementamos un Heap File con \emph{free-list}, un Sequential File
+con área de overflow encadenada y reorganización con \emph{fill factor}, un árbol B$^+$ multinivel y
+un Extendible Hashing, ambos en disco; un motor SQL propio (lexer, parser de descenso recursivo,
+planificador con estimación de costos y ejecutor), una API REST y un cliente web de cuatro paneles.
+Un monitor \code{DiskCounter} registra exactamente las páginas leídas y escritas por cada sentencia.
+Con 100\,000--500\,000 registros sintéticos, los cuatro experimentos pedidos reproducen los costos
+teóricos: la inserción en el Heap cuesta 2 I/O, la búsqueda puntual cuesta $P$ lecturas con full scan,
+$\lceil\log_2 M\rceil$ con búsqueda binaria, $h+1$ con el B$^+$ y 3 con el hash, y un índice no agrupado
+deja de convenir frente al full scan cuando el rango supera $\approx P/N$ de la tabla.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+%==========================================================================================
+\section{Introducción}
+
+El cuello de botella de un gestor de bases de datos es la transferencia de bloques entre disco y
+memoria, por lo que el costo de cada operación se mide en páginas transferidas. El objetivo de este
+entregable es construir el núcleo relacional de un gestor que haga visible ese costo: cada estructura
+se diseña para minimizar el número de accesos a disco y cada consulta informa exactamente cuántos hizo.
+
+\paragraph{Alcance.} El sistema implementa todos los componentes del Entregable 1:
+almacenamiento paginado con \code{DiskCounter}; Heap File y Sequential File; árbol B$^+$ y hashing
+dinámico en disco; SQL con \code{CREATE TABLE}, \code{INSERT}, \code{SELECT ... WHERE},
+\code{DELETE} y \code{CREATE INDEX} (más \code{DROP}, \code{COPY} y \code{EXPLAIN}); planificador
+con desglose de I/O y latencia; API REST; cliente web y experimentación con hasta 500\,000 registros.
+
+\paragraph{Restricciones respetadas.} No se usa ningún motor de bases de datos ni ORM; ningún
+archivo se serializa con \code{pickle}, \code{json} o similares (todo es \code{struct} little-endian);
+nunca se lee un archivo completo: solo \code{f.seek(offset)} + \code{f.read(page\_size)}; no hay
+\code{mmap} y todo acceso a disco pasa por \code{DiskManager}; la función hash persistida es
+\code{zlib.crc32} (no \code{hash()}, que en Python está salteado por proceso); y ninguna operación
+carga una tabla completa en memoria (ni siquiera \code{reorganize}, que usa ordenamiento externo si
+hace falta).
+
+\paragraph{Tecnologías.} Backend en Python~3.12 con FastAPI; frontend en React + TypeScript (Vite)
+con CodeMirror~6 y Recharts; todo se levanta con \code{docker compose up --build}. Los benchmarks usan
+matplotlib solo para graficar.
+
+%==========================================================================================
+\section{Arquitectura del sistema}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw, rounded corners=2pt, minimum width=3.6cm, minimum height=0.75cm, align=center, font=\small, fill=white},
+  wide/.style={box, minimum width=11.6cm},
+  arr/.style={-{Stealth[length=2mm]}, thick}]
+\node[wide, fill=blue!6] (web) {Cliente web (React): explorador $\cdot$ editor SQL $\cdot$ resultados $\cdot$ plan y métricas};
+\node[wide, below=0.45cm of web, fill=blue!3] (api) {API REST (FastAPI) --- \code{Database}: catálogo, tablas abiertas, lock, \code{DiskCounter} por sentencia};
+\node[box, below left=0.45cm and -3.6cm of api] (lex) {Lexer + Parser\\(descenso recursivo)};
+\node[box, right=0.4cm of lex] (plan) {Planner\\(reglas + costos)};
+\node[box, right=0.4cm of plan] (exec) {Executor\\(filtros, paginación)};
+\node[box, below=0.9cm of lex, fill=orange!8] (heap) {HeapFile\\(free-list)};
+\node[box, right=0.4cm of heap, fill=orange!8] (seq) {SequentialFile\\(+ overflow)};
+\node[box, right=0.4cm of seq, fill=green!8] (idx) {BPlusTree $\cdot$ ExtendibleHash};
+\node[wide, below=0.45cm of seq, fill=gray!10] (dm) {\code{DiskManager}: \code{seek(page\_id $\cdot$ B)} + \code{read/write(B)}; cuenta \code{disk\_reads} / \code{disk\_writes}};
+\node[wide, below=0.45cm of dm, fill=gray!4] (disk) {Archivos binarios paginados: \code{catalog.bin}, \code{*.heap}, \code{*.seq}, \code{*.ovf}, \code{*.bpt}, \code{*.hsh}};
+\draw[arr] (web) -- (api);
+\draw[arr] (api.south) -- ++(0,-0.2) -| (lex.north);
+\draw[arr] (lex) -- (plan);
+\draw[arr] (plan) -- (exec);
+\draw[arr] (exec.south) -- (idx.north);
+\draw[arr] (exec.south) -- (seq.north);
+\draw[arr] (exec.south) -- (heap.north);
+\node[fit=(heap)(seq)(idx), inner sep=2pt] (tbl) {};
+\draw[arr] (seq.south) -- (dm.north);
+\draw[arr] (dm) -- (disk);
+\end{tikzpicture}
+\caption{Capas de MiniDB. Todo acceso a disco pasa por \code{DiskManager}, que cuenta cada página transferida.}
+\label{fig:arquitectura}
+\end{figure}
+
+Una consulta sigue el camino de la figura~\ref{fig:arquitectura}: el cliente envía el SQL a
+\code{POST /api/query}; \code{Database.execute} lo parsea sentencia por sentencia (el lexer produce
+tokens de forma perezosa, así el tiempo de parseo de cada sentencia se mide por separado), resetea el
+\code{DiskCounter} compartido, ejecuta la sentencia, persiste las páginas~0 que cambiaron y devuelve
+filas paginadas, el plan y las métricas (\code{disk\_reads}, \code{disk\_writes}, \code{parse\_ms},
+\code{exec\_ms}, \code{total\_ms}, medidos con \code{time.perf\_counter()}). Un \emph{lock} serializa
+las sentencias: el motor atiende una a la vez, de modo que el conteo de cada una es exacto.
+
+La clase \code{Table} agrupa el archivo de datos (Heap o Sequential) y sus índices, y mantiene la
+consistencia entre ellos: todo \code{INSERT} y \code{DELETE} actualiza todos los índices y, tras una
+reorganización del Sequential, los índices se reconstruyen porque los RID cambian.
+
+%==========================================================================================
+\section{Diseño físico}
+
+\subsection{DiskManager y DiskCounter}
+
+Cada archivo es un \code{DiskManager} que lo abre una sola vez en modo \code{r+b} y \textbf{sin buffer
+de Python} (\code{buffering=0}): cada \code{read\_page(i)} es exactamente un \code{seek(i$\cdot$B)} y
+un \code{read(B)}, y cada \code{write\_page} un \code{seek} y un \code{write} de la página completa
+(se valida que \code{len(data) == B}). No hay \emph{buffer pool}: así el número de páginas
+transferidas coincide con el costo teórico de cada algoritmo. \code{allocate\_page()} solo reserva
+el siguiente \code{page\_id} (sin I/O); la escritura del contenido inicial es la que se cuenta, de
+modo que agregar una página cuesta una escritura. El tamaño de página $B$ es un parámetro
+\textbf{por archivo} (1024 a 8192 bytes en el Experimento~4, 4096 por defecto) y se guarda en la
+página~0.
+
+El \code{DiskCounter} tiene exactamente las dos variables pedidas, \code{disk\_reads} y
+\code{disk\_writes}; se comparte entre todos los archivos de una ejecución y se resetea antes de cada
+sentencia.
+
+\subsection{Header común de página}
+
+Todas las páginas de todos los archivos empiezan con el mismo header de 24 bytes, empaquetado como
+\code{'<IBBHHiiixx'} (tabla~\ref{tab:header}).
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{@{}lrrl>{\raggedright\arraybackslash}p{7.2cm}@{}}
+\toprule
+Campo & Offset & Bytes & Tipo & Uso \\
+\midrule
+\code{page\_id} & 0 & 4 & u32 & identificador del bloque dentro del archivo \\
+\code{page\_type} & 4 & 1 & u8 & 0 META, 1 HEAP, 2 SEQ\_MAIN, 3 SEQ\_OVERFLOW, 4 B$^+$ interno, 5 B$^+$ hoja, 6 HASH\_DIR, 7 HASH\_BUCKET, 8 CATALOG, 9 SORT\_RUN \\
+\code{flags} & 5 & 1 & u8 & específico del tipo (profundidad local del bucket) \\
+\code{record\_count} & 6 & 2 & u16 & registros o claves activos en la página \\
+\code{free\_space\_offset} & 8 & 2 & u16 & primer slot libre (\code{0xFFFF} = llena) o fin de los datos usados \\
+\code{next\_page\_id} & 10 & 4 & i32 & encadenamiento (free-list, overflow, \code{next\_leaf}); $-1$ = nulo \\
+\code{prev\_page\_id} & 14 & 4 & i32 & encadenamiento (\code{prev\_leaf}, página principal anterior) \\
+\code{aux\_page\_id} & 18 & 4 & i32 & específico (cabeza del overflow de una página principal) \\
+relleno & 22 & 2 & -- & alineación a 24 bytes \\
+\bottomrule
+\end{tabular}
+\caption{Header de página (24 bytes, little-endian).}
+\label{tab:header}
+\end{table}
+
+\paragraph{Página 0 de metadatos.} Tras el header, la página~0 de cada archivo guarda
+\code{magic} (\code{MDB1}), versión, tipo de archivo, \code{page\_size} y \code{num\_pages}
+(16 bytes) y luego los campos propios de cada estructura: cabeza de la free-list y nº de registros
+(Heap); capacidad, columna clave, fill factor y mínimo/máximo de la PK (Sequential); raíz, altura,
+capacidades y nº de hojas (B$^+$); profundidad global y la tabla de segmentos del directorio (hash).
+La página~0 se lee una vez al abrir el archivo y queda en memoria. Al final de cada sentencia se
+escribe \textbf{solo si cambió su estructura} (cabeza de la free-list, raíz o altura del B$^+$,
+directorio del hash); las estadísticas (nº de registros, mínimo y máximo de la clave) viajan en esa
+escritura o al cerrar el archivo. Tanto la lectura al abrir como estas escrituras se cuentan en el
+\code{DiskCounter}: por ejemplo, el \code{INSERT} que obliga a crear una página nueva del Heap cuesta
+1W de la página nueva más 1W de la página~0 (cambió la cabeza de la free-list), mientras que un
+\code{INSERT} en una página que ya tenía espacio cuesta exactamente 1R + 1W.
+
+\subsection{Registros de longitud fija con bitmap y RID}
+
+Elegimos registros de longitud fija con bitmap de presencia. Los tipos se empaquetan con
+\code{struct}: \code{INT}$\to$\code{'i'} (4 B), \code{FLOAT}$\to$\code{'d'} (8 B) y
+\code{CHAR(n)}/\code{VARCHAR(n)}$\to$\code{'ns'} (UTF-8 rellenado con \code{\textbackslash x00}; se
+trunca por bytes sin cortar un carácter multibyte). La tabla del enunciado,
+\code{empleados(id INT, nombre CHAR(30), dept CHAR(20), salario FLOAT)}, se empaqueta como
+\code{'<i30s20sd'} = 62 bytes. Una página de datos tiene el layout
+\[
+\underbrace{\text{header}}_{24\ \text{B}}\;\big|\;\underbrace{\text{bitmap}}_{\lceil cap/8\rceil\ \text{B}}\;\big|\;\underbrace{\text{slot}_0 \cdots \text{slot}_{cap-1}}_{cap\,\times\,62\ \text{B}}
+\qquad\text{con}\qquad cap=\max\{n : 24+\lceil n/8\rceil+62n \le B\}.
+\]
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+$B$ (bytes) & 1024 & 2048 & 4096 & 8192 \\
+\midrule
+registros de 62 B por página ($cap$) & 16 & 32 & 65 & 131 \\
+bytes de bitmap & 2 & 4 & 9 & 17 \\
+bytes usados / libres & 1018 / 6 & 2012 / 36 & 4063 / 33 & 8163 / 29 \\
+páginas para 100\,000 registros ($P$) & 6250 & 3125 & 1539 & 764 \\
+\bottomrule
+\end{tabular}
+\caption{Capacidad de las páginas de datos para la tabla \code{empleados}.}
+\label{tab:capacidad}
+\end{table}
+
+Cada tupla se identifica con \code{RID = (page\_id, slot)}, empaquetado como \code{'<iH'} (6 bytes).
+En el Sequential File un \code{page\_id} negativo apunta al área de overflow: \code{RID($-k$, s)} es el
+slot \code{s} de la página $k$ del archivo \code{.ovf} (la página~0 es de metadatos, así que no hay
+ambigüedad).
+
+\subsection{Catálogo}
+
+El catálogo (\code{catalog.bin}) guarda tablas, columnas y tipos, PK, organización, archivos,
+\code{page\_size}, parámetros del Sequential e índices (nombre, columna, tipo y archivo). Se serializa
+con \code{struct} (cadenas con prefijo de longitud) y se reparte en páginas \code{CATALOG}
+encadenadas; la página~0 guarda la longitud total. Cada DDL lo reescribe (es pequeño) y esas
+escrituras se cuentan en la sentencia. Al arrancar, el backend lee el catálogo de
+\code{MINIDB\_DATA\_DIR} y reabre todas las tablas, de modo que todo sobrevive a un reinicio.
+
+%==========================================================================================
+\section{Organización de archivos}
+\label{sec:archivos}
+
+\subsection{Heap File con Free-List}
+
+El Heap (\code{<tabla>.heap}) mantiene una lista simplemente enlazada (por \code{next\_page\_id}) de las
+páginas que tienen al menos un slot libre; la cabeza vive en la página~0. Invariante: una página está
+en la lista si y solo si tiene espacio, y siempre se inserta en la cabeza.
+
+\begin{itemize}
+\item \textbf{Inserción $O(1)$}: si la lista no está vacía se lee la cabeza, se ocupa el slot indicado
+  por \code{free\_space\_offset} y se escribe (1R + 1W); si la página quedó llena sale de la lista
+  (la cabeza pasa a su siguiente). Si la lista está vacía se agrega una página al final (1W).
+\item \textbf{Búsqueda}: full table scan de las páginas $1..P$, $P$ lecturas.
+\item \textbf{Eliminación}: borrado lógico (se limpia el bit). Si la página estaba llena vuelve a la
+  cabeza de la free-list. Los RID del resto no cambian. Un \code{DELETE} con full scan borra en el
+  mismo recorrido ($P$ lecturas + 1 escritura por página modificada) y uno por índice agrupa los RID
+  por página (1R + 1W por página distinta).
+\end{itemize}
+
+\subsection{Sequential File}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[pg/.style={draw, minimum width=2.1cm, minimum height=0.8cm, align=center, font=\scriptsize},
+  ov/.style={pg, fill=orange!12}, arr/.style={-{Stealth[length=1.6mm]}}]
+\node[pg, fill=gray!10] (m0) {pág. 0\\metadatos};
+\node[pg, right=0.35cm of m0] (m1) {pág. 1\\claves $[-\infty, 480)$};
+\node[pg, right=0.35cm of m1] (m2) {pág. 2\\$[480, 1210)$};
+\node[pg, right=0.35cm of m2] (m3) {pág. 3\\$[1210, 1850)$};
+\node[pg, right=0.35cm of m3] (m4) {pág. $M$\\$[\dots, +\infty)$};
+\draw[arr] (m1) -- (m2); \draw[arr] (m2) -- (m3); \draw[arr, dashed] (m3) -- (m4);
+\node[ov, below=0.6cm of m2] (o1) {ovf 7\\(cabeza)};
+\node[ov, below=0.35cm of o1] (o2) {ovf 3};
+\node[ov, below=0.6cm of m4] (o3) {ovf 5};
+\draw[arr] (m2) -- node[right, font=\scriptsize]{\code{aux\_page\_id}} (o1);
+\draw[arr] (o1) -- node[right, font=\scriptsize]{\code{next\_page\_id}} (o2);
+\draw[arr] (m4) -- (o3);
+\node[font=\scriptsize, align=left, anchor=west] at ($(o2.east)+(0.4,0.3)$) {área de overflow (\code{.ovf}):\\cada página principal apunta a su\\cadena; los registros de la cadena\\caen en el rango de su página};
+\end{tikzpicture}
+\caption{Sequential File: área principal ordenada por rango de PK y cadenas de overflow por página.}
+\label{fig:sequential}
+\end{figure}
+
+\paragraph{Estructura dual.} El área principal (\code{<tabla>.seq}) tiene páginas \code{SEQ\_MAIN}
+ordenadas por rango de clave primaria: toda clave de la página $i$ es menor que la \emph{clave frontera}
+de la página $i+1$, lo que permite \textbf{búsqueda binaria sobre páginas}. Tras cada
+reorganización los registros de una página quedan ordenados en los slots $0..k-1$, así que el slot~0
+contiene la frontera. Para que esa frontera sea estable, en el área principal los slots borrados no
+se reutilizan hasta la siguiente reorganización (quedan como lápidas; \code{free\_space\_offset} es
+una marca de agua). El área de overflow (\code{<tabla>.ovf}) guarda las tuplas que ya no entran en su
+bloque: cada página principal apunta con \code{aux\_page\_id} a la cabeza de su cadena y las páginas
+de overflow se encadenan con \code{next\_page\_id}, manteniendo el orden lógico con punteros binarios
+(figura~\ref{fig:sequential}).
+
+\paragraph{Búsqueda binaria.} Se busca la última página cuya frontera es $\le k$ leyendo solo las
+páginas que sondea la bisección: $\lceil\log_2 M\rceil$ lecturas (+1 si nunca se sondeó la página~1),
+más la cadena de overflow de esa página si la clave no está en el área principal.
+
+\paragraph{Inserción.} Búsqueda binaria de la página destino. Si le quedan slots vírgenes (los que
+dejó el fill factor) se inserta ahí sin mover otros registros (1W). Si no, va a la cabeza de su cadena
+de overflow (1R + 1W) o a una página de overflow nueva que pasa a ser la cabeza (1W + 1W de la página
+principal). Si la clave es mayor que todas las de la última página y esta no tiene overflow, se agrega
+una página principal nueva: inserciones en orden creciente nunca generan overflow. En el motor SQL la
+unicidad de la PK se valida buscando la clave en la página destino y su cadena.
+
+\paragraph{Lectura ordenada.} Una página lógica (principal + su cadena) se ordena en memoria antes
+de entregarla, sin I/O extra; así \code{SELECT} y los rangos salen ordenados por PK.
+
+\paragraph{Reorganización.} \code{reorganize} recorre las páginas principales en orden, fusiona cada
+una con su cadena de overflow y reescribe un archivo principal nuevo con \textbf{fill factor 0.75}
+($\lfloor 0.75\cdot cap\rfloor$ registros por página, configurable 0.70--0.80), en streaming: en memoria
+hay a lo sumo una página lógica. Si una cadena supera 64 páginas se usa \textbf{ordenamiento externo}
+(runs ordenados de 64 páginas en un archivo temporal y fusión con un heap de una página por run). Al
+final el archivo nuevo reemplaza al viejo con \code{os.replace}, el overflow se vacía y los índices de
+la tabla se reconstruyen (el de la PK con carga masiva ordenada). Se dispara automáticamente cuando las
+páginas de overflow superan el 10\,\% de las principales (desactivable, para el Experimento~1) y
+manualmente con \code{POST /api/tables/reorganize}. Como el archivo crece geométricamente entre
+reorganizaciones, su costo amortizado por inserción es $O(1)$.
+
+%==========================================================================================
+\section{Índices}
+\label{sec:indices}
+
+Ambos índices son \textbf{no agrupados}: guardan pares \code{<clave, RID>} y se pueden crear sobre
+cualquier columna de una tabla Heap o Sequential. Un índice sobre la PK es \textbf{único}: rechaza
+claves repetidas durante el mismo descenso de la inserción (sin lecturas extra), y así valida la PK de
+las tablas Heap.
+
+\subsection{Árbol B$^+$ en disco}
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+$B$ (bytes) & 1024 & 2048 & 4096 & 8192 \\
+\midrule
+hoja: pares \code{<INT, RID>} ($L=\lfloor (B-24)/10\rfloor$) & 100 & 202 & 407 & 816 \\
+interno: claves ($m=\lfloor (B-28)/8\rfloor$) & 124 & 252 & 508 & 1020 \\
+fan-out ($m+1$) & 125 & 253 & 509 & 1021 \\
+\bottomrule
+\end{tabular}
+\caption{Capacidades del B$^+$ con clave INT, calculadas desde $B$ (nunca fijas en el código).}
+\label{tab:bplus}
+\end{table}
+
+\begin{itemize}
+\item \textbf{Nodo interno} (\code{BTREE\_INTERNAL}): $\langle P_0, K_1, P_1, \dots, K_m, P_m\rangle$
+  empaquetado como \code{'<i' + (kfmt + 'i')$\cdot m$}; \code{record\_count} $=m$.
+\item \textbf{Hoja} (\code{BTREE\_LEAF}): pares ordenados $\langle K_i, RID_i\rangle$ y
+  \code{next\_page\_id}/\code{prev\_page\_id} como \code{next\_leaf}/\code{prev\_leaf}.
+\item \textbf{Inserción}: descenso guardando el camino en una pila (no hay punteros al padre); si la
+  hoja desborda se divide al 50\,\% (la clave frontera se \emph{copia} al padre), si un interno desborda
+  se divide al 50\,\% (la clave del medio \emph{sube}), y si la raíz desborda se crea una nueva raíz.
+\item \textbf{Búsqueda puntual}: $h$ lecturas hasta la hoja ($+1$ para traer el registro por RID).
+\item \textbf{Rango}: descenso a la primera hoja con $K \ge lo$ y recorrido por \code{next\_leaf}; si
+  la cota superior del separador ya supera $hi$ no se lee la hoja siguiente.
+\item \textbf{Duplicados}: se baja a la hoja más a la izquierda con \code{bisect\_left} y se avanza a
+  la derecha; en un índice único se baja con \code{bisect\_right}, lo que garantiza exactamente $h$
+  lecturas aunque la clave coincida con un separador.
+\item \textbf{Borrado}: se quita la entrada de la hoja sin fusionar ni redistribuir nodos (decisión
+  de diseño: los separadores siguen siendo cotas válidas y el costo es $h$ + 1W).
+\item \textbf{Carga masiva}: si la entrada está ordenada (recorrido del Sequential por PK) el árbol se
+  construye de abajo hacia arriba con hojas llenas, escribiendo cada página una sola vez.
+\end{itemize}
+
+\subsection{Extendible Hashing en disco}
+
+\begin{itemize}
+\item \textbf{Directorio}: $2^{gd}$ punteros \code{i32} a buckets en páginas \code{HASH\_DIR} de
+  $E=\lfloor (B-24)/4\rfloor$ entradas (1018 con $B=4096$). Las páginas del directorio se reservan en
+  \emph{segmentos contiguos} (uno por duplicación que necesita más páginas) y la tabla de segmentos va
+  en la página~0: ubicar la entrada $i$ no cuesta I/O y leerla cuesta una lectura.
+\item \textbf{Bucket} (\code{HASH\_BUCKET}): profundidad local en \code{flags}, pares
+  \code{<clave, RID>} contiguos ($L=\lfloor (B-24)/(k+6)\rfloor$, 407 con INT y $B=4096$) y
+  \code{next\_page\_id} hacia su bucket de overflow.
+\item \textbf{Función hash}: \code{zlib.crc32} sobre los bytes empaquetados de la clave; se usan los
+  $gd$ bits bajos.
+\item \textbf{Split}: si el bucket lleno tiene profundidad local $< gd$ se divide por el bit $ld$ y se
+  redirigen las entradas del directorio correspondientes; si es igual a $gd$ primero se duplica el
+  directorio (en streaming, página por página). Si se llega a $gd=20$ o todas las claves del bucket
+  tienen el mismo hash (p.\,ej. valores repetidos de una columna no única) se encadena un bucket de
+  overflow.
+\item \textbf{Búsqueda}: 1 lectura del directorio + 1 del bucket (+ su overflow). No soporta rangos.
+\item \textbf{Borrado}: se quita el par moviendo el último del bucket a su lugar, sin fusionar buckets.
+\end{itemize}
+
+%==========================================================================================
+\section{Motor SQL}
+
+\subsection{Lexer y parser}
+
+El lexer (propio) reconoce palabras clave sin distinguir mayúsculas, identificadores, enteros,
+reales (con exponente), strings entre comillas simples (\code{''} escapa una comilla), operadores y
+comentarios, y guarda la línea, columna y offset de cada token. El parser es de descenso recursivo y
+produce un AST (\code{CreateTable}, \code{CreateIndex}, \code{Insert}, \code{Select}, \code{Delete},
+\code{DropTable}, \code{DropIndex}, \code{Copy}, \code{Explain}). Los errores indican qué se esperaba y
+dónde: \code{SELECT * FORM t} produce ``se esperaba FROM pero se encontró 'FORM'
+(línea 1, columna 10)'' y la API responde HTTP~400 con esa posición, que el editor resalta.
+
+\begin{lstlisting}[style=sql]
+CREATE TABLE empleados (id INT PRIMARY KEY, nombre CHAR(30), dept CHAR(20),
+                        salario FLOAT) USING SEQUENTIAL;
+INSERT INTO empleados VALUES (101, 'Ada Lovelace', 'Analytics', 5200.0);
+CREATE INDEX idx_emp_id ON empleados (id) USING HASH;
+SELECT * FROM empleados WHERE id = 101;
+SELECT nombre, salario FROM empleados WHERE id BETWEEN 100 AND 500 AND dept = 'TI';
+DELETE FROM empleados WHERE salario < 1500;
+COPY empleados FROM 'empleados.csv';   -- carga masiva desde MINIDB_DATA_DIR
+EXPLAIN SELECT * FROM empleados WHERE id >= 100 AND id <= 500;
+\end{lstlisting}
+
+\subsection{Planificador}
+
+El planificador liga los predicados del \code{WHERE} al esquema (valida tipos y lleva cada literal
+al dominio de su columna), combina las cotas de rango por columna (dos cotas unidas con \code{AND} o
+un \code{BETWEEN}) y genera los caminos candidatos según las reglas del enunciado:
+
+\begin{enumerate}
+\item \textbf{Igualdad} \code{col = v}: \code{IndexScan} si hay un índice HASH o BTREE sobre la columna;
+  \code{BinarySearch} si la tabla es SEQUENTIAL y \code{col} es su PK.
+\item \textbf{Rango}: \code{IndexRangeScan} si hay un BTREE sobre la columna; \code{SeqFileRangeScan}
+  si la tabla es SEQUENTIAL y \code{col} es su PK.
+\item En cualquier otro caso, \code{SeqScan}.
+\end{enumerate}
+
+En el modo por defecto (\code{rules}) se toma el primer grupo con candidatos (igualdad, luego rango,
+luego full scan) y, dentro del grupo, el de menor costo estimado (p.\,ej. HASH frente a BTREE para la
+misma igualdad). En el modo \code{cost} se elige el de menor costo entre todos, incluido el full scan:
+así el optimizador descarta un \code{IndexRangeScan} no agrupado cuando el rango es tan grande que
+leer toda la tabla es más barato (sección~\ref{sec:exp3}). Los predicados que no usa el acceso se
+aplican como filtro residual. Cada plan informa su costo estimado junto al real medido, y la lista de
+candidatos descartados con sus costos.
+
+Los costos estimados son los de la tabla~\ref{tab:costos}. La cantidad de registros que califican se
+estima con la selectividad: 1 para igualdad sobre una columna única, $1/10$ para igualdad sobre una
+columna no única, e interpolación lineal con el mínimo y máximo de la clave (que el B$^+$ y el
+Sequential guardan en su página~0) para rangos numéricos.
+
+\subsection{Ejecutor}
+
+El ejecutor aplica el camino elegido. Para los full scans compila el \code{WHERE} en un filtro sobre
+los bytes crudos del registro (desempaqueta solo las columnas del predicado con \code{struct}; los
+\code{CHAR} se comparan como bytes, que respetan el orden de los strings), de modo que solo se
+decodifican las filas que califican. Los \code{SELECT} se ejecutan completos y se devuelve la página
+pedida (\code{page}, \code{page\_size}) junto con el total de filas. \code{INSERT} valida tipos y
+mantiene todos los índices (si un índice único detecta un duplicado se deshace la inserción);
+\code{DELETE} usa el mismo planificador para encontrar los RID; \code{COPY} carga un CSV fila por
+fila por el mismo camino que \code{INSERT} (solo lee archivos dentro de \code{MINIDB\_DATA\_DIR}).
+
+%==========================================================================================
+\section{API REST y cliente web}
+
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+Endpoint & Respuesta \\
+\midrule
+\code{POST /api/query} & \code{\{sql, page, page\_size, planner\}} $\to$ columnas, filas de la página pedida, total, mensaje, plan (tipo, estructura, índice, predicado, filtro, costo estimado, candidatos) y métricas (\code{disk\_reads}, \code{disk\_writes}, \code{parse\_ms}, \code{exec\_ms}, \code{total\_ms}). Errores 400 con tipo, mensaje y posición. \\
+\code{GET /api/tables} & tablas con columnas y tipos, organización, nº de registros y de páginas, índices (tipo, columna, altura del B$^+$ o profundidad global del hash). \\
+\code{POST /api/tables/reorganize} & reorganiza una tabla SEQUENTIAL y devuelve páginas antes/después e I/O. \\
+\code{GET /api/tables/\{t\}/pages/\{id\}} & header decodificado, contenido de la página y hexdump (inspector del video). \\
+\bottomrule
+\end{tabularx}
+\caption{Endpoints principales (contrato completo en \code{docs/api.md}).}
+\end{table}
+
+El cliente web muestra a la vez los cuatro paneles pedidos: \textbf{explorador de tablas} (columnas y
+tipos, organización, estadísticas e índices activos, botón para reorganizar y para inspeccionar
+páginas), \textbf{editor SQL} con resaltado (CodeMirror~6), botón Ejecutar y atajo Ctrl+Enter,
+\textbf{visor de resultados} paginado contra el backend y \textbf{plan de ejecución y métricas}
+(tipo de plan, índice, lecturas y escrituras, tiempos de parseo y ejecución, costo estimado frente al
+real, candidatos y un gráfico del historial de I/O de las últimas consultas).
+
+\IfFileExists{figuras/frontend.png}{
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{frontend.png}
+\caption{Cliente web: explorador, editor, resultados y plan/métricas de una consulta con \code{IndexScan}.}
+\end{figure}}{}
+
+%==========================================================================================
+\section{Análisis de costos teóricos}
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Estructura & Inserción & Búsqueda puntual & Rango ($k$ registros) & Eliminación \\
+\midrule
+Heap (free-list) & 1R + 1W & $P$ (full scan) & $P$ & búsqueda + 1W \\
+Sequential & $\lceil\log_2 M\rceil$ + 1W (+ overflow) & $\lceil\log_2 M\rceil$ + ovf. & $\lceil\log_2 M\rceil + \lceil k/r\rceil$ & búsqueda + 1W \\
+B$^+$ (índice) & $h$R + 1W (+ split) & $h$ (+1 registro) & $h + \lceil k/f\rceil - 1 + k$ & $h$ + 1W \\
+Hash extensible & 2R + 1W (+ split) & 2 (+1 registro) & no soporta & 2R + 1W \\
+\bottomrule
+\end{tabular}
+\caption{Costos en páginas transferidas. $P$: páginas de datos; $M$: páginas principales del
+Sequential; $r$: registros por página tras reorganizar ($\lfloor 0.75\,cap\rfloor$); $h$: altura del
+B$^+$; $f$: entradas promedio por hoja; $k$: registros que califican.}
+\label{tab:costos}
+\end{table}
+
+La altura del B$^+$ con $N$ entradas, hojas de capacidad $L$ y fan-out $F$ está acotada por
+\[
+1+\left\lceil \log_{F}\left\lceil N/L\right\rceil\right\rceil \;\le\; h \;\le\; 1+\left\lceil \log_{\lceil F/2\rceil} \left\lceil N/\lfloor L/2\rfloor\right\rceil \right\rceil,
+\]
+ya que el split al 50\,\% garantiza nodos al menos a la mitad. El índice es no agrupado, por lo que
+un rango paga una lectura aleatoria por registro: frente al full scan ($P$ lecturas) conviene solo si
+$k \lesssim P$, es decir, con selectividad menor que $P/N \approx 1/cap$ (1.5\,\% con $B=4096$).
+El Sequential, en cambio, está agrupado por la PK: un rango lee páginas contiguas y cuesta
+$\approx k/r$ páginas. En el hash el costo de búsqueda no depende de $N$ mientras no haya overflow.
+
+%==========================================================================================
+\section{Experimentación}
+\label{sec:experimentos}
+
+\input{resultados.tex}
+
+%==========================================================================================
+\section{Pruebas}
+
+La suite de \code{pytest} (\code{tests/}, un archivo por módulo) cubre: round-trip de header,
+página, registro, RID y metadatos; \textbf{exactitud del contador} (inserción en Heap con página
+libre = 1R + 1W, búsqueda en B$^+$ = $h$ lecturas, full scan = $P$ lecturas, hash = 2 lecturas,
+búsqueda binaria $\le\lceil\log_2 M\rceil + 1$); invariantes del B$^+$ tras 20\,000 inserciones
+aleatorias (claves ordenadas en cada nodo, cotas de los separadores, hojas enlazadas en ambos
+sentidos, todas a la misma profundidad, nodos al menos al 50\,\% y altura entre las cotas de
+$\log_M N$); hash con duplicados, profundidad máxima y splits del directorio en varias páginas;
+\code{reorganize} (conserva registros, vacía el overflow, respeta el fill factor y usa ordenamiento
+externo con cadenas largas); persistencia (cerrar, reabrir y obtener los mismos resultados); parser
+(casos válidos y errores con posición); planner y ejecutor de punta a punta; y la API REST.
+
+%==========================================================================================
+\section{Conclusiones}
+
+\begin{itemize}
+\item Contar las páginas transferidas (y no solo el tiempo) permite verificar la teoría con exactitud:
+  los costos medidos coinciden con las fórmulas de la tabla~\ref{tab:costos} en todos los
+  experimentos.
+\item El Heap tiene la inserción más barata (2 I/O) pero toda búsqueda sin índice cuesta $P$.
+\item El Sequential File ofrece búsquedas en $\lceil\log_2 M\rceil$ y los rangos más baratos por estar
+  agrupado, a cambio de reorganizar periódicamente: sin reorganización la inserción es barata pero
+  el archivo degenera en una cadena de overflow y la búsqueda se vuelve lineal.
+\item El B$^+$ da búsquedas en $h+1$ con $h$ muy baja (2--3 para 100\,000 claves) y soporta rangos,
+  pero como índice no agrupado pierde frente al full scan cuando la selectividad supera
+  $\approx P/N$; ahí el modo \code{cost} del planificador elige el full scan.
+\item El hash extensible logra búsquedas en 3 lecturas independientes de $N$, sin soportar rangos.
+\item Páginas más grandes aumentan el fan-out y reducen la altura y el número de I/O, pero cada I/O
+  transfiere más bytes: el volumen transferido crece casi linealmente con $B$.
+\end{itemize}
+
+\paragraph{Trabajo futuro.} Buffer pool con política LRU (desactivable para medir), fusión y
+redistribución en el B$^+$, recorrido de índice ordenado por página (\emph{bitmap heap scan}),
+transacciones con WAL y, para el Entregable~2, los módulos espacial (R-Tree), textual (SPIMI/BM25) y
+vectorial (IVF/HNSW).
+
+\begin{thebibliography}{9}
+\bibitem{ramakrishnan} R. Ramakrishnan y J. Gehrke. \emph{Database Management Systems}, 3.ª ed. McGraw-Hill, 2003.
+\bibitem{garcia} H. Garcia-Molina, J. D. Ullman y J. Widom. \emph{Database Systems: The Complete Book}, 2.ª ed. Pearson, 2008.
+\bibitem{silberschatz} A. Silberschatz, H. F. Korth y S. Sudarshan. \emph{Database System Concepts}, 7.ª ed. McGraw-Hill, 2019.
+\bibitem{fagin} R. Fagin, J. Nievergelt, N. Pippenger y H. R. Strong. Extendible hashing --- a fast access method for dynamic files. \emph{ACM TODS}, 4(3):315--344, 1979.
+\bibitem{comer} D. Comer. The ubiquitous B-tree. \emph{ACM Computing Surveys}, 11(2):121--137, 1979.
+\bibitem{selinger} P. G. Selinger et al. Access path selection in a relational database management system. \emph{SIGMOD}, 1979.
+\end{thebibliography}
+
+\end{document}

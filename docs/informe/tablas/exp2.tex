@@ -1,0 +1,10 @@
+\begin{tabular}{@{}lrrrrrl@{}}
+\toprule
+Método & lecturas (media) & $\sigma$ & teórico & ms (media) & $\sigma$ (ms) & parámetros \\
+\midrule
+Full Scan (Heap) & 1\,539.00 & 0.00 & 1\,539 & 22.504 & 4.136 & P = 1539 páginas \\
+Búsqueda binaria (Sequential) & 11.03 & 0.18 & 11.03 & 0.093 & 0.206 & M = 2084 páginas principales \\
+B$^+$ (IndexScan) & 3.00 & 0.00 & 3 & 0.039 & 0.016 & h = 2 \\
+Hash (IndexScan) & 3.00 & 0.00 & 3 & 0.013 & 0.004 & global depth = 8 \\
+\bottomrule
+\end{tabular}

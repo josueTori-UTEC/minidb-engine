@@ -1,0 +1,214 @@
+% Sección de experimentación (se incluye desde informe.tex).
+% Las tablas de tablas/*.tex y las figuras de figuras/ se regeneran con:
+%   python -m benchmarks.run_all && python -m benchmarks.report_tables
+
+\subsection{Metodología}
+
+Los cuatro experimentos están automatizados en \code{benchmarks/} (\code{python -m benchmarks.run\_all})
+y guardan sus resultados en \code{benchmarks/results/} (CSV + PNG). Cada experimento crea archivos nuevos
+en una carpeta de trabajo, usa el dataset sintético \code{empleados} generado con semilla fija
+(ids únicos 1..$N$ en orden aleatorio, registros de 62 bytes) y mide con contadores independientes
+(\code{DiskCounter}) y \code{time.perf\_counter()}, con el recolector de basura desactivado durante las
+mediciones. Entorno de la corrida: \input{tablas/entorno.tex}.
+
+Las lecturas y escrituras contadas son \textbf{deterministas} (no dependen de la máquina) y son la métrica
+principal. Los tiempos son secundarios: los archivos caben en la caché de páginas del sistema operativo,
+de modo que una ``lectura'' cuesta microsegundos y el tiempo refleja sobre todo el costo de CPU de
+Python. En un disco real el costo estaría dominado por el número de transferencias.
+
+En el Experimento~1 se mide la \emph{inserción estructural} en todas las organizaciones (sin validar la
+unicidad de la PK, porque las claves generadas son únicas por construcción): así se compara lo mismo en
+todas, ya que el Heap sin índice no valida y los índices B$^+$/hash se miden por separado. En el motor SQL
+la unicidad sí se valida (secciones~\ref{sec:archivos} y~\ref{sec:indices}).
+
+%------------------------------------------------------------------------------------------
+\subsection{Experimento 1: costo de inserción masiva}
+
+Se insertan lotes $N\in\{10^3, 10^4, 5\cdot10^4, 10^5, 2.5\cdot10^5, 5\cdot10^5\}$ con $B=4096$. Los
+índices B$^+$ y hash son índices únicos sobre \code{id} de un Heap: se reporta el costo total (heap +
+índice) y el del índice solo.
+
+\begin{table}[H]
+\centering\scriptsize
+\input{tablas/exp1.tex}
+\caption{Experimento 1: tiempo, escrituras, lecturas e I/O por inserción ($B=4096$).}
+\label{tab:exp1}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.49\textwidth}\includegraphics[width=\textwidth]{exp1_time.png}\caption{Tiempo total.}\end{subfigure}
+\begin{subfigure}{0.49\textwidth}\includegraphics[width=\textwidth]{exp1_writes.png}\caption{Escrituras.}\end{subfigure}
+\caption{Experimento 1 en escala log-log: todas las curvas son lineales en $N$ (pendiente 1), es decir,
+costo por inserción aproximadamente constante.}
+\label{fig:exp1a}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.78\textwidth]{exp1_io_per_insert.png}
+\caption{I/O por inserción medido frente al costo teórico.}
+\label{fig:exp1b}
+\end{figure}
+
+\paragraph{Análisis.}
+\begin{itemize}
+\item \textbf{Heap}: 1.98 I/O por inserción para todo $N$, exactamente el costo teórico de 1R + 1W
+  (el 0.02 que falta son las inserciones que abren una página nueva, que cuestan solo 1W: una de cada 65).
+  Es la inserción más barata y la más rápida (4.7\,s para 500\,000 registros).
+\item \textbf{Sequential sin reorganización}: $\approx 3$ I/O por inserción (1R de la página principal,
+  1R + 1W de la cabeza de su overflow). La inserción es barata, pero el archivo degenera: con 500\,000
+  registros queda 1 página principal y 7\,692 de overflow, y una búsqueda puntual posterior cuesta en
+  promedio 4\,026 lecturas (tabla~\ref{tab:exp1seq}, figura~\ref{fig:exp1c}); es decir, sin reorganizar el
+  Sequential se comporta como un Heap con peor inserción.
+\item \textbf{Sequential con reorganización}: el costo por inserción crece como $\log_2 M$ (4.4 I/O con
+  1\,000 registros, 13.0 con 500\,000): cada inserción paga la búsqueda binaria de su página. Las
+  reorganizaciones (35 en total para 500\,000 registros) suman solo $\approx 0.1$ escrituras por
+  inserción, porque el archivo crece geométricamente entre una y otra (con fill factor 0.75 cada página
+  admite $\approx 35\,\%$ más registros antes de desbordar: pasa de 48 a 65). A cambio, al terminar la carga la búsqueda
+  cuesta $\lceil\log_2 M\rceil\approx 13$ lecturas.
+\item \textbf{B$^+$}: el índice solo cuesta $h$R + 1W: 3.0 I/O por inserción mientras $h=2$ y 3.7 con
+  500\,000 claves, cuando la altura pasa a 3 (tabla~\ref{tab:exp1forma}); los splits agregan poco
+  (una hoja se divide cada $\approx 290$ inserciones). Es la estructura más lenta en tiempo porque cada
+  inserción decodifica y reescribe nodos de hasta 508 claves.
+\item \textbf{Hash}: 3.0 I/O por inserción del índice para todo $N$ (2R + 1W), independiente de $N$; la
+  profundidad global crece de 2 a 11 y el directorio ocupa 1 a 3 páginas. Los splits y las
+  duplicaciones del directorio son poco frecuentes, y \code{crc32} reparte las claves de forma tan
+  uniforme que los buckets quedan casi llenos (96\,\% de ocupación con 100\,000 claves).
+\end{itemize}
+
+\begin{table}[H]
+\centering\small
+\input{tablas/exp1_seq.tex}
+\caption{Sequential File tras la carga: páginas principales ($M$), páginas de overflow y lecturas
+promedio de una búsqueda puntual posterior (100 claves aleatorias).}
+\label{tab:exp1seq}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\input{tablas/exp1_forma.tex}
+\caption{Forma final de los índices en el Experimento 1.}
+\label{tab:exp1forma}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{exp1_sequential_reorg.png}
+\caption{Lo que compra la reorganización: sin ella la búsqueda posterior es lineal en $N$ (la cadena de
+overflow crece sin límite); con ella se mantiene en $\lceil\log_2 M\rceil$.}
+\label{fig:exp1c}
+\end{figure}
+
+%------------------------------------------------------------------------------------------
+\subsection{Experimento 2: búsquedas puntuales de igualdad}
+
+Con $N=100\,000$ registros ($B=4096$) se ejecutan 1\,000 búsquedas de claves aleatorias existentes en
+cada estructura. Las lecturas incluyen traer el registro por RID en los índices.
+
+\begin{table}[H]
+\centering\small
+\input{tablas/exp2.tex}
+\caption{Experimento 2: 1\,000 búsquedas de igualdad sobre 100\,000 registros.}
+\label{tab:exp2}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{exp2_equality.png}
+\caption{Experimento 2 (escala logarítmica). La raya negra marca el costo teórico.}
+\label{fig:exp2}
+\end{figure}
+
+\paragraph{Análisis.} Los cuatro métodos coinciden con la teoría:
+el \textbf{full scan} lee siempre las $P=1\,539$ páginas ($\sigma=0$), la \textbf{búsqueda binaria} sobre
+$M=2\,084$ páginas principales hace en promedio $\log_2 M = 11.03$ sondeos ($\lfloor\log_2 M\rfloor$ o
+$\lceil\log_2 M\rceil$ según la clave, de ahí $\sigma=0.18$), el \textbf{B$^+$} de altura $h=2$ cuesta
+exactamente $h+1=3$ lecturas y el \textbf{hash} exactamente 3 (directorio + bucket + registro, sin
+overflow). El índice reduce el costo en un factor de $\approx 500$ frente al full scan. En tiempo, B$^+$
+y hash hacen las mismas 3 lecturas pero el hash es 3 veces más rápido: busca la clave en el bucket con
+una búsqueda de bytes en C, mientras que el B$^+$ decodifica dos nodos completos con \code{struct}. La
+búsqueda binaria es $\approx 250$ veces más rápida que el full scan a pesar de no usar índice.
+
+%------------------------------------------------------------------------------------------
+\subsection{Experimento 3: búsquedas por rango con selectividad variable}
+\label{sec:exp3}
+
+Con $N=100\,000$ ($B=4096$) se consultan rangos \code{id BETWEEN a AND a+k-1} que devuelven el 0.1\,\%,
+1\,\%, 5\,\%, 10\,\% y 25\,\% de la tabla (10 rangos aleatorios por selectividad).
+
+\begin{table}[H]
+\centering\scriptsize
+\input{tablas/exp3.tex}
+\caption{Experimento 3: lecturas medidas (media de 10 rangos), costo teórico y tiempo en ms.
+Teórico: B$^+$ $= h + \lceil k/f\rceil - 1 + k$; Sequential $= \log_2 M + k/r$ con $r=48$; full scan $=P$.}
+\label{tab:exp3}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{exp3_range.png}
+\caption{Experimento 3: lecturas y tiempo frente a la selectividad (log-log). La línea vertical marca
+el cruce teórico entre el B$^+$ no agrupado y el full scan ($k\approx P$).}
+\label{fig:exp3}
+\end{figure}
+
+\paragraph{Análisis.}
+\begin{itemize}
+\item \textbf{B$^+$ (no agrupado)}: cuesta $\approx k$ lecturas (una por registro, porque cada RID apunta
+  a una página distinta del Heap) más $h$ y las hojas recorridas (1 hoja cada $\approx 290$ entradas).
+  Supera al full scan cuando $k > P$, es decir, con selectividad mayor a $P/N = 1.5\,\%$: con 25\,\%
+  hace 25\,088 lecturas, 16 veces más que el full scan. Este es el cruce que justifica que un
+  optimizador basado en costos (modo \code{cost} de nuestro planner) elija el full scan para rangos
+  amplios.
+\item \textbf{Sequential (agrupado)}: la búsqueda binaria ubica la primera página ($\log_2 M\approx 11$
+  lecturas) y luego lee páginas contiguas con 48 registros cada una: $k/48$ páginas. Es el mejor método en
+  todas las selectividades (532 lecturas para el 25\,\%, un tercio del full scan) y el costo medido
+  coincide con la fórmula a la décima.
+\item \textbf{Full scan}: $P=1\,539$ lecturas constantes; solo crece el tiempo de CPU (filtrar y
+  decodificar más filas).
+\item \textbf{Tiempo vs I/O}: en tiempo el B$^+$ le gana al full scan hasta $\approx 5\,\%$ aunque ya lea
+  3 veces más páginas, porque sus lecturas aleatorias caen en la caché del sistema operativo y cuestan
+  poco; en un disco real, donde una lectura aleatoria cuesta de 0.1\,ms (SSD) a varios ms (HDD), el cruce
+  se acerca al que predice el conteo de I/O (1.5\,\%).
+\end{itemize}
+
+%------------------------------------------------------------------------------------------
+\subsection{Experimento 4: sensibilidad al tamaño de bloque}
+
+Para $B\in\{1024, 2048, 4096, 8192\}$ se insertan 100\,000 registros en un Heap con un B$^+$ único sobre
+\code{id} y luego se hacen 1\,000 búsquedas puntuales. Como referencia se reporta también el Sequential
+(reorganizado) y el hash con el mismo $B$.
+
+\begin{table}[H]
+\centering\small
+\input{tablas/exp4.tex}
+\caption{Experimento 4: efecto del tamaño de página ($N=100\,000$). La altura teórica es el intervalo
+entre nodos llenos y nodos al 50\,\%.}
+\label{tab:exp4}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{exp4_block_size.png}
+\caption{Experimento 4: fan-out y altura del B$^+$ (izq.) e I/O totales y bytes transferidos (der.).}
+\label{fig:exp4}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.62\textwidth]{exp4_search_reads.png}
+\caption{Lecturas por búsqueda puntual según $B$: B$^+$ ($h+1$), Sequential ($\log_2 M$) y hash (3).}
+\label{fig:exp4b}
+\end{figure}
+
+\paragraph{Análisis.} El fan-out crece linealmente con $B$ (125, 253, 509 y 1\,021) y la altura baja de
+3 a 2 al pasar de 2\,048 a 4\,096 bytes, siempre dentro del intervalo teórico. Como cada búsqueda cuesta
+$h+1$, pasa de 4 a 3 lecturas, y como cada inserción cuesta $h$R + 1W en el índice, las I/O de inserción
+del B$^+$ bajan de 397\,497 a 299\,809 (las del Heap, 2 por registro, no dependen de $B$). El total de
+I/O baja un 16\,\% de $B=1024$ a $B=8192$, pero el volumen transferido (I/O $\times B$) crece casi
+linealmente: de 581\,MB a 3\,922\,MB. Duplicar $B$ más allá de 4\,096 no reduce la altura para
+100\,000 claves (la raíz ya cabe en una página) y solo encarece cada transferencia: páginas de 4\,KB,
+el tamaño de página del sistema operativo, son el mejor compromiso para este volumen. El Sequential
+muestra el mismo efecto ($\log_2 M$ baja de 13 a 10 lecturas) y el hash mantiene 3 lecturas con
+cualquier $B$, con una profundidad global que baja de 10 a 7 porque los buckets son más grandes.
