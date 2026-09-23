@@ -61,6 +61,7 @@ export interface Plan {
   filter: string | null
   estimated_io: number | null
   detail: string | null
+  planner: string | null
   candidates: PlanCandidate[]
 }
 
@@ -71,10 +72,14 @@ export interface StatementSummary {
   metrics: Metrics
 }
 
+/** 'rules': reglas del enunciado (por defecto); 'cost': menor costo estimado de I/O. */
+export type PlannerMode = 'rules' | 'cost'
+
 export interface QueryRequest {
   sql: string
   page?: number
   page_size?: number
+  planner?: PlannerMode
 }
 
 export interface QueryResponse {
@@ -340,6 +345,7 @@ function normalizePlan(raw: Loose<Plan> | null | undefined): Plan | null {
     filter: raw.filter ?? null,
     estimated_io: raw.estimated_io ?? null,
     detail: raw.detail ?? null,
+    planner: raw.planner ?? null,
     candidates: raw.candidates ?? [],
   }
 }

@@ -12,7 +12,7 @@ import CodeMirror, {
   type ViewUpdate,
 } from '@uiw/react-codemirror'
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState, type Ref } from 'react'
-import type { TableInfo } from '../api'
+import type { PlannerMode, TableInfo } from '../api'
 import { editorTheme, sqlLanguage } from '../lib/editorSetup'
 import { fmtInt } from '../lib/format'
 import { RUN_SHORTCUT } from '../lib/platform'
@@ -41,8 +41,26 @@ interface SqlEditorProps {
   running: boolean
   locked: boolean
   tables: readonly TableInfo[]
+  planner: PlannerMode
+  onPlanner(mode: PlannerMode): void
   ref?: Ref<SqlEditorHandle>
 }
+
+const PLANNER_OPTIONS: { value: PlannerMode; label: string; title: string }[] = [
+  {
+    value: 'rules',
+    label: 'Reglas',
+    title:
+      'Planificador por reglas (enunciado): igualdad con índice → IndexScan; rango con B+ → IndexRangeScan; ' +
+      'si no, SeqScan',
+  },
+  {
+    value: 'cost',
+    label: 'Costo',
+    title:
+      'Optimizador por costos: elige el camino con menor I/O estimado (con rangos grandes puede preferir el full scan)',
+  },
+]
 
 const BASIC_SETUP: BasicSetupOptions = {
   lineNumbers: true,
@@ -107,7 +125,7 @@ const errorMark = StateField.define<DecorationSet>({
   provide: (field) => EditorView.decorations.from(field),
 })
 
-export function SqlEditor({ value, onChange, onRun, running, locked, tables, ref }: SqlEditorProps) {
+export function SqlEditor({ value, onChange, onRun, running, locked, tables, planner, onPlanner, ref }: SqlEditorProps) {
   const viewRef = useRef<EditorView | null>(null)
   const [cursor, setCursor] = useState<CursorInfo>({ line: 1, column: 1, selected: 0, hasSelection: false })
   const [notice, setNotice] = useState<string | null>(null)
@@ -215,6 +233,24 @@ export function SqlEditor({ value, onChange, onRun, running, locked, tables, ref
           Editor SQL
         </h2>
         <div className="panel-actions">
+          <div className="planner-control">
+            <span className="planner-label" id="planner-label">
+              Planner
+            </span>
+            <div className="segmented" role="group" aria-labelledby="planner-label">
+              {PLANNER_OPTIONS.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  aria-pressed={planner === option.value}
+                  onClick={() => onPlanner(option.value)}
+                  title={option.title}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
           <ExamplesMenu onPick={insertSnippet} />
           <button type="button" className="btn btn-ghost btn-icon" onClick={clear} title="Vaciar el editor (se puede deshacer con Ctrl+Z)" aria-label="Vaciar el editor">
             <Icon name="eraser" />

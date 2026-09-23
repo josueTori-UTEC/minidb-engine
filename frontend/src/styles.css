@@ -2806,3 +2806,27 @@ button {
     max-height: 480px;
   }
 }
+
+/* Selector del modo del planificador en la barra del editor */
+.planner-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.planner-label {
+  color: var(--text-3);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.planner-control .segmented button {
+  font-weight: 600;
+}
+
+@media (max-width: 1280px) {
+  .planner-label {
+    display: none;
+  }
+}

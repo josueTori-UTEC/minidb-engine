@@ -5,6 +5,7 @@ import {
   fetchTables,
   reorganizeTable,
   toApiError,
+  type PlannerMode,
   type QueryResponse,
   type StatementSummary,
   type TableInfo,
@@ -100,6 +101,16 @@ export default function App() {
     return () => window.removeEventListener('pagehide', flush)
   }, [])
 
+  // --- Modo del planificador (persistido) ---
+  const [planner, setPlanner] = useState<PlannerMode>(() =>
+    readString(STORAGE_KEYS.planner) === 'cost' ? 'cost' : 'rules',
+  )
+  const plannerRef = useRef(planner)
+  useEffect(() => {
+    plannerRef.current = planner
+    writeString(STORAGE_KEYS.planner, planner)
+  }, [planner])
+
   // --- Estado del backend ---
   const [health, setHealth] = useState<HealthState>({ status: 'checking' })
   const checkHealth = useCallback(async () => {
@@ -183,7 +194,12 @@ export default function App() {
       const seq = ++querySeq.current
       setBusy(true)
       try {
-        const res = await executeQuery({ sql, page: options.page, page_size: options.pageSize })
+        const res = await executeQuery({
+          sql,
+          page: options.page,
+          page_size: options.pageSize,
+          planner: plannerRef.current,
+        })
         if (seq !== querySeq.current) return
         const isPaging = options.script !== undefined
         // Al paginar solo se reenvía el último SELECT, nunca las sentencias que lo precedían en el script
@@ -320,6 +336,8 @@ export default function App() {
           running={busy}
           locked={locked}
           tables={tables}
+          planner={planner}
+          onPlanner={setPlanner}
         />
         <ResultsPanel
           result={result}

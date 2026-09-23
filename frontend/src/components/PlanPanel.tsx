@@ -109,6 +109,12 @@ function PlanDetails({ plan }: { plan: Plan }) {
         <dd>{plan.predicate ? <code className="code-chip">{plan.predicate}</code> : <span className="muted">sin predicado</span>}</dd>
         <dt>Filtro residual</dt>
         <dd>{plan.filter ? <code className="code-chip">{plan.filter}</code> : <span className="muted">ninguno</span>}</dd>
+        {plan.planner && (
+          <>
+            <dt>Planificador</dt>
+            <dd>{plan.planner === 'cost' ? 'por costos (menor I/O estimado)' : 'por reglas (enunciado)'}</dd>
+          </>
+        )}
         {plan.detail && (
           <>
             <dt>Detalle</dt>
