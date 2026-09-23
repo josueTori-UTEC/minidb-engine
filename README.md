@@ -76,6 +76,7 @@ Cada respuesta trae las filas (paginadas), el plan elegido con su costo estimado
 candidatos que se descartaron, y las métricas exactas: `disk_reads`, `disk_writes`,
 `parse_ms`, `exec_ms` y `total_ms`. En la barra del editor, el selector **Planner** cambia entre
 las reglas del enunciado (por defecto) y el optimizador por costos (campo `planner` de la API).
+El visor de resultados copia al portapapeles en CSV las filas que muestra.
 
 ## 2. Desarrollo local (sin Docker)
 
@@ -225,6 +226,7 @@ Archivos binarios paginados en MINIDB_DATA_DIR
 ## 8. Estructura del repositorio
 
 ```text
+.github/      workflows/tests.yml (pytest en cada push)
 backend/
   storage/    disk_manager.py, page.py, record.py, rid.py, catalog.py
   files/      heap_file.py, sequential_file.py
@@ -246,5 +248,5 @@ docs/         Proyecto_Enunciado.pdf, api.md, informe/ (fuentes LaTeX + informe.
 |---|---|
 | **Renzo Acervo** | Núcleo del motor: `DiskManager` y `DiskCounter`, layout de página, registros y RID, catálogo binario; Heap File con free-list y Sequential File con overflow y `reorganize`; árbol B+ y extendible hashing en disco; lexer, parser, planner y executor; endpoints de la API REST; `dump_page`; y la suite de tests, incluidas las pruebas aleatorias diferenciales. |
 | **Lisseth Rondan** | Generador del dataset sintético; los 4 experimentos automatizados y `run_all`, la corrida final y las tablas del informe; cliente web de 4 paneles con su Dockerfile y el selector del modo del planner; informe LaTeX (diseño físico, costos y experimentos) y capturas del cliente y del inspector. |
-| **Josué Toribio** | Creación y estructura del repositorio; contenedor del backend y `compose.yaml`; compilación del informe a PDF y correcciones de maquetado; verificación de reproducibilidad de los experimentos en una segunda máquina. |
+| **Josué Toribio** | Repositorio y despliegue: estructura inicial del repositorio, contenedor del backend, `compose.yaml` e integración continua con GitHub Actions; exportación CSV del visor de resultados; compilación del informe a PDF y correcciones de maquetado; y la verificación de reproducibilidad de los experimentos en una segunda máquina. |
 
