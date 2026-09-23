@@ -19,7 +19,7 @@ paginados que se leen y escriben de a una página completa (`seek` + `read`/`wri
 | API REST (`POST /api/query`, `GET /api/tables`, `POST /api/tables/reorganize`) | [`backend/api/main.py`](backend/api/main.py), [`docs/api.md`](docs/api.md) |
 | Cliente web con 4 paneles (explorador, editor SQL, resultados, plan y métricas) | [`frontend/`](frontend) |
 | Datos sintéticos ≥ 100 000 registros y 4 experimentos automatizados | [`data/generate.py`](data/generate.py), [`benchmarks/`](benchmarks) |
-| Informe LaTeX y guion del video | [`docs/informe/`](docs/informe), [`docs/guion_video.md`](docs/guion_video.md) |
+| Informe en PDF compilado desde LaTeX y guion del video | [`docs/informe/informe.pdf`](docs/informe/informe.pdf), [`docs/guion_video.md`](docs/guion_video.md) |
 
 **Integrantes:** Renzo Acervo, Josué Toribio, Lisseth Rondan.
 
@@ -85,6 +85,9 @@ uvicorn backend.api.main:app --reload            # API en http://localhost:8000
 cd frontend && npm install && npm run dev        # cliente en http://localhost:5173 (proxy /api -> :8000)
 ```
 
+El cliente necesita Node ≥ 20.19 (o ≥ 22.12), como declara `frontend/package.json`. Con Docker da igual
+la versión instalada: la imagen compila con Node 24.
+
 Variables de entorno del backend:
 
 | Variable | Default | Uso |
@@ -97,7 +100,7 @@ Variables de entorno del backend:
 ## 3. Tests
 
 ```bash
-pytest            # 133 tests, ~12 s
+pytest            # 133 tests (de ~12 s en macOS a ~45 s en Windows)
 ```
 
 Cubren round-trip de header/página/registro/RID, **exactitud del contador** (insert en heap
@@ -128,7 +131,9 @@ fija, y guarda CSV + PNG en [`benchmarks/results/`](benchmarks/results) (sí ver
 | 3. Rangos con selectividad 0.1 %, 1 %, 5 %, 10 %, 25 % | `exp3_range.py` | `exp3_range.csv`, `exp3_range.png` |
 | 4. Tamaño de página B ∈ {1024, 2048, 4096, 8192} | `exp4_block_size.py` | `exp4_block_size.csv`, `exp4_*.png` |
 
-El análisis contra el costo teórico está en el informe.
+El análisis contra el costo teórico está en el informe. Las lecturas y escrituras son deterministas:
+repetir los experimentos 2, 3 y 4 en otra máquina (macOS arm64 y Windows AMD64) da las mismas columnas
+de I/O hasta la desviación estándar, y solo cambian los tiempos.
 
 ## 5. Inspeccionar los archivos binarios
 
@@ -227,5 +232,14 @@ tests/        un test_*.py por módulo
 frontend/     cliente React + TypeScript (Vite)
 data/         generate.py (los .csv y binarios no se versionan)
 benchmarks/   exp1_insert.py … exp4_block_size.py, run_all.py, results/ (CSV + PNG)
-docs/         Proyecto_Enunciado.pdf, api.md, informe/ (LaTeX), guion_video.md
+docs/         Proyecto_Enunciado.pdf, api.md, informe/ (fuentes LaTeX + informe.pdf), guion_video.md
 ```
+
+## 9. Contribuciones
+
+| Integrante | Aportes |
+|---|---|
+| **Renzo Acervo** | Núcleo del motor: `DiskManager` y `DiskCounter`, layout de página, registros y RID, catálogo binario; Heap File con free-list y Sequential File con overflow y `reorganize`; árbol B+ y extendible hashing en disco; lexer, parser, planner y executor; endpoints de la API REST; `dump_page`; y la suite de tests, incluidas las pruebas aleatorias diferenciales. |
+| **Lisseth Rondan** | Generador del dataset sintético; los 4 experimentos automatizados y `run_all`, la corrida final y las tablas del informe; cliente web de 4 paneles con su Dockerfile y el selector del modo del planner; informe LaTeX (diseño físico, costos y experimentos) y capturas del cliente y del inspector. |
+| **Josué Toribio** | Creación y estructura del repositorio; contenedor del backend y `compose.yaml`; compilación del informe a PDF y correcciones de maquetado; verificación de reproducibilidad de los experimentos en una segunda máquina. |
+
