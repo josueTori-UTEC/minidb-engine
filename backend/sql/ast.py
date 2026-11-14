@@ -44,7 +44,100 @@ class Between:
         return f"{self.column} BETWEEN {format_literal(self.low)} AND {format_literal(self.high)}"
 
 
-Predicate = Union[Comparison, Between]
+Point = tuple[float, float]
+
+
+@dataclass(frozen=True)
+class WithinRadius:
+    """``columna WITHIN_RADIUS((lon, lat), r)``: puntos a lo más a ``r`` km del centro."""
+
+    column: str
+    center: Point
+    radius: float
+
+    def __str__(self) -> str:
+        return f"{self.column} WITHIN_RADIUS(({self.center[0]}, {self.center[1]}), {self.radius})"
+
+
+@dataclass(frozen=True)
+class WithinBox:
+    """``columna WITHIN_BOX((x1, y1), (x2, y2))``: puntos dentro del rectángulo."""
+
+    column: str
+    low: Point
+    high: Point
+
+    def __str__(self) -> str:
+        return (f"{self.column} WITHIN_BOX(({self.low[0]}, {self.low[1]}), "
+                f"({self.high[0]}, {self.high[1]}))")
+
+
+@dataclass(frozen=True)
+class Match:
+    """``columna MATCH 'consulta'``: booleana (AND / OR / NOT) o de texto libre."""
+
+    column: str
+    query: str
+
+    def __str__(self) -> str:
+        return f"{self.column} MATCH {format_literal(self.query)}"
+
+
+Predicate = Union[Comparison, Between, WithinRadius, WithinBox, Match]
+SCALAR_PREDICATES = (Comparison, Between)
+
+
+@dataclass(frozen=True)
+class Expr:
+    """Expresión de la lista de selección o del ``ORDER BY``.
+
+    * ``column``: una columna (o, en ``ORDER BY``, el alias de otra expresión);
+    * ``score``: ``COSINE_SCORE()``, la relevancia del ``MATCH`` de la consulta;
+    * ``distance``: ``columna <-> operando`` (L2 o km) o ``columna <=> operando`` (coseno).
+    """
+
+    kind: str
+    column: str | None = None
+    op: str | None = None
+    operand: Any = None
+
+    def __str__(self) -> str:
+        if self.kind == "score":
+            return "COSINE_SCORE()"
+        if self.kind == "distance":
+            return f"{self.column} {self.op} {format_operand(self.operand)}"
+        return str(self.column)
+
+
+@dataclass(frozen=True)
+class SelectItem:
+    expr: Expr
+    alias: str | None = None
+
+    @property
+    def name(self) -> str:
+        return self.alias or str(self.expr)
+
+
+@dataclass(frozen=True)
+class OrderBy:
+    expr: Expr
+    descending: bool = False
+
+    def __str__(self) -> str:
+        return f"{self.expr} {'DESC' if self.descending else 'ASC'}"
+
+
+def format_operand(value: Any) -> str:
+    if isinstance(value, tuple):
+        if len(value) > 6:
+            head = ", ".join(f"{v:g}" for v in value[:3])
+            return f"'[{head}, … ({len(value)} dims)]'"
+        inner = ", ".join(f"{v:g}" for v in value)
+        return f"({inner})" if len(value) == 2 else f"'[{inner}]'"
+    if isinstance(value, str) and len(value) > 48:
+        return format_literal(value[:45] + "…")
+    return format_literal(value)
 
 
 def format_literal(value: Any) -> str:
@@ -89,6 +182,7 @@ class CreateIndex(Statement):
     table: str
     column: str
     method: IndexKind = IndexKind.BTREE
+    options: dict[str, str] = field(default_factory=dict)  # WITH (clave = valor, ...)
 
     @property
     def kind(self) -> str:
@@ -108,12 +202,27 @@ class Insert(Statement):
 @dataclass
 class Select(Statement):
     table: str
-    columns: list[str] | None  # None = '*'
+    columns: list[str] | None  # None = '*' (o una lista con expresiones: ver ``items``)
     where: list[Predicate] = field(default_factory=list)
+    # Lista de selección con expresiones (COSINE_SCORE(), distancias, alias); None si
+    # son solo columnas o '*'.
+    items: list[SelectItem] | None = None
+    order_by: OrderBy | None = None
+    limit: int | None = None
 
     @property
     def kind(self) -> str:
         return "SELECT"
+
+    @property
+    def is_relational(self) -> bool:
+        """Consulta de la Entrega 1: solo columnas y predicados de comparación."""
+        return (
+            self.items is None
+            and self.order_by is None
+            and self.limit is None
+            and all(isinstance(p, SCALAR_PREDICATES) for p in self.where)
+        )
 
 
 @dataclass
@@ -154,6 +263,18 @@ class Copy(Statement):
     @property
     def kind(self) -> str:
         return "COPY"
+
+
+@dataclass
+class Set(Statement):
+    """``SET ivf.probes = 5``: parámetro de sesión del motor."""
+
+    name: str
+    value: Any
+
+    @property
+    def kind(self) -> str:
+        return "SET"
 
 
 @dataclass

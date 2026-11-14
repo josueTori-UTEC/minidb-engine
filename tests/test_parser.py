@@ -68,13 +68,13 @@ def test_script_con_varias_sentencias_y_texto_de_cada_una():
         ("SELECT * FORM empleados", "se esperaba FROM pero se encontró 'FORM'", 10),
         ("SELEC * FROM t", "sentencia no reconocida", 1),
         ("CREATE TABLE t (id INT, )", "se esperaba nombre de columna", 25),
-        ("CREATE TABLE t (id TEXT)", "se esperaba un tipo", 20),
+        ("CREATE TABLE t (id BLOB)", "se esperaba un tipo", 20),
         ("CREATE TABLE t (id INT) USING ISAM", "HEAP o SEQUENTIAL", 31),
         ("INSERT INTO t VALUES (1, 2", "se esperaba ',' o ')'", 27),
         ("SELECT * FROM t WHERE id = ", "se esperaba un literal", 28),
         ("SELECT * FROM t WHERE id = 1 OR id = 2", "se esperaba ';' o el fin de la consulta", 30),
         ("SELECT * FROM select", "palabra reservada", 15),
-        ("CREATE INDEX i ON t (c) USING RTREE", "BTREE o HASH", 31),
+        ("CREATE INDEX i ON t (c) USING GIST", "BTREE o HASH", 31),
     ],
 )
 def test_errores_de_sintaxis_con_posicion(sql, fragment, column):

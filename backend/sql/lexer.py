@@ -4,7 +4,9 @@ Produce tokens de forma perezosa (el parser los pide a medida que avanza), con
 su posición (línea, columna y offset) para reportar errores. Palabras clave e
 identificadores son case-insensitive (los identificadores se normalizan a
 minúsculas); los strings van entre comillas simples y ``''`` escapa una comilla.
-Se ignoran comentarios ``-- ...`` y ``/* ... */``.
+Se ignoran comentarios ``-- ...`` y ``/* ... */``. Además de los operadores de
+comparación reconoce los de distancia ``<->`` y ``<=>`` y los corchetes de un
+vector literal (``[0.1, 0.2, ...]``).
 """
 
 from __future__ import annotations
@@ -20,6 +22,7 @@ KEYWORDS = frozenset(
     CREATE TABLE INSERT INTO VALUES SELECT FROM WHERE AND DELETE INDEX ON USING
     PRIMARY KEY HEAP SEQUENTIAL BTREE HASH INT INTEGER FLOAT CHAR VARCHAR BETWEEN
     DROP COPY EXPLAIN
+    RTREE INVERTED IVF WITH MATCH WITHIN_RADIUS WITHIN_BOX ORDER BY LIMIT ASC DESC AS SET
     """.split()
 )
 
@@ -38,6 +41,9 @@ class TokenType(str, Enum):
     STAR = "'*'"
     MINUS = "'-'"
     PLUS = "'+'"
+    LBRACKET = "'['"
+    RBRACKET = "']'"
+    DOT = "'.'"
     EOF = "fin de la consulta"
 
 
@@ -67,7 +73,8 @@ class SQLSyntaxError(Exception):
 
 
 _SINGLE = {"(": TokenType.LPAREN, ")": TokenType.RPAREN, ",": TokenType.COMMA, ";": TokenType.SEMICOLON,
-           "*": TokenType.STAR, "-": TokenType.MINUS, "+": TokenType.PLUS}
+           "*": TokenType.STAR, "-": TokenType.MINUS, "+": TokenType.PLUS,
+           "[": TokenType.LBRACKET, "]": TokenType.RBRACKET, ".": TokenType.DOT}
 
 
 class Lexer:
@@ -134,7 +141,12 @@ class Lexer:
                 yield self._string(start)
             elif ch in "<>!=":
                 two = text[start : start + 2]
-                if two in ("<=", ">=", "!=", "<>"):
+                three = text[start : start + 3]
+                if three in ("<->", "<=>"):
+                    # operadores de distancia: <-> euclidiana / geográfica, <=> coseno
+                    self.pos += 3
+                    yield Token(TokenType.OP, three, three, self._position(start))
+                elif two in ("<=", ">=", "!=", "<>"):
                     self.pos += 2
                     yield Token(TokenType.OP, "!=" if two == "<>" else two, two, self._position(start))
                 elif ch in "<>=":
