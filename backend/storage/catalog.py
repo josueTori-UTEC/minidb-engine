@@ -54,10 +54,18 @@ class Organization(str, Enum):
 class IndexKind(str, Enum):
     BTREE = "BTREE"
     HASH = "HASH"
+    RTREE = "RTREE"
+    INVERTED = "INVERTED"
+    IVF = "IVF"
 
 
 _ORG_CODES = {Organization.HEAP: 1, Organization.SEQUENTIAL: 2}
-_INDEX_CODES = {IndexKind.BTREE: 1, IndexKind.HASH: 2}
+_INDEX_CODES = {IndexKind.BTREE: 1, IndexKind.HASH: 2, IndexKind.RTREE: 3, IndexKind.INVERTED: 4, IndexKind.IVF: 5}
+
+# El payload empieza con esta marca y la versión; los catálogos de la Entrega 1
+# (sin opciones de índice) empezaban directamente con el número de tablas.
+_PAYLOAD_MARK = 0xFFFF
+_PAYLOAD_VERSION = 2
 
 
 @dataclass
@@ -67,6 +75,8 @@ class IndexInfo:
     column: str
     kind: IndexKind
     file: str
+    # Opciones de ``WITH (...)``: scoring, analyzer, lists, metric, ...
+    options: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -141,6 +151,8 @@ class _Reader:
 
 def serialize_tables(tables: list[TableInfo]) -> bytes:
     w = _Writer()
+    w.u16(_PAYLOAD_MARK)
+    w.u16(_PAYLOAD_VERSION)
     w.u16(len(tables))
     for t in tables:
         w.text(t.name)
@@ -164,6 +176,10 @@ def serialize_tables(tables: list[TableInfo]) -> bytes:
             w.text(idx.column)
             w.u8(_INDEX_CODES[idx.kind])
             w.text(idx.file)
+            w.u8(len(idx.options))
+            for key, value in idx.options.items():
+                w.text(key)
+                w.text(str(value))
     return w.getvalue()
 
 
@@ -172,7 +188,12 @@ def deserialize_tables(data: bytes) -> list[TableInfo]:
     org_by_code = {v: k for k, v in _ORG_CODES.items()}
     kind_by_code = {v: k for k, v in _INDEX_CODES.items()}
     tables = []
-    for _ in range(r.u16()):
+    count = r.u16()
+    version = 1
+    if count == _PAYLOAD_MARK:
+        version = r.u16()
+        count = r.u16()
+    for _ in range(count):
         name = r.text()
         organization = org_by_code[r.u8()]
         page_size = r.u32()
@@ -192,7 +213,13 @@ def deserialize_tables(data: bytes) -> list[TableInfo]:
             idx_name = r.text()
             idx_column = r.text()
             kind = kind_by_code[r.u8()]
-            indexes.append(IndexInfo(idx_name, name, idx_column, kind, r.text()))
+            idx_file = r.text()
+            options = {}
+            if version >= 2:
+                for _ in range(r.u8()):
+                    key = r.text()
+                    options[key] = r.text()
+            indexes.append(IndexInfo(idx_name, name, idx_column, kind, idx_file, options))
         tables.append(
             TableInfo(name, columns, organization, page_size, files, indexes, fill_factor, reorg_ratio, auto_reorganize)
         )

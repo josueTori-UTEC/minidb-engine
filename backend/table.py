@@ -23,13 +23,35 @@ from backend.files.heap_file import HeapFile
 from backend.files.sequential_file import ReorganizeStats, SequentialFile
 from backend.indexes.bplus_tree import BPlusTree
 from backend.indexes.extendible_hash import ExtendibleHash
+from backend.indexes.inverted_index import InvertedIndex, InvertedIndexError
+from backend.indexes.ivf import IVFError, IVFIndex
+from backend.indexes.rtree import RTree
 from backend.storage.catalog import IndexInfo, IndexKind, Organization, TableInfo
 from backend.storage.disk_manager import DiskCounter
-from backend.storage.record import Schema
+from backend.storage.record import ColumnType, Schema
 from backend.storage.rid import RID
 
 FILE_EXTENSIONS = {Organization.HEAP: ("heap",), Organization.SEQUENTIAL: ("seq", "ovf")}
-INDEX_EXTENSIONS = {IndexKind.BTREE: "bpt", IndexKind.HASH: "hsh"}
+INDEX_EXTENSIONS = {
+    IndexKind.BTREE: "bpt",
+    IndexKind.HASH: "hsh",
+    IndexKind.RTREE: "rtr",
+    IndexKind.INVERTED: "vocab.dic",
+    IndexKind.IVF: "ivf.dir",
+}
+# Tipo de columna que admite cada índice
+INDEX_COLUMN_TYPES = {
+    IndexKind.RTREE: (ColumnType.POINT,),
+    IndexKind.INVERTED: (ColumnType.CHAR,),
+    IndexKind.IVF: (ColumnType.VECTOR,),
+}
+INDEX_OPTIONS = {
+    IndexKind.BTREE: (),
+    IndexKind.HASH: (),
+    IndexKind.RTREE: (),
+    IndexKind.INVERTED: ("scoring", "analyzer"),
+    IndexKind.IVF: ("lists", "metric"),
+}
 
 
 def table_files(name: str, organization: Organization) -> list[str]:
@@ -40,25 +62,84 @@ def index_file(table: str, column: str, kind: IndexKind) -> str:
     return f"{table}_{column}.{INDEX_EXTENSIONS[kind]}"
 
 
+def index_base(file: str, kind: IndexKind) -> str:
+    """Nombre base de un índice de varios archivos (``<tabla>_<col>``)."""
+    return file[: -len(INDEX_EXTENSIONS[kind]) - 1]
+
+
+class IndexOptionError(Exception):
+    """Opción de ``WITH (...)`` inválida para el tipo de índice."""
+
+
 class Index:
-    """Índice abierto (B+ o hash) sobre una columna de la tabla."""
+    """Índice abierto sobre una columna de la tabla.
+
+    * ``BTREE`` / ``HASH``: columnas INT, FLOAT o CHAR (igualdad y rangos).
+    * ``RTREE``: columna POINT (radio, ventana y k-NN espacial).
+    * ``INVERTED``: columna CHAR/TEXT (booleano y ranking TF-IDF o BM25).
+    * ``IVF``: columna VECTOR (vecinos aproximados).
+    """
 
     def __init__(self, info: IndexInfo, table: TableInfo, data_dir: Path, counter: DiskCounter, *, create: bool) -> None:
         self.info = info
+        self.build_info: dict[str, Any] = {}
         schema = table.schema
         self.column_index = schema.index_of(info.column)
         self.column = schema.columns[self.column_index]
-        self.unique = schema.pk_index == self.column_index
+        self.unique = schema.pk_index == self.column_index and info.kind in (IndexKind.BTREE, IndexKind.HASH)
         self.path = data_dir / info.file
-        cls = BPlusTree if info.kind == IndexKind.BTREE else ExtendibleHash
-        if create:
-            if self.path.exists():
-                self.path.unlink()  # archivo huérfano de una ejecución anterior
-            self.structure: BPlusTree | ExtendibleHash = cls.create(
-                self.path, self.column, table.page_size, counter, unique=self.unique
-            )
+        self.rebuilt = False  # se reconstruyó durante la sentencia en curso
+        kind = info.kind
+        opts = info.options
+        base = data_dir / index_base(info.file, kind)
+        if kind == IndexKind.INVERTED:
+            self.paths = InvertedIndex.paths(base)
+        elif kind == IndexKind.IVF:
+            self.paths = IVFIndex.paths(base)
         else:
-            self.structure = cls.open(self.path, self.column, table.page_size, counter)
+            self.paths = [self.path]
+        if create:
+            for path in self.paths:
+                path.unlink(missing_ok=True)  # archivos huérfanos de una ejecución anterior
+        self.structure: BPlusTree | ExtendibleHash | RTree | InvertedIndex | IVFIndex
+        if kind in (IndexKind.BTREE, IndexKind.HASH):
+            cls = BPlusTree if kind == IndexKind.BTREE else ExtendibleHash
+            if create:
+                self.structure = cls.create(self.path, self.column, table.page_size, counter, unique=self.unique)
+            else:
+                self.structure = cls.open(self.path, self.column, table.page_size, counter)
+        elif kind == IndexKind.RTREE:
+            if create:
+                self.structure = RTree.create(self.path, 2, table.page_size, counter)
+            else:
+                self.structure = RTree.open(self.path, table.page_size, counter)
+        elif kind == IndexKind.INVERTED:
+            if create:
+                try:
+                    self.structure = InvertedIndex.create(
+                        base, table.page_size, counter,
+                        analyzer=opts.get("analyzer", "spanish").lower(),
+                        scoring=opts.get("scoring", "TFIDF_COSINE").upper(),
+                    )
+                except InvertedIndexError as exc:
+                    raise IndexOptionError(str(exc)) from None
+            else:
+                self.structure = InvertedIndex.open(base, table.page_size, counter)
+        else:
+            if create:
+                try:
+                    lists = int(opts.get("lists", 0))
+                except ValueError:
+                    raise IndexOptionError(f"lists debe ser un entero (se recibió {opts.get('lists')!r})") from None
+                try:
+                    self.structure = IVFIndex.create(
+                        base, self.column.size or 0, table.page_size, counter,
+                        metric=opts.get("metric", "L2").upper(), lists=lists,
+                    )
+                except IVFError as exc:
+                    raise IndexOptionError(str(exc)) from None
+            else:
+                self.structure = IVFIndex.open(base, table.page_size, counter)
 
     @property
     def name(self) -> str:
@@ -68,13 +149,38 @@ class Index:
     def kind(self) -> IndexKind:
         return self.info.kind
 
+    @property
+    def is_scalar(self) -> bool:
+        return self.info.kind in (IndexKind.BTREE, IndexKind.HASH)
+
+    @property
+    def file_names(self) -> list[str]:
+        return [p.name for p in self.paths]
+
+    # -- mantenimiento
     def insert(self, values: Sequence[Any], rid: RID) -> None:
-        self.structure.insert(values[self.column_index], rid)
+        s = self.structure
+        value = values[self.column_index]
+        if isinstance(s, RTree):
+            s.insert(value, None, rid)
+        elif isinstance(s, InvertedIndex):
+            s.mark_stale()
+        else:
+            s.insert(value, rid)
 
     def delete(self, values: Sequence[Any], rid: RID) -> bool:
-        return self.structure.delete(values[self.column_index], rid)
+        s = self.structure
+        value = values[self.column_index]
+        if isinstance(s, RTree):
+            return s.delete(value, None, rid)
+        if isinstance(s, InvertedIndex):
+            s.mark_stale()
+            return True
+        return s.delete(value, rid)
 
+    # -- acceso (B+ / hash)
     def search(self, value: Any) -> list[RID]:
+        assert isinstance(self.structure, (BPlusTree, ExtendibleHash))
         return self.structure.search(value)
 
     def range(self, low: Any, high: Any, low_inclusive: bool, high_inclusive: bool) -> Iterator[RID]:
@@ -93,19 +199,35 @@ class Index:
     def close(self) -> None:
         self.structure.close()
 
+    def remove_files(self) -> None:
+        for path in self.paths:
+            path.unlink(missing_ok=True)
+
+    def size_bytes(self) -> int:
+        return sum(os.path.getsize(p) for p in self.paths if p.exists())
+
     def stats(self) -> dict[str, Any]:
         s = self.structure
-        return {
+        out: dict[str, Any] = {
             "name": self.name,
             "column": self.info.column,
             "type": self.kind.value,
             "unique": self.unique,
-            "height": s.height if isinstance(s, BPlusTree) else None,
+            "height": s.height if isinstance(s, (BPlusTree, RTree)) else None,
             "global_depth": s.global_depth if isinstance(s, ExtendibleHash) else None,
             "page_count": s.page_count,
-            "entry_count": s.entry_count,
+            "entry_count": s.num_docs if isinstance(s, InvertedIndex) else s.entry_count,
             "file": self.info.file,
+            "files": self.file_names,
+            "options": dict(self.info.options),
         }
+        if isinstance(s, RTree):
+            out["details"] = {"leaf_capacity": s.leaf_capacity, "internal_capacity": s.internal_capacity}
+        elif isinstance(s, InvertedIndex):
+            out["details"] = s.stats()
+        elif isinstance(s, IVFIndex):
+            out["details"] = s.stats()
+        return out
 
 
 class Table:
@@ -211,13 +333,25 @@ class Table:
             self._build(index)
         except Exception:
             index.close()
-            index.path.unlink(missing_ok=True)
+            index.remove_files()
             raise
         self.indexes[info.name] = index
         return index
 
     def _build(self, index: Index) -> None:
         col = index.column_index
+        s = index.structure
+        if isinstance(s, RTree):
+            # Empaquetado STR: una escritura por página en vez de una inserción por punto
+            if self.file.record_count:
+                s.bulk_load((values[col], rid) for rid, values in self.file.scan())
+            return
+        if isinstance(s, InvertedIndex):
+            index.build_info = s.build((rid, values[col]) for rid, values in self.file.scan())
+            return
+        if isinstance(s, IVFIndex):
+            index.build_info = s.build(lambda: ((rid, values[col]) for rid, values in self.file.scan()))
+            return
         sorted_scan = self.is_sequential and col == self.schema.pk_index and index.kind == IndexKind.BTREE
         if sorted_scan:
             # El Sequential se recorre en orden de PK: carga masiva de abajo hacia arriba.
@@ -230,15 +364,31 @@ class Table:
     def remove_index(self, name: str) -> None:
         index = self.indexes.pop(name)
         index.close()
-        index.path.unlink(missing_ok=True)
+        index.remove_files()
+
+    def rebuild_index(self, name: str) -> Index:
+        old = self.indexes[name]
+        old.close()
+        fresh = Index(old.info, self.info, self.data_dir, self.counter, create=True)
+        self._build(fresh)
+        fresh.rebuilt = True
+        self.indexes[name] = fresh
+        return fresh
 
     def rebuild_indexes(self) -> None:
         for name in list(self.indexes):
-            old = self.indexes[name]
-            old.close()
-            fresh = Index(old.info, self.info, self.data_dir, self.counter, create=True)
-            self._build(fresh)
-            self.indexes[name] = fresh
+            self.rebuild_index(name)
+
+    def fresh_index(self, index: Index) -> Index:
+        """Devuelve el índice listo para consultar, reconstruyéndolo si quedó desactualizado.
+
+        El índice invertido es estático (se marca ``stale`` cuando la tabla cambia) y
+        un IVF creado sobre una tabla vacía se entrena cuando ya hay datos.
+        """
+        s = index.structure
+        if (isinstance(s, InvertedIndex) and (s.stale or not s.built)) or (isinstance(s, IVFIndex) and s.needs_training):
+            return self.rebuild_index(index.name)
+        return index
 
     # ------------------------------------------------------------------ mantenimiento
     def reorganize(self) -> ReorganizeStats:
@@ -269,7 +419,7 @@ class Table:
         for f in self.info.files:
             (self.data_dir / f).unlink(missing_ok=True)
         for idx in self.indexes.values():
-            idx.path.unlink(missing_ok=True)
+            idx.remove_files()
 
     # ------------------------------------------------------------------ estadísticas
     def stats(self) -> dict[str, Any]:
@@ -302,4 +452,4 @@ class Table:
 
     def file_size_bytes(self) -> int:
         total = sum(os.path.getsize(self.data_dir / f) for f in self.info.files)
-        return total + sum(os.path.getsize(idx.path) for idx in self.indexes.values())
+        return total + sum(idx.size_bytes() for idx in self.indexes.values())

@@ -7,8 +7,10 @@ Uso::
     python -m backend.tools.dump_page data/empleados.seq --all      # un renglón por página
 
 Decodifica el header común de 24 bytes, los campos propios de cada tipo de
-página (bitmap y registros, claves e hijos del B+, directorio y buckets del hash)
-y muestra un hexdump al estilo ``hexdump -C``. Si la carpeta del archivo tiene un
+página (bitmap y registros, claves e hijos del B+, directorio y buckets del hash,
+entradas ``<MBR, puntero>`` del R-Tree, diccionario y listas de posteo del índice
+invertido, centroides y listas del IVF) y muestra un hexdump al estilo
+``hexdump -C``. Si la carpeta del archivo tiene un
 ``catalog.bin``, usa el esquema de la tabla para decodificar los registros.
 Las lecturas se hacen con un ``DiskManager`` propio (no afectan las métricas de
 las consultas).
@@ -26,6 +28,19 @@ from backend.files.heap_file import HEAP_META
 from backend.files.sequential_file import OVF_META, RUN_META, SEQ_META
 from backend.indexes.bplus_tree import BPT_META
 from backend.indexes.extendible_hash import HASH_META
+from backend.indexes.inverted_index import (
+    ANALYZERS,
+    DOC_RID,
+    DOC_STAT,
+    DOCS_META,
+    POSTING,
+    POSTINGS_META,
+    SCORINGS,
+    VOCAB_ENTRY,
+    VOCAB_META,
+)
+from backend.indexes.ivf import DIR_META, LIST_META, METRICS
+from backend.indexes.rtree import RTREE_META
 from backend.storage.catalog import CATALOG_FILE, Catalog
 from backend.storage.disk_manager import MIN_PAGE_SIZE, DiskCounter, DiskManager
 from backend.storage.page import (
@@ -50,6 +65,12 @@ META_CODECS: dict[int, MetaCodec] = {
     FileKind.BPLUS: BPT_META,
     FileKind.HASH: HASH_META,
     FileKind.CATALOG: _CATALOG_META,
+    FileKind.RTREE: RTREE_META,
+    FileKind.INV_VOCAB: VOCAB_META,
+    FileKind.INV_POSTINGS: POSTINGS_META,
+    FileKind.INV_DOCS: DOCS_META,
+    FileKind.IVF_DIR: DIR_META,
+    FileKind.IVF_LIST: LIST_META,
 }
 MAX_ROWS_IN_DETAILS = 200
 
@@ -97,7 +118,125 @@ def _jsonable(value: Any) -> Any:
         return decode_str(value)
     if isinstance(value, float) and (value != value):
         return None
+    if isinstance(value, tuple):
+        if len(value) > 8:  # vector: se muestra resumido
+            head = ", ".join(f"{v:.4f}" for v in value[:4])
+            return f"[{head}, … ({len(value)} dims)]"
+        return [round(v, 6) for v in value]
     return value
+
+
+def _preview(vector: Any, n: int = 4) -> str:
+    head = ", ".join(f"{float(v):.4f}" for v in vector[:n])
+    return f"[{head}, … ({len(vector)} dims)]" if len(vector) > n else f"[{head}]"
+
+
+def _rtree_details(data: bytes, header: PageHeader, meta: dict[str, Any]) -> dict[str, Any]:
+    import numpy as np
+
+    d = int(meta["dims"])
+    ctype = "<f8" if int(meta["coord_code"]) == 0 else "<f4"
+    leaf = header.page_type == PageType.RTREE_LEAF
+    if leaf:
+        dtype = np.dtype({"names": ["lo", "hi", "page", "slot"], "formats": [(ctype, (d,)), (ctype, (d,)), "<i4", "<u2"]})
+    else:
+        dtype = np.dtype({"names": ["lo", "hi", "page"], "formats": [(ctype, (d,)), (ctype, (d,)), "<i4"]})
+    arr = np.frombuffer(data, dtype=dtype, count=header.record_count, offset=PAGE_HEADER_SIZE)
+    entries = []
+    for e in arr[:MAX_ROWS_IN_DETAILS]:
+        mbr = [round(float(x), 6) for x in e["lo"]] + [round(float(x), 6) for x in e["hi"]]
+        if d > 4:
+            mbr = mbr[:4] + ["…"]
+        entries.append({"mbr": mbr, "rid": [int(e["page"]), int(e["slot"])]} if leaf
+                       else {"mbr": mbr, "child": int(e["page"])})
+    out: dict[str, Any] = {
+        "kind": "hoja" if leaf else "interno",
+        "dims": d,
+        "entry_size": dtype.itemsize,
+        "capacity": int(meta["leaf_capacity" if leaf else "internal_capacity"]),
+        "entries": entries,
+    }
+    if len(arr) and d <= 4:
+        out["node_mbr"] = [round(float(x), 6) for x in arr["lo"].min(axis=0)] + \
+            [round(float(x), 6) for x in arr["hi"].max(axis=0)]
+    return out
+
+
+def _inverted_details(data: bytes, header: PageHeader, meta: dict[str, Any], page_id: int) -> dict[str, Any]:
+    import numpy as np
+
+    n = header.record_count
+    if header.page_type == PageType.INV_VOCAB:
+        arr = np.frombuffer(data, dtype=VOCAB_ENTRY, count=n, offset=PAGE_HEADER_SIZE)
+        return {
+            "kind": "diccionario (términos ordenados)",
+            "entry_size": VOCAB_ENTRY.itemsize,
+            "entries": [
+                {"term": e["term"].decode("utf-8", errors="ignore"), "df": int(e["df"]),
+                 "postings": int(e["length"]), "offset": int(e["offset"])}
+                for e in arr[:MAX_ROWS_IN_DETAILS]
+            ],
+        }
+    if header.page_type == PageType.INV_POSTINGS:
+        arr = np.frombuffer(data, dtype=POSTING, count=n, offset=PAGE_HEADER_SIZE)
+        return {
+            "kind": "listas de posteo <doc_id, tf>",
+            "entry_size": POSTING.itemsize,
+            "first_posting": (page_id - 1) * ((len(data) - PAGE_HEADER_SIZE) // POSTING.itemsize),
+            "entries": [{"doc_id": int(e["doc"]), "tf": int(e["tf"])} for e in arr[:MAX_ROWS_IN_DETAILS]],
+        }
+    stat_pages = int(meta.get("stat_pages", 0))
+    per = (len(data) - PAGE_HEADER_SIZE) // DOC_STAT.itemsize
+    if page_id <= stat_pages:
+        arr = np.frombuffer(data, dtype=DOC_STAT, count=n, offset=PAGE_HEADER_SIZE)
+        first = (page_id - 1) * per
+        return {
+            "kind": "estadísticas por documento <norma L2, longitud>",
+            "entries": [
+                {"doc_id": first + i, "norm": round(float(e["norm"]), 6), "length": int(e["length"])}
+                for i, e in enumerate(arr[:MAX_ROWS_IN_DETAILS])
+            ],
+        }
+    arr = np.frombuffer(data, dtype=DOC_RID, count=n, offset=PAGE_HEADER_SIZE)
+    first = (page_id - 1 - stat_pages) * per
+    return {
+        "kind": "RID por documento",
+        "entries": [
+            {"doc_id": first + i, "rid": [int(e["page"]), int(e["slot"])]}
+            for i, e in enumerate(arr[:MAX_ROWS_IN_DETAILS])
+        ],
+    }
+
+
+def _ivf_details(data: bytes, header: PageHeader, meta: dict[str, Any]) -> dict[str, Any]:
+    import numpy as np
+
+    d = int(meta["dims"])
+    n = header.record_count
+    if header.page_type == PageType.IVF_DIR:
+        dtype = np.dtype({"names": ["cluster", "centroid", "head", "count", "pages"],
+                          "formats": ["<u4", ("<f4", (d,)), "<i4", "<u4", "<u4"]})
+        arr = np.frombuffer(data, dtype=dtype, count=n, offset=PAGE_HEADER_SIZE)
+        return {
+            "kind": "directorio de centroides",
+            "entry_size": dtype.itemsize,
+            "entries": [
+                {"cluster_id": int(e["cluster"]), "head_page_id": int(e["head"]), "vectors": int(e["count"]),
+                 "pages": int(e["pages"]), "centroid": _preview(e["centroid"])}
+                for e in arr[:MAX_ROWS_IN_DETAILS]
+            ],
+        }
+    dtype = np.dtype({"names": ["page", "slot", "vector"], "formats": ["<i4", "<u2", ("<f4", (d,))]})
+    arr = np.frombuffer(data, dtype=dtype, count=n, offset=PAGE_HEADER_SIZE)
+    return {
+        "kind": "lista invertida <RID, vector>",
+        "cluster_id": header.aux_page_id,
+        "entry_size": dtype.itemsize,
+        "entries": [
+            {"rid": [int(e["page"]), int(e["slot"])], "vector": _preview(e["vector"])}
+            for e in arr[:MAX_ROWS_IN_DETAILS]
+        ],
+    }
 
 
 def _key_column(meta: dict[str, Any]) -> Column:
@@ -211,6 +350,13 @@ def inspect_page(
     ptype = header.page_type
     if page_id == 0:
         details: dict[str, Any] = {"common": common, "fields": {k: _jsonable(v) for k, v in meta.items()}}
+        if kind == FileKind.INV_VOCAB:
+            details["fields"]["analyzer"] = ANALYZERS[int(meta["analyzer"])]
+            details["fields"]["scoring"] = SCORINGS[int(meta["scoring"])]
+        elif kind == FileKind.IVF_DIR:
+            details["fields"]["metric"] = METRICS[int(meta["metric"])]
+        elif kind == FileKind.RTREE:
+            details["fields"]["coord"] = "float64" if int(meta["coord_code"]) == 0 else "float32"
         if kind == FileKind.HASH:
             n = int(meta["segment_count"])
             details["fields"]["segments"] = [
@@ -226,6 +372,12 @@ def inspect_page(
         details = _btree_details(data, header, meta)
     elif ptype in (PageType.HASH_DIR, PageType.HASH_BUCKET):
         details = _hash_details(data, header, meta, page_size)
+    elif ptype in (PageType.RTREE_LEAF, PageType.RTREE_INTERNAL):
+        details = _rtree_details(data, header, meta)
+    elif ptype in (PageType.INV_VOCAB, PageType.INV_POSTINGS, PageType.INV_DOCS):
+        details = _inverted_details(data, header, meta, page_id)
+    elif ptype in (PageType.IVF_DIR, PageType.IVF_LIST):
+        details = _ivf_details(data, header, meta)
     elif ptype == PageType.CATALOG:
         payload = data[PAGE_HEADER_SIZE : PAGE_HEADER_SIZE + header.free_space_offset]
         details = {"payload_bytes": len(payload), "payload_preview": payload[:160].decode("latin-1")}
