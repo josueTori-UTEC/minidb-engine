@@ -36,7 +36,7 @@ def test_query_con_plan_y_metricas(client):
     assert body["rows"] == [[101, "Emp 101", "D1", 1010.0]]
     assert body["plan"]["type"] == "IndexScan" and body["plan"]["index"] == "idx_emp_id"
     assert body["plan"]["structure"] == "BTREE"
-    assert set(body["metrics"]) == {"disk_reads", "disk_writes", "parse_ms", "exec_ms", "total_ms"}
+    assert set(body["metrics"]) == {"disk_reads", "disk_writes", "parse_ms", "exec_ms", "total_ms", "io"}
     assert body["metrics"]["disk_reads"] == body["plan"]["estimated_io"]
     assert any(c["chosen"] for c in body["plan"]["candidates"])
 

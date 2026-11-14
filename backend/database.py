@@ -48,6 +48,8 @@ class Database:
         self.fill_factor = fill_factor
         self.reorg_ratio = reorg_ratio
         self.counter = DiskCounter()
+        # Parámetros de sesión (SET nombre = valor)
+        self.settings: dict[str, Any] = {"ivf.probes": 5, "hybrid.strategy": "auto", "text.analyzer": "spanish"}
         self._lock = threading.RLock()
         self.catalog = Catalog(self.data_dir, self.counter)
         self.tables: dict[str, Table] = {
@@ -90,6 +92,7 @@ class Database:
                     "parse_ms": _ms(parse_s),
                     "exec_ms": _ms(exec_s),
                     "total_ms": _ms(parse_s + exec_s),
+                    "io": self.io_breakdown(),
                 }
                 results.append(result)
             if not results:
@@ -107,6 +110,25 @@ class Database:
                 "metrics": last.metrics,
                 "statements": [r.summary() for r in results],
             }
+
+    def io_breakdown(self) -> dict[str, Any]:
+        """Bloques leídos y escritos por archivo, separando índices de tablas de datos."""
+        roles: dict[str, tuple[str, str]] = {}
+        for table in self.tables.values():
+            for name in table.info.files:
+                roles[name] = ("table", table.name)
+            for idx in table.indexes.values():
+                for name in idx.file_names:
+                    roles[name] = ("index", idx.name)
+        files = []
+        totals = {"index_reads": 0, "index_writes": 0, "table_reads": 0, "table_writes": 0,
+                  "other_reads": 0, "other_writes": 0}
+        for name, io in self.counter.by_file().items():
+            role, owner = roles.get(name, ("other", "catálogo" if name == "catalog.bin" else "temporal"))
+            files.append({"file": name, "role": role, "owner": owner, **io})
+            totals[f"{role}_reads"] += io["reads"]
+            totals[f"{role}_writes"] += io["writes"]
+        return {**totals, "files": files}
 
     def _end_of_statement(self) -> None:
         """Persiste las páginas 0 con cambios estructurales (cuentan como escrituras)."""
@@ -168,9 +190,12 @@ class Database:
                             "num_pages": path.stat().st_size // table.info.page_size,
                             "page_size": table.info.page_size})
             for idx in table.indexes.values():
-                out.append({"key": idx.name, "kind": idx.kind.value, "path": idx.info.file,
-                            "num_pages": idx.path.stat().st_size // table.info.page_size,
-                            "page_size": table.info.page_size})
+                for path in idx.paths:
+                    # un índice de varios archivos se lista como ``nombre:archivo``
+                    key = idx.name if len(idx.paths) == 1 else f"{idx.name}:{path.name.split('.', 1)[1]}"
+                    out.append({"key": key, "kind": idx.kind.value, "path": path.name,
+                                "num_pages": path.stat().st_size // table.info.page_size,
+                                "page_size": table.info.page_size})
             return out
 
     def file_path(self, name: str, key: str) -> tuple[Table, Path, str]:
@@ -179,10 +204,16 @@ class Database:
             return table, self.data_dir / table.info.files[0], "data"
         if key == "overflow" and table.is_sequential:
             return table, self.data_dir / table.info.files[1], "overflow"
-        idx = table.indexes.get(key)
+        index_name, _, suffix = key.partition(":")
+        idx = table.indexes.get(index_name)
         if idx is None:
             raise SemanticError(f"'{key}' no es un archivo de '{name}' (use data, overflow o el nombre de un índice)")
-        return table, idx.path, key
+        if not suffix:
+            return table, idx.paths[0], key
+        for path in idx.paths:
+            if path.name.split(".", 1)[1] == suffix:
+                return table, path, key
+        raise SemanticError(f"'{suffix}' no es un archivo del índice '{index_name}'")
 
     # ------------------------------------------------------------------ ciclo de vida
     def sync(self) -> None:

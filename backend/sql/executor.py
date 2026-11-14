@@ -17,6 +17,10 @@ from backend.files.common import DuplicateKeyError, RecordNotFoundError
 from backend.files.sequential_file import SequentialFile
 from backend.indexes.bplus_tree import BPlusTree
 from backend.sql import ast
+from backend.indexes.inverted_index import InvertedIndex
+from backend.indexes.ivf import IVFIndex
+from backend.indexes.rtree import RTree
+from backend.sql import multimodal
 from backend.sql.errors import SemanticError
 from backend.sql.planner import Plan, _log2_pages
 from backend.sql.planner import plan as make_plan
@@ -24,7 +28,7 @@ from backend.sql.predicates import BoundPredicate, bind, compile_raw_filter, mat
 from backend.storage.catalog import CatalogError, IndexInfo, IndexKind, Organization, TableInfo
 from backend.storage.page import PageFormatError
 from backend.storage.record import Column, ColumnType, Schema, SchemaError
-from backend.table import Table, index_file, table_files
+from backend.table import INDEX_COLUMN_TYPES, INDEX_OPTIONS, IndexOptionError, Table, index_file, table_files
 
 if TYPE_CHECKING:
     from backend.database import Database
@@ -117,23 +121,30 @@ def _insert_cost(table: Table) -> int:
     """Costo estimado de insertar una fila (archivo + índices)."""
     f = table.file
     cost = (_log2_pages(f.main_pages) + 1) if isinstance(f, SequentialFile) else 2
-    for idx in table.indexes.values():
-        s = idx.structure
-        cost += (max(1, s.height) + 1) if isinstance(s, BPlusTree) else 3
-    return cost
+    return cost + _index_maintenance_cost(table)
+
+
+def _index_cost(s: Any) -> int:
+    """I/O estimado de mantener un índice al insertar o borrar una fila."""
+    if isinstance(s, (BPlusTree, RTree)):
+        return max(1, s.height) + 1
+    if isinstance(s, InvertedIndex):
+        return 0  # estático: solo se marca como desactualizado
+    if isinstance(s, IVFIndex):
+        return 2 * s.dir_pages + 3  # leer centroides, la página de la celda y escribir ambas
+    return 3
 
 
 def _index_maintenance_cost(table: Table) -> int:
-    total = 0
-    for idx in table.indexes.values():
-        s = idx.structure
-        total += (max(1, s.height) + 1) if isinstance(s, BPlusTree) else 3
-    return total
+    return sum(_index_cost(idx.structure) for idx in table.indexes.values())
 
 
 # ---------------------------------------------------------------------- SELECT / DELETE / EXPLAIN
 def _select(db: Database, stmt: ast.Select, page: int, page_size: int, mode: str) -> StatementResult:
     table = _table(db, stmt.table)
+    if not stmt.is_relational:
+        columns, rows, total, info = multimodal.run_select(db, table, stmt, page, page_size, mode)
+        return StatementResult("SELECT", stmt.sql, columns, rows, total, f"{total} fila(s)", info)
     schema = table.schema
     if stmt.columns is None:
         positions = list(range(len(schema)))
@@ -158,6 +169,11 @@ def _select(db: Database, stmt: ast.Select, page: int, page_size: int, mode: str
 
 def _delete(db: Database, stmt: ast.Delete, page: int, page_size: int, mode: str) -> StatementResult:
     table = _table(db, stmt.table)
+    if not all(isinstance(p, ast.SCALAR_PREDICATES) for p in stmt.where):
+        rids, info = multimodal.matching_rids(db, table, stmt.where, mode)
+        count = len(table.delete_rids(rids))
+        info["detail"] += f"; luego borrado lógico y mantenimiento de {len(table.indexes)} índice(s)"
+        return StatementResult("DELETE", stmt.sql, message=f"{count} fila(s) eliminada(s)", plan=info, total_rows=0)
     plan, _ = _plan_for(db, table, stmt.where, mode)
     if plan.access.type == "SeqScan":
         count = table.delete_where(compile_raw_filter(table.schema, plan.residual))
@@ -176,8 +192,13 @@ def _delete(db: Database, stmt: ast.Delete, page: int, page_size: int, mode: str
 def _explain(db: Database, stmt: ast.Explain, page: int, page_size: int, mode: str) -> StatementResult:
     inner = stmt.statement
     table = _table(db, inner.table)
-    plan, _ = _plan_for(db, table, inner.where, mode)
-    info = plan.as_dict()
+    if isinstance(inner, ast.Select) and not inner.is_relational:
+        _, _, info = multimodal.plan_select(db, table, inner, mode)
+    elif not all(isinstance(p, ast.SCALAR_PREDICATES) for p in inner.where):
+        _, _, info = multimodal.plan_select(db, table, ast.Select(table.name, None, inner.where), mode)
+    else:
+        plan, _ = _plan_for(db, table, inner.where, mode)
+        info = plan.as_dict()
     rows = [
         [c["type"], c["structure"], c["index"] or "", c["estimated_io"], "sí" if c["chosen"] else ""]
         for c in info["candidates"]
@@ -217,7 +238,14 @@ def _insert_plan(table: Table, rows: int | None) -> dict[str, Any]:
              "Sequential: búsqueda binaria + 1W"]
     for idx in table.indexes.values():
         s = idx.structure
-        parts.append(f"{idx.name}: {s.height}R + 1W" if isinstance(s, BPlusTree) else f"{idx.name}: 2R + 1W")
+        if isinstance(s, (BPlusTree, RTree)):
+            parts.append(f"{idx.name}: {s.height}R + 1W")
+        elif isinstance(s, InvertedIndex):
+            parts.append(f"{idx.name}: se marca desactualizado (se reconstruye en la próxima búsqueda)")
+        elif isinstance(s, IVFIndex):
+            parts.append(f"{idx.name}: {s.dir_pages}R de centroides + 2R + 2W")
+        else:
+            parts.append(f"{idx.name}: 2R + 1W")
     return {
         "type": "Insert",
         "table": table.name,
@@ -332,24 +360,82 @@ def _create_index(db: Database, stmt: ast.CreateIndex, page: int, page_size: int
     if not table.schema.has_column(stmt.column):
         raise SemanticError(f"no existe la columna '{stmt.column}' en '{table.name}'")
     col_index = table.schema.index_of(stmt.column)
+    column = table.schema.columns[col_index]
     if any(i.kind == stmt.method for i in table.indexes_on(col_index)):
         raise SemanticError(f"ya existe un índice {stmt.method.value} sobre {table.name}.{stmt.column}")
-    info = IndexInfo(stmt.name, table.name, stmt.column, stmt.method, index_file(table.name, stmt.column, stmt.method))
+    allowed_types = INDEX_COLUMN_TYPES.get(stmt.method)
+    if allowed_types is None:
+        if not column.is_scalar:
+            raise SemanticError(
+                f"un índice {stmt.method.value} no admite la columna {column.display_type()} '{column.name}' "
+                "(use RTREE para POINT e IVF para VECTOR)"
+            )
+    elif column.type not in allowed_types:
+        wanted = {IndexKind.RTREE: "POINT", IndexKind.INVERTED: "de texto (CHAR / TEXT)", IndexKind.IVF: "VECTOR"}
+        raise SemanticError(
+            f"un índice {stmt.method.value} necesita una columna {wanted[stmt.method]}; "
+            f"'{column.name}' es {column.display_type()}"
+        )
+    options = {k.lower(): v for k, v in stmt.options.items()}
+    unknown = sorted(set(options) - set(INDEX_OPTIONS[stmt.method]))
+    if unknown:
+        valid = ", ".join(INDEX_OPTIONS[stmt.method]) or "ninguna"
+        raise SemanticError(
+            f"opción desconocida para un índice {stmt.method.value}: {', '.join(unknown)} (válidas: {valid})"
+        )
+    info = IndexInfo(
+        stmt.name, table.name, stmt.column, stmt.method, index_file(table.name, stmt.column, stmt.method), options
+    )
     try:
         index = table.add_index(info)
     except DuplicateKeyError as exc:
         raise SemanticError(f"no se puede crear el índice: la PK tiene valores repetidos ({exc})") from None
+    except IndexOptionError as exc:
+        raise SemanticError(str(exc)) from None
     db.catalog.add_index(info)
     s = index.stats()
-    shape = f"altura {s['height']}" if stmt.method == IndexKind.BTREE else f"profundidad global {s['global_depth']}"
+    structure = index.structure
+    if isinstance(structure, InvertedIndex):
+        shape = (f"{structure.num_terms} términos, {structure.total_postings} posteos, "
+                 f"{structure.scoring}, analizador {structure.analyzer.name}")
+        entries = f"{structure.num_docs} documentos"
+    elif isinstance(structure, IVFIndex):
+        shape = f"{structure.num_lists} celdas, métrica {structure.metric}, {structure.list_capacity} vectores por página"
+        entries = f"{structure.entry_count} vectores"
+    elif isinstance(structure, RTree):
+        shape = f"altura {s['height']}, {structure.leaf_capacity} entradas por hoja"
+        entries = f"{s['entry_count']} puntos"
+    else:
+        shape = f"altura {s['height']}" if stmt.method == IndexKind.BTREE else f"profundidad global {s['global_depth']}"
+        entries = f"{s['entry_count']} entradas"
     return StatementResult(
         "CREATE INDEX",
         stmt.sql,
         message=(
             f"Índice '{stmt.name}' ({stmt.method.value}{', único' if index.unique else ''}) creado sobre "
-            f"{table.name}.{stmt.column}: {s['entry_count']} entradas, {shape}, {s['page_count']} páginas"
+            f"{table.name}.{stmt.column}: {entries}, {shape}, {s['page_count']} páginas"
         ),
     )
+
+
+_SETTING_PARSERS: dict[str, Any] = {
+    "ivf.probes": ("un entero >= 1", lambda v: int(v) if isinstance(v, int) and not isinstance(v, bool) and v >= 1 else None),
+    "hybrid.strategy": ("auto, pre o post", lambda v: v if v in ("auto", "pre", "post") else None),
+    "text.analyzer": ("spanish, english o raw", lambda v: v if v in ("spanish", "english", "raw") else None),
+}
+
+
+def _set(db: Database, stmt: ast.Set, page: int, page_size: int, mode: str) -> StatementResult:
+    entry = _SETTING_PARSERS.get(stmt.name)
+    if entry is None:
+        raise SemanticError(f"parámetro desconocido '{stmt.name}' (disponibles: {', '.join(sorted(_SETTING_PARSERS))})")
+    expected, parse_value = entry
+    raw = stmt.value.lower() if isinstance(stmt.value, str) else stmt.value
+    value = parse_value(raw)
+    if value is None:
+        raise SemanticError(f"valor inválido para {stmt.name}: {stmt.value!r} (se esperaba {expected})")
+    db.settings[stmt.name] = value
+    return StatementResult("SET", stmt.sql, message=f"{stmt.name} = {value}")
 
 
 def _drop_table(db: Database, stmt: ast.DropTable, page: int, page_size: int, mode: str) -> StatementResult:
@@ -377,4 +463,5 @@ _HANDLERS: dict[type, Any] = {
     ast.CreateIndex: _create_index,
     ast.DropTable: _drop_table,
     ast.DropIndex: _drop_index,
+    ast.Set: _set,
 }
