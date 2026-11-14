@@ -51,6 +51,13 @@ class PageType(IntEnum):
     HASH_BUCKET = 7
     CATALOG = 8
     SORT_RUN = 9
+    RTREE_INTERNAL = 10
+    RTREE_LEAF = 11
+    INV_VOCAB = 12
+    INV_POSTINGS = 13
+    INV_DOCS = 14
+    IVF_DIR = 15
+    IVF_LIST = 16
 
 
 class FileKind(IntEnum):
@@ -61,6 +68,12 @@ class FileKind(IntEnum):
     HASH = 5
     CATALOG = 6
     SORT_RUN = 7
+    RTREE = 8
+    INV_VOCAB = 9
+    INV_POSTINGS = 10
+    INV_DOCS = 11
+    IVF_DIR = 12
+    IVF_LIST = 13
 
 
 class PageFormatError(Exception):

@@ -24,18 +24,28 @@ class DiskCounter:
     """Monitor de I/O: bloques físicos leídos (``disk_reads``) y escritos (``disk_writes``).
 
     Se comparte entre todos los ``DiskManager`` de una ejecución y se resetea antes
-    de cada consulta.
+    de cada consulta. Además del total lleva el desglose por archivo
+    (``file_reads`` / ``file_writes``), que permite separar el I/O del índice del
+    I/O de la tabla de datos en las consultas híbridas.
     """
 
-    __slots__ = ("disk_reads", "disk_writes")
+    __slots__ = ("disk_reads", "disk_writes", "file_reads", "file_writes")
 
     def __init__(self) -> None:
         self.disk_reads = 0
         self.disk_writes = 0
+        self.file_reads: dict[str, int] = {}
+        self.file_writes: dict[str, int] = {}
 
     def reset(self) -> None:
         self.disk_reads = 0
         self.disk_writes = 0
+        self.file_reads = {}
+        self.file_writes = {}
+
+    def by_file(self) -> dict[str, dict[str, int]]:
+        names = sorted(set(self.file_reads) | set(self.file_writes))
+        return {n: {"reads": self.file_reads.get(n, 0), "writes": self.file_writes.get(n, 0)} for n in names}
 
     def snapshot(self) -> tuple[int, int]:
         return self.disk_reads, self.disk_writes
@@ -83,6 +93,7 @@ class DiskManager:
         self.path = Path(path)
         self.page_size = validate_page_size(page_size)
         self.counter = counter
+        self.name = self.path.name
         if create:
             # "xb" falla si el archivo ya existe: nunca se pisa un archivo existente.
             with open(self.path, "xb"):
@@ -105,7 +116,9 @@ class DiskManager:
         data = self._file.read(self.page_size)
         if data is None or len(data) != self.page_size:
             raise DiskError(f"{self.path.name}: lectura incompleta de la página {page_id}")
-        self.counter.disk_reads += 1
+        counter = self.counter
+        counter.disk_reads += 1
+        counter.file_reads[self.name] = counter.file_reads.get(self.name, 0) + 1
         return data
 
     def write_page(self, page_id: int, data: bytes | bytearray | memoryview) -> None:
@@ -122,7 +135,9 @@ class DiskManager:
             if not n:
                 raise DiskError(f"{self.path.name}: escritura incompleta de la página {page_id}")
             written += n
-        self.counter.disk_writes += 1
+        counter = self.counter
+        counter.disk_writes += 1
+        counter.file_writes[self.name] = counter.file_writes.get(self.name, 0) + 1
 
     def allocate_page(self) -> int:
         """Reserva el siguiente ``page_id`` al final del archivo.
