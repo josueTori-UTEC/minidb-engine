@@ -1,0 +1,26 @@
+\begin{itemize}
+\item \textbf{El mismo principio en tres dominios}: R-Tree, índice invertido e IVF hacen lo mismo que
+  el B$^+$ y el hash del Entregable~1: organizar las páginas para leer solo las que pueden contener la
+  respuesta. Midiendo bloques, un $k$-NN geográfico pasa de 1\,235 lecturas a 12, un Top-10 textual
+  de 2\,320 a 128--252 y un $k$-NN vectorial de 22\,036 a 363 (con 98.6\,\% de recall).
+\item \textbf{Los índices no agrupados pagan por fila}: tanto el R-Tree por radio como las consultas
+  booleanas poco selectivas leen más bloques que un recorrido secuencial cuando califican más filas
+  que páginas tiene la tabla. Las consultas con ranking y \code{LIMIT} no tienen ese problema porque
+  solo traen $K$ registros.
+\item \textbf{La dimensión decide la estructura}: el R-Tree deja de servir a partir de $D\approx16$
+  (visita el 99\,\% de sus hojas); para los vectores de 128 dimensiones hay que renunciar a la
+  exactitud, y el IVF convierte esa renuncia en un parámetro (\code{probes}).
+\item \textbf{Guardar lo necesario para puntuar}: tener $tf$ en los posteos y la norma precalculada
+  hace que nuestro ranking Top-10 sea unas 30 veces más rápido que \code{ts\_rank} sobre GIN, aunque
+  PostgreSQL sea mucho más rápido en las consultas booleanas.
+\item \textbf{Los \emph{embeddings} superan al BoVW} en efectividad (P@10 0.79 frente a 0.51), en
+  latencia (6\,ms frente a 134\,ms) y en bloques leídos, con el mismo costo de extracción.
+\item \textbf{Ninguna estrategia híbrida es siempre mejor}: con un filtro que deja pasar el 79\,\% de
+  las filas el \emph{post-filtering} lee 223 bloques y el \emph{pre-filtering} 34\,822; con uno que
+  deja pasar el 0.5\,\% el \emph{pre-filtering} lee 208 y el \emph{post-filtering} ni siquiera
+  completa los $k$ resultados. Estimar el costo de ambas y elegir es indispensable.
+\end{itemize}
+
+\paragraph{Trabajo futuro.} Índice invertido incremental (segmentos y fusión), compresión de las
+listas de posteo, HNSW en disco, cuantización de producto para el IVF, histogramas para estimar la
+selectividad y un \emph{buffer pool} para el directorio de centroides y el diccionario.

@@ -1,0 +1,11 @@
+\begin{tabular}{@{}rrrrrrrr@{}}
+\toprule
+$N$ & páginas del Heap & \multicolumn{3}{c}{R-Tree por inserciones} & \multicolumn{3}{c}{R-Tree STR} \\
+\cmidrule(lr){3-5}\cmidrule(l){6-8}
+ & & páginas & altura & construcción (s) / escrituras & páginas & altura & construcción (s) / escrituras \\
+\midrule
+10\,000 & 124 & 141 & 3 & 0.88 / 10\,678 & 96 & 2 & 0.02 / 100 \\
+50\,000 & 618 & 696 & 3 & 5.51 / 53\,564 & 475 & 3 & 0.11 / 479 \\
+100\,000 & 1\,235 & 1\,402 & 3 & 10.95 / 106\,617 & 946 & 3 & 0.21 / 950 \\
+\bottomrule
+\end{tabular}

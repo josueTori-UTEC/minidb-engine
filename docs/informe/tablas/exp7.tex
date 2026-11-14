@@ -1,0 +1,9 @@
+\begin{tabular}{@{}lrrrrrrr@{}}
+\toprule
+Representación & P@5 & P@10 & extracción (ms/imagen) & consulta (ms) & lecturas & en el índice & índice (MB) \\
+\midrule
+BoVW (SIFT + índice invertido) & 0.531 & 0.505 & 7.70 & 133.68 & 646.0 & 635.0 & 17.0 \\
+Embedding (ResNet-18 + IVF) & 0.811 & 0.789 & 7.80 & 6.11 & 215.6 & 204.6 & 25.1 \\
+Embedding (k-NN exacto) & 0.811 & 0.786 & 7.80 & 850.25 & 22\,036.0 & 0.0 & -- \\
+\bottomrule
+\end{tabular}

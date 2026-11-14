@@ -1,0 +1,11 @@
+\begin{tabular}{@{}llrrrrrl@{}}
+\toprule
+Filtro (filas que lo cumplen) & Estrategia & filas & lecturas & en el índice & en la tabla & ms & elegida \\
+\midrule
+\code{precio <= 300} (78.6\,\%) & \emph{Pre-filtering} & 10.0 & 34\,822 & 180 & 34\,642 & 1\,038.3 &  \\
+ & \emph{Post-filtering} & 10.0 & 223 & 209 & 15 & 5.9 & sí \\
+\addlinespace
+\code{precio <= 22} (0.5\,\%) & \emph{Pre-filtering} & 10.0 & 208 & 3 & 205 & 6.0 & sí \\
+ & \emph{Post-filtering} & 0.9 & 1\,421 & 209 & 1\,213 & 15.6 &  \\
+\bottomrule
+\end{tabular}

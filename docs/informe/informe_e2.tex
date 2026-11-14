@@ -1,0 +1,664 @@
+% Informe del Proyecto 2 (Entregable 2) — MiniDB multimodal
+% Compilar:  cd docs/informe && tectonic informe_e2.tex   (o latexmk -pdf informe_e2.tex, o Overleaf)
+% Las tablas de tablas/exp5*.tex ... exp8.tex y las figuras exp5_*.png ... exp8_*.png se regeneran con:
+%   python -m benchmarks.run_all --only 5 6 7 8 && python -m benchmarks.report_tables
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+\fi
+\usepackage[spanish,es-noshorthands,es-tabla,es-nodecimaldot]{babel}
+\usepackage[margin=2.2cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc,fit}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{figuras/}}
+\setlength{\parskip}{0.35em}
+\setlist{itemsep=0.15em,topsep=0.3em}
+\captionsetup{font=small,labelfont=bf}
+
+\definecolor{codebg}{RGB}{246,248,250}
+\definecolor{kw}{RGB}{0,92,197}
+\lstdefinestyle{sql}{
+  language=SQL, basicstyle=\ttfamily\small, keywordstyle=\color{kw}\bfseries,
+  backgroundcolor=\color{codebg}, frame=single, rulecolor=\color{black!15},
+  columns=fullflexible, breaklines=true, literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1,
+  morekeywords={USING,HEAP,SEQUENTIAL,BTREE,HASH,COPY,EXPLAIN,BETWEEN,INDEX,RTREE,INVERTED,IVF,WITH,MATCH,
+                WITHIN_RADIUS,WITHIN_BOX,LIMIT,POINT,VECTOR,TEXT,COSINE_SCORE}
+}
+\lstdefinestyle{txt}{basicstyle=\ttfamily\small, backgroundcolor=\color{codebg}, frame=single,
+  rulecolor=\color{black!15}, columns=fullflexible, breaklines=true}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\hypersetup{pdftitle={MiniDB multimodal: índices espaciales, textuales y vectoriales en disco},
+  pdfauthor={Renzo Acervo, Josué Toribio, Lisseth Rondan}}
+
+\begin{document}
+
+%----------------------------- Portada estilo artículo -----------------------------
+\thispagestyle{plain}
+\begin{center}
+{\LARGE MiniDB multimodal: índices espaciales, textuales y vectoriales en disco\par}
+\vspace{1.4em}
+{\large Renzo Acervo\textsuperscript{a}, Josué Toribio\textsuperscript{a}, Lisseth Rondan\textsuperscript{a}\par}
+\vspace{1em}
+{\small\itshape \textsuperscript{a}Departamento de Ciencia de la Computación, Universidad de Ingeniería y
+Tecnología (UTEC), Lima, Perú\par}
+\vspace{0.5em}
+{\small Proyecto 2 (Entregable 2) --- Base de Datos II (CS2042) --- 2026-II --- Docente: Percy Lovon Ramos\par}
+\end{center}
+
+\vspace{1.5em}
+\noindent\rule{\textwidth}{0.4pt}\par
+\vspace{0.4em}
+\noindent\textbf{Resumen}\par
+\vspace{0.3em}
+\noindent Extendimos MiniDB, el motor relacional en disco del Entregable~1, para indexar y consultar
+datos no convencionales sin salir de memoria secundaria. Agregamos tres tipos de columna
+(\code{POINT}, \code{TEXT} y \code{VECTOR}) y tres índices paginados construidos desde cero: un
+\textbf{R-Tree} con división cuadrática, empaquetado STR y búsqueda $k$-NN \emph{best-first}; un
+\textbf{índice invertido} separado en diccionario y listas de posteo, construido con SPIMI, con
+consultas booleanas por mezcla de dos punteros y ranking TF-IDF con similitud de coseno; y un índice
+vectorial aproximado \textbf{IVF-Flat} con directorio de centroides y listas invertidas paginadas. El
+parser SQL acepta \code{WITHIN\_RADIUS}, \code{MATCH}, \code{COSINE\_SCORE()}, los operadores
+\code{<->} y \code{<=>} y \code{ORDER BY \dots\ LIMIT}, y un planificador híbrido decide entre
+\emph{pre-filtering} y \emph{post-filtering} e informa los bloques leídos en el índice y en la tabla.
+Sobre el motor desplegamos un \textbf{recomendador multimodal de productos de moda} (44\,072
+productos con imagen) que compara, en vivo, \emph{Bag of Visual Words} (SIFT + índice invertido)
+frente a \emph{embeddings} densos (ResNet-18 + IVF), con filtros de precio (B$^+$) y de cercanía
+(R-Tree). Los cuatro experimentos pedidos muestran que el R-Tree resuelve un $k$-NN en 2D leyendo
+\input{tablas/resumen_knn.tex} bloques frente a \input{tablas/resumen_seq.tex} del recorrido
+secuencial pero pierde desde $D\approx16$; que el índice invertido responde consultas booleanas y de
+ranking leyendo cientos de bloques frente a miles del \emph{full scan}; que los embeddings superan al
+BoVW (Precision@10 de 0.79 frente a 0.51); y que el IVF alcanza \input{tablas/resumen_recall.tex}\,\% de Recall@10 leyendo
+\input{tablas/resumen_reads.tex}\,\% de los bloques del $k$-NN exacto.
+\par
+\vspace{0.4em}
+\noindent\textbf{Palabras clave:} R-Tree, índice invertido, SPIMI, TF-IDF, IVF, búsqueda aproximada de
+vecinos, \emph{filter-and-refine}, planificación híbrida.
+\par\vspace{0.2em}
+\noindent\rule{\textwidth}{0.4pt}
+
+\vspace{0.6em}
+\tableofcontents
+\newpage
+
+%==========================================================================================
+\section{Introducción}
+
+El Entregable~1 dejó un motor relacional que opera sobre archivos binarios paginados: toda página se
+transfiere con \code{seek} + \code{read}/\code{write}, se serializa con \code{struct} y cada
+transferencia la cuenta el \code{DiskCounter}. En este entregable ese mismo motor aprende a indexar
+geometrías, texto libre y vectores de alta dimensión, y sirve de base a una aplicación de inteligencia
+artificial. El criterio de diseño no cambia: \textbf{toda estructura vive en disco, en páginas de
+4\,KB, y cada consulta informa exactamente cuántos bloques leyó}.
+
+\begin{table}[H]
+\centering\small
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+Requisito del enunciado & Implementación \\
+\midrule
+Módulo espacial (R-Tree, radio, $k$-NN, mapa) & \code{backend/indexes/rtree.py}; visor Leaflet en el cliente (sección~\ref{sec:rtree}) \\
+Índice invertido en disco, booleano y TF-IDF + coseno & \code{backend/indexes/inverted\_index.py}, \code{backend/text/} (sección~\ref{sec:texto}) \\
+BoVW y embeddings; $k$-NN exacto; ANN en disco & \code{backend/ml/features.py}, \code{backend/indexes/ivf.py} (sección~\ref{sec:vector}) \\
+Gramática SQL extendida y planificador híbrido & \code{backend/sql/parser.py}, \code{backend/sql/multimodal.py} (sección~\ref{sec:sql}) \\
+Aplicación de IA (Opción B: recomendador) & \code{backend/app/recommender.py}, pestaña \emph{Recomendador} (sección~\ref{sec:app}) \\
+Experimentos 5 a 8 & \code{benchmarks/exp5\_spatial.py} \dots\ \code{exp8\_ann.py} (sección~\ref{sec:experimentos}) \\
+\bottomrule
+\end{tabularx}
+\caption{Alcance del Entregable~2.}
+\end{table}
+
+\paragraph{Restricciones.} Se mantienen las del Entregable~1: sin motores de bases de datos ni ORM,
+sin \code{pickle}/\code{json} para persistir, sin leer archivos completos y sin \code{mmap}; todo
+acceso a disco pasa por \code{DiskManager}. PostgreSQL aparece únicamente como sistema de referencia
+en el Experimento~6. Para la aritmética sobre los bytes de una página ya leída (áreas de cajas,
+distancias, K-Means) usamos \code{numpy}: no interviene en el almacenamiento, que sigue siendo una
+página por transferencia. Las redes preentrenadas (ResNet-18) y SIFT solo extraen características;
+la indexación y la búsqueda son nuestras.
+
+%==========================================================================================
+\section{Arquitectura}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw, rounded corners=2pt, minimum height=0.8cm, align=center, font=\scriptsize, fill=white},
+  wide/.style={box, minimum width=15.4cm},
+  arr/.style={-{Stealth[length=2mm]}, thick}]
+\node[wide, fill=blue!6] (web) {Cliente web (React): cliente SQL de 4 paneles $\cdot$ visor de mapa (Leaflet) $\cdot$ miniaturas $\cdot$ pestaña \emph{Recomendador}};
+\node[wide, below=0.4cm of web, fill=blue!3] (api) {API REST (FastAPI): \code{/api/query} $\cdot$ \code{/api/tables} $\cdot$ \code{/api/app/recommend} $\cdot$ \code{/api/media}};
+\node[box, minimum width=3.6cm, below left=0.45cm and -3.6cm of api, fill=purple!6] (app) {Recomendador\\(arma SQL por método)};
+\node[box, minimum width=3.6cm, right=0.33cm of app, fill=purple!6] (ml) {Extracción\\ResNet-18 + PCA $\cdot$ SIFT + BoVW};
+\node[box, minimum width=3.6cm, right=0.33cm of ml] (parser) {Lexer + Parser\\(gramática extendida)};
+\node[box, minimum width=3.6cm, right=0.33cm of parser] (plan) {Planner híbrido + Executor\\(pre / post-filtering)};
+\node[box, minimum width=2.25cm, below=0.9cm of app.south west, anchor=north west, fill=orange!8] (heap) {Heap / Sequential\\POINT, TEXT, VECTOR};
+\node[box, minimum width=2.25cm, right=0.25cm of heap, fill=green!8] (bt) {B$^+$ $\cdot$ Hash};
+\node[box, minimum width=2.25cm, right=0.25cm of bt, fill=green!14] (rt) {R-Tree\\\code{.rtr}};
+\node[box, minimum width=3.6cm, right=0.25cm of rt, fill=green!14] (inv) {Índice invertido\\\code{.vocab.dic} \code{.postings.inv} \code{.docs.bin}};
+\node[box, minimum width=3.6cm, right=0.25cm of inv, fill=green!14] (ivf) {IVF-Flat\\\code{.ivf.dir} \code{.ivf.lst}};
+\node[wide, below=0.45cm of rt.south, xshift=1.55cm, fill=gray!10] (dm) {\code{DiskManager}: \code{seek(page\_id $\cdot$ B)} + \code{read/write(B)} $\cdot$ \code{DiskCounter} total y por archivo};
+\draw[arr] (web) -- (api);
+\draw[arr] (api.south -| app) -- (app);
+\draw[arr] (api.south -| parser) -- (parser);
+\draw[arr] (app) -- (ml);
+\draw[arr] (parser) -- (plan);
+\draw[arr] (app.south) -- ++(0,-0.25) -| ([xshift=-1.2cm]plan.south);
+\draw[arr] (plan.south) -- ++(0,-0.45) -| (ivf.north);
+\draw[arr] (plan.south) -- ++(0,-0.45) -| (inv.north);
+\draw[arr] (plan.south) -- ++(0,-0.45) -| (rt.north);
+\draw[arr] (plan.south) -- ++(0,-0.45) -| (bt.north);
+\draw[arr] (plan.south) -- ++(0,-0.45) -| (heap.north);
+\draw[arr] (rt.south) -- (rt.south |- dm.north);
+\end{tikzpicture}
+\caption{Capas de MiniDB tras el Entregable~2. En verde oscuro, los índices nuevos; en morado, la
+aplicación de IA, que solo habla con el motor a través de sentencias SQL.}
+\label{fig:arq}
+\end{figure}
+
+La figura~\ref{fig:arq} resume los cambios. El \code{DiskCounter} ahora lleva, además del total, el
+\textbf{desglose por archivo}: al terminar cada sentencia \code{Database.execute} clasifica cada
+archivo como tabla de datos o índice y devuelve \code{index\_reads} y \code{table\_reads}, que es lo
+que el enunciado pide mostrar en las consultas híbridas. La clase \code{Table} mantiene los cinco
+tipos de índice con la misma interfaz (\code{insert}, \code{delete}, \code{flush}); el catálogo
+binario guarda el tipo de índice y sus opciones (\code{WITH (\dots)}).
+
+\subsection{Tipos de columna nuevos}
+
+El registro sigue siendo de \textbf{longitud fija con bitmap de presencia}; los tipos nuevos ocupan
+un campo de bytes de tamaño fijo dentro del registro:
+
+\begin{table}[H]
+\centering\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Tipo & Formato \code{struct} & Bytes & Uso \\
+\midrule
+\code{POINT} & \code{'dd'} & 16 & coordenadas $(x, y)$ = (longitud, latitud) \\
+\code{VECTOR(n)} & \code{'\{n\}f'} & $4n$ & $n$ componentes \code{float32} \\
+\code{TEXT(n)} / \code{CHAR(n)} & \code{'\{n\}s'} & $n \le 4000$ & UTF-8 rellenado con \code{\textbackslash x00} \\
+\bottomrule
+\end{tabular}
+\caption{Tipos agregados. Un registro debe caber en una página.}
+\end{table}
+
+La tabla de la aplicación, \code{productos(id, titulo, categoria, tipo, genero, color, precio,
+tienda, ubicacion POINT, descripcion TEXT(200), imagen, palabras TEXT(800), embedding VECTOR(128))},
+tiene registros de 1\,708 bytes: entran 2 por página y sus 44\,072 filas ocupan $P=22\,036$ páginas
+(86\,MB). Ese es el costo de cualquier recorrido secuencial sobre ella.
+
+%==========================================================================================
+\section{Módulo espacial: R-Tree en disco}
+\label{sec:rtree}
+
+\subsection{Diseño físico}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[cell/.style={draw, minimum height=0.7cm, font=\scriptsize, align=center}, x=1cm]
+\node[cell, minimum width=2.6cm, fill=gray!15] (h) {header 24 B\\\code{record\_count}=$n$};
+\node[cell, minimum width=3.4cm, right=0cm of h, fill=green!10] (e1) {$x_{\min}$ $y_{\min}$ $x_{\max}$ $y_{\max}$\\MBR$_1$ = 32 B};
+\node[cell, minimum width=1.7cm, right=0cm of e1, fill=orange!14] (p1) {RID$_1$\\6 B};
+\node[cell, minimum width=3.4cm, right=0cm of p1, fill=green!10] (e2) {MBR$_2$\\32 B};
+\node[cell, minimum width=1.7cm, right=0cm of e2, fill=orange!14] (p2) {RID$_2$\\6 B};
+\node[cell, minimum width=1.4cm, right=0cm of p2] (dots) {$\cdots$};
+\node[font=\scriptsize, below=0.15cm of e2] {hoja (\code{RTREE\_LEAF}): 107 entradas de 38 B con $B=4096$};
+\node[cell, minimum width=2.6cm, fill=gray!15, below=1.15cm of h] (h2) {header 24 B};
+\node[cell, minimum width=3.4cm, right=0cm of h2, fill=green!10] (f1) {MBR$_1$ (recubre al hijo)\\32 B};
+\node[cell, minimum width=1.7cm, right=0cm of f1, fill=blue!10] (c1) {hijo$_1$\\4 B};
+\node[cell, minimum width=3.4cm, right=0cm of c1, fill=green!10] (f2) {MBR$_2$\\32 B};
+\node[cell, minimum width=1.7cm, right=0cm of f2, fill=blue!10] (c2) {hijo$_2$\\4 B};
+\node[cell, minimum width=1.4cm, right=0cm of c2] {$\cdots$};
+\node[font=\scriptsize, below=0.15cm of f2] {nodo interno (\code{RTREE\_INTERNAL}): 113 entradas de 36 B};
+\end{tikzpicture}
+\caption{Páginas del archivo \code{<tabla>\_<col>.rtr}. La página~0 guarda la raíz, la altura, la
+dimensión, el tipo de coordenada, las capacidades y el número de entradas.}
+\label{fig:rtree-pag}
+\end{figure}
+
+Cada objeto o subárbol se aproxima con su caja envolvente mínima $\text{MBR}=\langle x_{\min},
+y_{\min}, x_{\max}, y_{\max}\rangle$ (para un punto, una caja degenerada). El árbol es genérico en la
+dimensión $D$ y en el tipo de coordenada ($c=8$ bytes en \code{float64} para coordenadas geográficas,
+$c=4$ en \code{float32} para el experimento de dimensionalidad); las capacidades se calculan siempre
+desde $B$:
+\[
+L=\left\lfloor\frac{B-24}{2Dc+6}\right\rfloor,\qquad
+M=\left\lfloor\frac{B-24}{2Dc+4}\right\rfloor .
+\]
+Con $B=4096$ y $D=2$ entran $L=107$ entradas por hoja y $M=113$ por nodo interno; con $D=128$ en
+\code{float32} entran solo 3 (tabla~\ref{tab:exp5dim}).
+
+\subsection{Operaciones}
+
+\begin{itemize}
+\item \textbf{Inserción.} Se desciende desde la raíz eligiendo en cada nodo la entrada cuya caja
+  necesita la \emph{menor ampliación de área} para cubrir el objeto nuevo ($\Delta$Área; en empates,
+  la de menor área y luego la de menor margen). El camino se guarda en una pila porque los nodos no
+  tienen puntero al padre. Si la hoja tiene espacio se escribe (1W) y solo se reescriben los ancestros
+  cuya caja tuvo que crecer.
+\item \textbf{División cuadrática} (Guttman). Si la página desborda, \code{PickSeeds} elige el par de
+  entradas que desperdiciaría más área al quedar juntas, y \code{PickNext} asigna las demás, una a la
+  vez, al grupo cuya caja crece menos, empezando por la entrada con mayor preferencia por un grupo.
+  Se garantiza un llenado mínimo del 40\,\%. El ajuste de cajas y los posibles \emph{splits} se
+  propagan hacia la raíz; si la raíz se divide, el árbol crece un nivel.
+\item \textbf{Carga masiva STR} (\emph{Sort-Tile-Recursive}). \code{CREATE INDEX} sobre una tabla con
+  datos ordena los puntos por $x$, los corta en $\lceil\sqrt{N/L}\rceil$ franjas y dentro de cada
+  franja los ordena por $y$; cada grupo de $L$ puntos es una hoja, y los niveles superiores se
+  empaquetan igual. Cada página se escribe una sola vez.
+\item \textbf{Ventana y radio.} Para una ventana $W$ se podan las entradas con $\text{MBR}\cap
+  W=\emptyset$. Para un punto $Q$ y un radio $r$ se podan las que cumplen
+  $\text{MINDIST}(Q,\text{MBR})>r$.
+\item \textbf{$k$-NN \emph{best-first}.} Una cola de prioridad ordenada por $\text{MINDIST}(Q,
+  \text{MBR})$ contiene nodos y entradas de hoja. Como $\text{MINDIST}$ es una cota inferior de la
+  distancia a cualquier objeto del subárbol, cuando sale de la cola una entrada de hoja ningún nodo
+  pendiente puede contener algo más cercano: los vecinos salen en orden exacto y se deja de leer en
+  cuanto se entregan $k$. Es un generador, así que el ejecutor puede seguir pidiendo vecinos si un
+  filtro descarta algunos.
+\item \textbf{Borrado.} Se quita la entrada de su hoja sin condensar el árbol: las cajas de los
+  ancestros siguen siendo cotas válidas (decisión análoga al B$^+$ sin fusión del Entregable~1).
+\end{itemize}
+
+\paragraph{Distancias geográficas (\emph{filter-and-refine}).} \code{WITHIN\_RADIUS((lon, lat), r)}
+recibe $r$ en kilómetros. Dentro del árbol se usa la distancia euclidiana ponderada por los km por
+grado de cada eje (aproximación equirectangular), tomando para la longitud el coseno de la latitud
+más desfavorable del círculo: así la distancia ponderada nunca sobreestima la real y no hay falsos
+negativos. Los candidatos se refinan con la distancia de Haversine sobre el registro traído de la
+tabla. El operador \code{ubicacion <-> (lon, lat)} devuelve esa distancia en km.
+
+\paragraph{Costos.} Con altura $h$: inserción $h$R + 1W (más hasta $h$ escrituras si crecen cajas y
+2 por cada \emph{split}); ventana o radio $\approx h + \lceil k/L\rceil$ nodos más $k$ lecturas de la
+tabla (índice no agrupado); $k$-NN $\approx h$ + unas pocas hojas + $k$ registros.
+
+%==========================================================================================
+\section{Módulo de texto: índice invertido en disco}
+\label{sec:texto}
+
+\subsection{Preprocesamiento}
+
+El analizador (\code{backend/text/analyzer.py}) convierte cada documento en una bolsa de palabras:
+(1) minúsculas y eliminación de tildes y diacríticos; (2) tokenización en secuencias alfanuméricas;
+(3) eliminación de \emph{stopwords} (\code{stoplist\_es.txt}, \code{stoplist\_en.txt}); (4)
+\emph{stemming} Snowball de \code{nltk}. Hay analizadores \code{spanish} y \code{english}, y uno
+\code{raw} que solo separa por espacios y admite \code{término:frecuencia}: es el que usa el índice
+de palabras visuales (sección~\ref{sec:vector}).
+
+\subsection{Diseño físico}
+
+El índice nunca se reconstruye en RAM para consultar. Vive en tres archivos paginados
+(figura~\ref{fig:invertido}):
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[cell/.style={draw, minimum height=0.62cm, font=\scriptsize, align=center},
+  arr/.style={-{Stealth[length=1.8mm]}}]
+\node[font=\scriptsize\bfseries, anchor=west] at (0,0.55) {\code{vocab.dic} --- diccionario ordenado (entradas de 56 B, 72 por página)};
+\node[cell, minimum width=2.9cm, fill=green!10, anchor=west] (v1) at (0,0) {término (40 B)};
+\node[cell, minimum width=1.5cm, right=0cm of v1] (v2) {df (u32)};
+\node[cell, minimum width=2.4cm, right=0cm of v2] (v3) {longitud (u32)};
+\node[cell, minimum width=2.4cm, right=0cm of v3, fill=orange!14] (v4) {offset (u64)};
+\node[cell, minimum width=1.2cm, right=0cm of v4] {$\cdots$};
+\node[font=\scriptsize\bfseries, anchor=west] at (0,-1.0) {\code{postings.inv} --- listas concatenadas, ordenadas por \code{doc\_id} (posteos de 6 B, 678 por página)};
+\node[cell, minimum width=1.9cm, fill=blue!8, anchor=west] (p1) at (0,-1.55) {doc\_id (u32)};
+\node[cell, minimum width=1.3cm, right=0cm of p1, fill=blue!8] (p2) {tf (u16)};
+\node[cell, minimum width=1.9cm, right=0cm of p2] (p3) {doc\_id};
+\node[cell, minimum width=1.3cm, right=0cm of p3] (p4) {tf};
+\node[cell, minimum width=1.9cm, right=0cm of p4, fill=blue!8] (p5) {doc\_id};
+\node[cell, minimum width=1.3cm, right=0cm of p5, fill=blue!8] (p6) {tf};
+\node[cell, minimum width=1.2cm, right=0cm of p6] {$\cdots$};
+\draw[arr] (v4.south) -- ++(0,-0.33) -| ([xshift=0.3cm]p5.north west);
+\node[font=\scriptsize\bfseries, anchor=west] at (0,-2.55) {\code{docs.bin} --- dos regiones direccionadas por \code{doc\_id} (8 B por documento, 509 por página)};
+\node[cell, minimum width=2.6cm, fill=purple!8, anchor=west] (d1) at (0,-3.1) {norma $\lVert d\rVert_2$ (f32)};
+\node[cell, minimum width=2.2cm, right=0cm of d1, fill=purple!8] (d2) {longitud (u32)};
+\node[cell, minimum width=1.2cm, right=0cm of d2] (d3) {$\cdots$};
+\node[cell, minimum width=3.0cm, right=0.5cm of d3, fill=orange!14] (d4) {RID del registro (6 B)};
+\node[cell, minimum width=1.2cm, right=0cm of d4] {$\cdots$};
+\end{tikzpicture}
+\caption{Los tres archivos del índice invertido. La página~0 de \code{vocab.dic} guarda $N$, el
+número de términos y posteos, la longitud media, el analizador, el esquema de puntuación y la bandera
+\code{stale}.}
+\label{fig:invertido}
+\end{figure}
+
+\begin{itemize}
+\item \textbf{Diccionario} (\code{vocab.dic}). Cada término normalizado con su frecuencia de documento
+  $df_t$, la longitud de su lista y el \emph{offset} de la lista dentro de \code{postings.inv}. Las
+  entradas son de tamaño fijo y están \emph{ordenadas por término}, así que un término se ubica con
+  \textbf{búsqueda binaria sobre las páginas del diccionario}: $\lceil\log_2 V\rceil$ lecturas, sin
+  cargar el vocabulario en memoria.
+\item \textbf{Posteos} (\code{postings.inv}). La concatenación de todas las listas $\langle
+  doc\_id, tf_{t,d}\rangle$, cada una ordenada ascendentemente por \code{doc\_id}. Para un término se
+  leen solo las páginas $\lfloor o/678\rfloor \dots \lfloor (o+df-1)/678\rfloor$.
+\item \textbf{Documentos} (\code{docs.bin}). La norma euclidiana precalculada y la longitud de cada
+  documento, y en una segunda región el RID del registro. Separar las dos regiones permite que el
+  ranking lea solo las páginas de normas de los candidatos y el RID únicamente del Top-$K$.
+\end{itemize}
+
+\subsection{Construcción con SPIMI}
+
+\code{CREATE INDEX \dots\ USING INVERTED} recorre la tabla una sola vez. Los posteos se acumulan en
+un diccionario en memoria y, cada \code{block\_postings} posteos ($10^6$ por defecto), el bloque se
+escribe ordenado por término en un archivo temporal de \emph{runs}. Al terminar, una \textbf{mezcla
+de $k$ vías} (con un \emph{heap}) recorre los \emph{runs} en orden de término: como los \code{doc\_id}
+crecen de un bloque al siguiente, concatenar las listas parciales conserva el orden. La mezcla escribe
+\code{postings.inv} y \code{vocab.dic} secuencialmente y acumula $\sum_t w_{t,d}^2$ por documento
+para dejar las normas en \code{docs.bin}. En memoria nunca hay más de un bloque de posteos.
+
+El índice es estático: si la tabla cambia después, se marca \code{stale} (una escritura en la
+página~0) y se reconstruye antes de la siguiente búsqueda; el plan lo informa.
+
+\subsection{Consultas}
+
+\paragraph{Booleanas.} \code{MATCH 'a AND b AND NOT c'} admite \code{AND}, \code{OR}, \code{NOT} y
+paréntesis (la yuxtaposición equivale a \code{AND}). Cada operador se resuelve con el algoritmo de
+\textbf{mezcla con dos punteros} sobre listas ordenadas: intersección, unión y diferencia en
+$O(n+m)$.
+
+\paragraph{Ranking.} El peso de un término en un documento y la similitud son
+\[
+w_{t,d}=(1+\log_{10} tf_{t,d})\cdot\log_{10}\frac{N}{df_t},\qquad
+\text{score}(q,d)=\frac{\sum_{t\in q} w_{t,q}\,w_{t,d}}{\lVert d\rVert_2\,\lVert q\rVert_2}.
+\]
+\code{CosineScore} acumula los productos \emph{solo sobre las listas de los términos de la consulta},
+divide por las normas (leídas de \code{docs.bin}) y obtiene el Top-$K$ con un \emph{heap}. Una
+consulta sin operadores es de texto libre: califica todo documento que contenga algún término. Con
+\code{WITH (scoring = 'BM25')} el índice usa BM25 ($k_1=1.2$, $b=0.75$).
+
+\paragraph{Costo.} Para una consulta de $T$ términos: $T\lceil\log_2 V\rceil$ lecturas del
+diccionario $+ \sum_t \lceil df_t/678\rceil$ páginas de posteo $+$ las páginas de normas de los
+candidatos $+$ hasta $K$ páginas de RID $+ K$ registros de la tabla.
+
+\paragraph{Sin índice.} El mismo \code{MATCH} se puede ejecutar por recorrido secuencial: se
+tokeniza cada documento y se evalúa la expresión sobre su conjunto de términos. Es la línea base del
+Experimento~6.
+
+%==========================================================================================
+\section{Módulo multimedia y búsqueda vectorial}
+\label{sec:vector}
+
+\subsection{Dos representaciones de una imagen}
+
+\begin{itemize}
+\item \textbf{Clásica: \emph{Bag of Visual Words}.} De cada imagen se extraen hasta 100 descriptores
+  locales \textbf{SIFT} de 128 dimensiones (la imagen de $60\times80$ se amplía $\times4$). Con
+  K-Means sobre 200\,000 de los 3.3 millones de descriptores del catálogo se construye un
+  \emph{codebook} de $K=1\,000$ palabras visuales. Cada imagen queda como el histograma de sus
+  palabras, que se guarda como texto (\code{"v17:3 v402 v9:2"}) en la columna \code{palabras} y se
+  indexa con \textbf{el mismo índice invertido de la sección~\ref{sec:texto}} (analizador \code{raw},
+  TF-IDF + coseno). En promedio una imagen tiene 75 descriptores y 64 palabras distintas.
+\item \textbf{Moderna: \emph{embedding} denso.} La salida de 512 dimensiones de la penúltima capa de
+  una \textbf{ResNet-18} preentrenada en ImageNet, reducida a $D=128$ con PCA (conserva el 90.6\,\% de
+  la varianza) y normalizada a norma 1. Se guarda en la columna \code{embedding VECTOR(128)}.
+\end{itemize}
+
+El K-Means (Lloyd con inicialización k-means++) es propio y es el mismo que entrena el IVF.
+
+\subsection{Búsqueda exacta}
+
+\code{ORDER BY embedding <-> q LIMIT k} (distancia euclidiana) u \code{<=>} (distancia coseno
+$1-\cos\theta$) sin índice aplicable se resuelve con un recorrido secuencial que calcula la distancia
+de cada fila y mantiene los $k$ mejores en un \emph{heap}: $P$ lecturas. Es la verdad base del
+Experimento~8 y el camino que usa el \emph{pre-filtering} sobre las filas que pasan el filtro.
+
+\subsection{IVF-Flat en disco}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[cell/.style={draw, minimum height=0.62cm, font=\scriptsize, align=center},
+  pg/.style={draw, minimum width=2.5cm, minimum height=0.8cm, font=\scriptsize, align=center, fill=blue!6},
+  arr/.style={-{Stealth[length=1.8mm]}}]
+\node[font=\scriptsize\bfseries, anchor=west] at (0,0.55) {\code{.ivf.dir} --- directorio de centroides (entradas de $16+4D$ = 528 B, 7 por página)};
+\node[cell, minimum width=2.0cm, anchor=west] (a) at (0,0) {cluster\_id (u32)};
+\node[cell, minimum width=3.4cm, right=0cm of a, fill=green!10] (b) {centroide $\vec\mu_c$ ($D$ f32)};
+\node[cell, minimum width=2.6cm, right=0cm of b, fill=orange!14] (c) {head\_page\_id (i32)};
+\node[cell, minimum width=1.6cm, right=0cm of c] (d) {count};
+\node[cell, minimum width=1.6cm, right=0cm of d] (e) {pages};
+\node[font=\scriptsize\bfseries, anchor=west] at (0,-1.05) {\code{.ivf.lst} --- listas invertidas paginadas (tuplas $\langle$RID, $\vec v\rangle$ de $6+4D$ = 518 B, 7 por página)};
+\node[pg, anchor=west] (l1) at (2.4,-1.75) {página de la celda $c$\\7 $\times\langle$RID, $\vec v\rangle$};
+\node[pg, right=0.9cm of l1] (l2) {página\\7 $\times\langle$RID, $\vec v\rangle$};
+\node[pg, right=0.9cm of l2] (l3) {página\\$\le 7$ tuplas};
+\node[font=\scriptsize, right=0.3cm of l3] {$-1$};
+\draw[arr] (c.south) -- ++(0,-0.4) -| (l1.north);
+\draw[arr] (l1) -- node[above, font=\tiny]{\code{next}} (l2);
+\draw[arr] (l2) -- node[above, font=\tiny]{\code{next}} (l3);
+\end{tikzpicture}
+\caption{Índice IVF: cada celda de Voronoi es una cadena de páginas enlazadas por
+\code{next\_page\_id}.}
+\label{fig:ivf}
+\end{figure}
+
+\begin{itemize}
+\item \textbf{Partición.} El espacio se divide en $C=\lfloor\sqrt N\rfloor$ celdas de Voronoi con
+  K-Means (\code{WITH (lists = \dots)} lo cambia). Con métrica coseno los centroides se normalizan
+  (K-Means esférico).
+\item \textbf{Construcción en dos pasadas.} (1) \emph{Reservoir sampling} de hasta 50\,000 vectores
+  para entrenar; (2) cada vector se asigna a su centroide más cercano y se agrega a la página en
+  curso de esa celda. En memoria hay una página por celda, nunca la tabla. Para el catálogo:
+  $C=209$ celdas, 30 páginas de directorio y 6\,385 páginas de listas.
+\item \textbf{Búsqueda.} Se leen las páginas del directorio, se eligen los \code{probes} centroides
+  más cercanos a $\vec q$ y se recorren \emph{solo} las cadenas de esas celdas, calculando la
+  distancia exacta a cada vector leído. Con \code{probes} $=C$ el resultado es exacto.
+  \code{SET ivf.probes = n} fija el parámetro.
+\item \textbf{Mantenimiento.} Un \code{INSERT} agrega el vector a la cabeza de la cadena de su celda
+  (directorio + 1R + 2W); un \code{DELETE} lo busca empezando por la celda más cercana.
+\end{itemize}
+
+\paragraph{Costo.} $\lceil C/7\rceil + \text{probes}\cdot\lceil N/(7C)\rceil$ lecturas en el índice,
+más un registro de la tabla por resultado. Frente a las $P$ páginas del recorrido exacto, el ahorro
+es aproximadamente $\text{probes}/C$.
+
+%==========================================================================================
+\section{SQL multimodal y planificador híbrido}
+\label{sec:sql}
+
+\begin{lstlisting}[style=sql]
+CREATE INDEX idx_geo   ON locales (ubicacion)   USING RTREE;
+CREATE INDEX idx_texto ON documentos (cuerpo)   USING INVERTED WITH (scoring = 'TFIDF_COSINE');
+CREATE INDEX idx_vec   ON multimedia (embedding) USING IVF WITH (lists = 100, metric = 'COSINE');
+
+SELECT id, nombre, ubicacion FROM locales
+WHERE ubicacion WITHIN_RADIUS((-77.0282, -12.1354), 2.5);            -- radio en km
+
+SELECT id, nombre, ubicacion <-> (-77.0282, -12.1354) AS km FROM locales
+ORDER BY km LIMIT 10;                                                  -- k-NN geografico
+
+SELECT id, titulo, COSINE_SCORE() AS relevancia FROM documentos
+WHERE cuerpo MATCH 'aprendizaje AND profundo AND NOT basico'
+ORDER BY relevancia DESC LIMIT 10;
+
+SET ivf.probes = 5;
+SELECT id, categoria, precio, embedding <=> '[0.12, -0.34, 0.56, ...]' AS dist_coseno
+FROM multimedia WHERE categoria = 'footwear' AND precio <= 250.0
+ORDER BY dist_coseno ASC LIMIT 5;
+\end{lstlisting}
+
+El lexer reconoce los operadores \code{<->} y \code{<=>}, los corchetes de un vector literal y el
+punto de \code{ivf.probes}; el parser de descenso recursivo agrega los tipos, \code{WITH (\dots)},
+los predicados \code{MATCH}, \code{WITHIN\_RADIUS} y \code{WITHIN\_BOX}, expresiones con alias en la
+lista de selección, \code{ORDER BY \dots\ [ASC|DESC]}, \code{LIMIT} y \code{SET}. \code{TEXT},
+\code{POINT}, \code{VECTOR} y \code{COSINE\_SCORE} se reconocen por contexto, así que siguen siendo
+nombres de columna válidos. Los errores conservan línea y columna.
+
+\subsection{Planificador híbrido}
+
+Una consulta puede combinar predicados relacionales, un predicado espacial, un \code{MATCH} y un
+ranking. Cuando el \code{ORDER BY} lo puede resolver un índice de ranking (IVF, R-Tree o índice
+invertido) y además hay filtros, existen dos estrategias:
+
+\begin{description}
+\item[\emph{Post-filtering}.] El índice de ranking entrega candidatos en orden; se trae cada registro
+  y se le aplican los demás predicados hasta completar $k$. Costo estimado: el del índice más
+  $\min(\text{candidatos},\, k/s)$ lecturas de la tabla, donde $s$ es la selectividad estimada del
+  filtro. Con un IVF solo se ven las celdas sondeadas: si el filtro es muy selectivo pueden salir
+  menos de $k$ filas, y el plan lo advierte.
+\item[\emph{Pre-filtering}.] Primero se resuelven los filtros con el mejor camino disponible (B$^+$,
+  hash, R-Tree, índice invertido o \emph{full scan}) y el ranking se calcula de forma \emph{exacta}
+  sobre las filas que quedan (Top-$K$ con \emph{heap}). Para el texto, los RID que entrega el índice
+  relacional se pasan como conjunto permitido al índice invertido, que solo puntúa esos documentos.
+\end{description}
+
+El planificador genera todos los caminos, estima el I/O de cada uno y elige el menor; \code{SET
+hybrid.strategy = pre | post | auto} permite forzar la estrategia para compararlas. La selectividad
+se estima como en el Entregable~1 (interpolación con el mínimo y máximo del B$^+$ para rangos,
+$1/10$ para igualdades sobre columnas no únicas) y con valores por defecto para los predicados
+espacial y textual. Sin ranking por índice, el modo \code{rules} prioriza índice invertido, R-Tree,
+índice relacional y \emph{full scan}, y el modo \code{cost} toma el de menor costo.
+
+\begin{table}[H]
+\centering\small
+\resizebox{\ifdim\width>\textwidth\textwidth\else\width\fi}{!}{\input{tablas/hibrido.tex}}
+\caption{La misma consulta híbrida sobre \code{productos} con las dos estrategias (medido). Con el
+filtro amplio el planificador elige \emph{post-filtering}; con el selectivo, \emph{pre-filtering},
+porque el \emph{post-filtering} tendría que revisar casi todos los candidatos y aun así no completa
+$k$.}
+\label{tab:hibrido}
+\end{table}
+
+El plan que devuelve la API incluye el tipo de acceso (\code{IVFScan}, \code{RTreeKNN},
+\code{RTreeRadiusScan}, \code{InvertedIndexScan}, \dots), la estrategia, los candidatos descartados
+con su costo, los detalles de cada índice (celdas sondeadas y vectores comparados; términos con su
+$df$ y páginas de posteo; nodos del R-Tree visitados con sus cajas) y el desglose de bloques leídos
+en el índice y en la tabla.
+
+%==========================================================================================
+\section{Cliente web y aplicación de IA}
+\label{sec:app}
+
+\subsection{Cliente SQL}
+
+El cliente de cuatro paneles del Entregable~1 ahora muestra los índices nuevos en el explorador, las
+columnas \code{POINT} y \code{VECTOR}, miniaturas para la columna \code{imagen} y, en el panel del
+plan, la estrategia, el I/O por archivo y los detalles espaciales, textuales y vectoriales. Cuando el
+resultado tiene una columna \code{POINT} aparece la vista \textbf{Mapa} (Leaflet): dibuja los puntos
+recuperados, el círculo o rectángulo de la consulta y, opcionalmente, las cajas MBR de los nodos del
+R-Tree inspeccionados (figura~\ref{fig:mapa}). El inspector de páginas decodifica también las páginas
+de los índices nuevos.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{mapa.png}
+\caption{Consulta \code{WITHIN\_RADIUS} en el cliente web: puntos recuperados, radio de la consulta y
+cajas MBR inspeccionadas; a la derecha, el plan \code{RTreeRadiusScan} con el I/O del índice y de la
+tabla.}
+\label{fig:mapa}
+\end{figure}
+
+\subsection{Recomendador multimodal de moda (Opción B)}
+
+\paragraph{Datos.} \emph{Fashion Product Images (Small)}: 44\,072 productos con imagen, nombre,
+género, categoría, tipo de artículo, color, temporada y uso. El dataset no trae precio ni tienda, así
+que \code{data/prepare\_fashion.py} los genera de forma determinista: un precio en soles según el
+tipo de artículo y una de 140 tiendas con coordenadas en 28 distritos de Lima Metropolitana. El mismo
+script extrae las imágenes, calcula los \emph{embeddings} y las palabras visuales, y con
+\code{--load} crea la tabla, la carga con \code{COPY} y construye seis índices: hash sobre \code{id},
+B$^+$ sobre \code{precio}, R-Tree sobre \code{ubicacion}, índice invertido sobre \code{descripcion}
+(inglés), índice invertido sobre \code{palabras} (BoVW) e IVF sobre \code{embedding}.
+
+\paragraph{Flujo.} El usuario sube la foto de una prenda (o elige un producto) y/o escribe una
+descripción, y puede acotar por rango de precios y por cercanía a un punto del mapa. El backend
+vectoriza la imagen con los mismos modelos del catálogo y \textbf{arma una sentencia SQL por método},
+que ejecuta en el motor:
+
+\begin{lstlisting}[style=sql]
+-- Embedding + IVF
+SELECT id, titulo, ..., embedding <=> '[...]' AS distancia FROM productos
+WHERE precio BETWEEN 20 AND 80 AND ubicacion WITHIN_RADIUS((-77.0282, -12.1211), 6)
+ORDER BY distancia ASC LIMIT 12;
+-- BoVW + indice invertido
+SELECT id, titulo, ..., COSINE_SCORE() AS similitud FROM productos
+WHERE palabras MATCH 'v12:3 v85 v402 ...' AND precio BETWEEN 20 AND 80
+  AND ubicacion WITHIN_RADIUS((-77.0282, -12.1211), 6)
+ORDER BY similitud DESC LIMIT 12;
+\end{lstlisting}
+
+Como la aplicación solo usa SQL, cada método devuelve su plan y sus métricas: la interfaz muestra,
+lado a lado, los productos recomendados por BoVW y por \emph{embeddings}, las lecturas de disco en el
+índice y en la tabla, el tiempo, la estrategia elegida y el SQL ejecutado, y ubica las tiendas en el
+mapa (figura~\ref{fig:app}). Se puede agregar el $k$-NN exacto como referencia y la búsqueda por
+texto (TF-IDF sobre \code{descripcion}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{recomendador.png}
+\caption{Recomendador: consulta por imagen con filtros de precio y cercanía; resultados de
+\emph{Embedding + IVF} y de \emph{BoVW + índice invertido} con sus lecturas de disco.}
+\label{fig:app}
+\end{figure}
+
+%==========================================================================================
+\section{Experimentación}
+\label{sec:experimentos}
+
+\input{resultados_e2.tex}
+
+%==========================================================================================
+\section{Pruebas}
+
+A las 133 pruebas del Entregable~1 se suman 56: \code{test\_rtree.py} (capacidades desde $B$;
+invariantes tras miles de inserciones: contención de cajas, profundidad uniforme, número de entradas;
+ventana, radio y $k$-NN contra fuerza bruta; STR; borrado; persistencia; dimensiones altas),
+\code{test\_inverted\_index.py} (analizadores; mezclas con dos punteros; SPIMI con varios bloques
+contra un solo bloque; listas ordenadas; lectura exclusiva de las páginas del término; ranking contra
+un modelo TF-IDF en memoria con tolerancia $10^{-6}$; consultas booleanas; BM25; BoVW;
+reconstrucción), \code{test\_ivf.py} (K-Means; reparto de todos los vectores; exactitud con
+\code{probes} $=C$; recall e I/O crecientes con \code{probes}; inserción y borrado; persistencia) y
+\code{test\_multimodal.py}, que ejecuta por SQL las mismas consultas sobre una base sin índices y
+otra con índices y exige resultados idénticos, además de verificar la estrategia elegida, el
+desglose de I/O y los errores. En total, 189 pruebas.
+
+%==========================================================================================
+\section{Decisiones y limitaciones}
+
+\begin{itemize}
+\item \textbf{Registros de longitud fija.} \code{TEXT(n)} y \code{VECTOR(n)} reservan su tamaño
+  máximo y el registro debe caber en una página; a cambio el RID sigue siendo estable y el acceso por
+  RID cuesta una lectura. Documentos más largos requerirían páginas ranuradas o un archivo de
+  \emph{blobs}.
+\item \textbf{Índice invertido estático}: las actualizaciones lo marcan como desactualizado y se
+  reconstruye antes de la siguiente búsqueda. Adecuado para cargas masivas seguidas de consultas.
+\item \textbf{Sin \emph{buffer pool}}: el directorio del IVF y el diccionario se leen en cada
+  consulta, de modo que el I/O informado es el real.
+\item \textbf{R-Tree sin condensación} en el borrado y \textbf{IVF sin reentrenamiento} automático
+  (salvo el de un índice creado sobre una tabla vacía).
+\item \textbf{Estimación de selectividad} con valores por defecto para predicados espaciales y
+  textuales; un histograma por columna mejoraría la elección entre pre y post-filtering.
+\item \textbf{Aritmética con \code{numpy}} sobre páginas ya leídas; el almacenamiento sigue siendo
+  una página por transferencia a través de \code{DiskManager}.
+\end{itemize}
+
+%==========================================================================================
+\section{Conclusiones}
+
+\input{conclusiones_e2.tex}
+
+\begin{thebibliography}{9}
+\bibitem{guttman} A. Guttman. R-trees: a dynamic index structure for spatial searching. \emph{SIGMOD}, 1984.
+\bibitem{str} S. Leutenegger, M. López y J. Edgington. STR: a simple and efficient algorithm for R-tree packing. \emph{ICDE}, 1997.
+\bibitem{hjaltason} G. Hjaltason y H. Samet. Distance browsing in spatial databases. \emph{ACM TODS}, 24(2):265--318, 1999.
+\bibitem{manning} C. Manning, P. Raghavan y H. Schütze. \emph{Introduction to Information Retrieval}. Cambridge University Press, 2008.
+\bibitem{sivic} J. Sivic y A. Zisserman. Video Google: a text retrieval approach to object matching in videos. \emph{ICCV}, 2003.
+\bibitem{lowe} D. Lowe. Distinctive image features from scale-invariant keypoints. \emph{IJCV}, 60(2):91--110, 2004.
+\bibitem{he} K. He, X. Zhang, S. Ren y J. Sun. Deep residual learning for image recognition. \emph{CVPR}, 2016.
+\bibitem{jegou} H. Jégou, M. Douze y C. Schmid. Product quantization for nearest neighbor search. \emph{IEEE TPAMI}, 33(1):117--128, 2011.
+\bibitem{ramakrishnan} R. Ramakrishnan y J. Gehrke. \emph{Database Management Systems}, 3.\textsuperscript{a} ed. McGraw-Hill, 2003.
+\end{thebibliography}
+
+\end{document}
