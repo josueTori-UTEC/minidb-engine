@@ -2,14 +2,21 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY requirements.txt requirements-ml.txt ./
 
-RUN pip install --no-cache-dir -r requirements.txt
+# requirements-ml.txt agrega torch (CPU), torchvision y OpenCV para la aplicación de IA
+# (vectorizar la imagen de una consulta). Con INSTALL_ML=0 la imagen queda liviana y el
+# motor y el cliente SQL funcionan igual; solo se desactiva la búsqueda por imagen.
+ARG INSTALL_ML=1
+RUN pip install --no-cache-dir -r requirements.txt \
+    && if [ "$INSTALL_ML" = "1" ]; then \
+         pip install --no-cache-dir --extra-index-url https://download.pytorch.org/whl/cpu -r requirements-ml.txt; \
+       fi
 
 COPY backend ./backend
 
 # El generador del dataset: con Compose llega por el volumen ./data, pero copiarlo
 # deja la imagen autosuficiente para correrla sola.
-COPY data/generate.py ./data/generate.py
+COPY data/generate.py data/prepare_fashion.py ./data/
 
 CMD ["uvicorn", "backend.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
