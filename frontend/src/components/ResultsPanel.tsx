@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
-import type { ApiError, CellValue, ColumnInfo, QueryResponse, StatementSummary, TableInfo } from '../api'
-import { codePointOffsetToUtf16, columnTypeLabel, fmtInt, fmtMs, formatCell, lineColumnAt, rowsToCsv } from '../lib/format'
+import { isMediaFile, mediaUrl, type ApiError, type CellValue, type ColumnInfo, type QueryResponse, type StatementSummary, type TableInfo } from '../api'
+import { codePointOffsetToUtf16, columnTypeLabel, fmtInt, fmtMs, formatCell, isPoint, lineColumnAt, rowsToCsv } from '../lib/format'
 import { RUN_SHORTCUT } from '../lib/platform'
 import type { ResultState } from '../types'
 import { Badge, StatementBadge } from './Badges'
 import { Icon } from './Icon'
+import { ResultsMap } from './ResultsMap'
 
 export const PAGE_SIZES = [25, 50, 100, 200] as const
 
@@ -17,7 +18,18 @@ interface ResultsPanelProps {
   onPageSize(size: number): void
 }
 
+type ResultsView = 'table' | 'map'
+
 export function ResultsPanel({ result, busy, pageSize, tables, onPage, onPageSize }: ResultsPanelProps) {
+  const response = result.status === 'success' ? result.response : null
+  const script = result.status === 'success' ? result.script : null
+  const pointColumns = useMemo(() => (response ? findPointColumns(response, tables) : []), [response, tables])
+
+  // La elección manual vale mientras se pagina la misma consulta; una consulta nueva vuelve al valor por defecto
+  const [choice, setChoice] = useState<{ script: StatementSummary[]; view: ResultsView } | null>(null)
+  const defaultView: ResultsView = response?.plan?.spatial ? 'map' : 'table'
+  const view: ResultsView = pointColumns.length === 0 ? 'table' : choice !== null && choice.script === script ? choice.view : defaultView
+
   return (
     <section className="panel panel-results" aria-labelledby="results-title" aria-busy={busy}>
       <header className="panel-header">
@@ -29,6 +41,23 @@ export function ResultsPanel({ result, busy, pageSize, tables, onPage, onPageSiz
           <span className="results-summary" aria-live="polite">
             <ResultSummary result={result} busy={busy} />
           </span>
+          {script !== null && pointColumns.length > 0 && (
+            <div className="segmented" role="group" aria-label="Vista de los resultados">
+              <button type="button" aria-pressed={view === 'table'} onClick={() => setChoice({ script, view: 'table' })}>
+                <Icon name="table" size={13} />
+                Tabla
+              </button>
+              <button
+                type="button"
+                aria-pressed={view === 'map'}
+                onClick={() => setChoice({ script, view: 'map' })}
+                title="Ubica en el mapa las filas de la página actual"
+              >
+                <Icon name="map" size={13} />
+                Mapa
+              </button>
+            </div>
+          )}
           {!busy && result.status === 'success' && result.response.columns.length > 0 && (
             <CopyRowsButton response={result.response} />
           )}
@@ -56,6 +85,8 @@ export function ResultsPanel({ result, busy, pageSize, tables, onPage, onPageSiz
             busy={busy}
             pageSize={pageSize}
             tables={tables}
+            view={view}
+            pointColumns={pointColumns}
             onPage={onPage}
             onPageSize={onPageSize}
           />
@@ -130,18 +161,24 @@ interface SuccessViewProps {
   busy: boolean
   pageSize: number
   tables: readonly TableInfo[]
+  view: ResultsView
+  pointColumns: readonly number[]
   onPage(page: number): void
   onPageSize(size: number): void
 }
 
-function SuccessView({ response, script, canPaginate, busy, pageSize, tables, onPage, onPageSize }: SuccessViewProps) {
+function SuccessView({ response, script, canPaginate, busy, pageSize, tables, view, pointColumns, onPage, onPageSize }: SuccessViewProps) {
   const hasGrid = response.columns.length > 0
   return (
     <div className="success-view">
       {script.length > 1 && <ScriptSummary statements={script} />}
       {hasGrid ? (
         <>
-          <DataGrid response={response} tables={tables} />
+          {view === 'map' ? (
+            <ResultsMap response={response} pointColumns={pointColumns} />
+          ) : (
+            <DataGrid response={response} tables={tables} />
+          )}
           <Pagination
             response={response}
             pageSize={pageSize}
@@ -237,6 +274,24 @@ function columnLookup(response: QueryResponse, tables: readonly TableInfo[]): Ma
   return new Map((table?.columns ?? []).map((c) => [c.name, c]))
 }
 
+/** Columnas POINT del resultado: todos sus valores no nulos son pares [lon, lat]. */
+function findPointColumns(response: QueryResponse, tables: readonly TableInfo[]): number[] {
+  const lookup = columnLookup(response, tables)
+  const found: number[] = []
+  response.columns.forEach((name, j) => {
+    if (lookup.get(name)?.type === 'VECTOR') return
+    let sawPoint = false
+    for (const row of response.rows) {
+      const value = row[j]
+      if (value === null || value === undefined) continue
+      if (!isPoint(value)) return
+      sawPoint = true
+    }
+    if (sawPoint) found.push(j)
+  })
+  return found
+}
+
 function isNumericColumn(rows: CellValue[][], index: number): boolean {
   let sawNumber = false
   for (const row of rows) {
@@ -295,8 +350,15 @@ function DataGrid({ response, tables }: { response: QueryResponse; tables: reado
                   const cell = formatCell(row[j], col.info?.type)
                   const cls = [cell.isNull && 'is-null', (cell.numeric || col.numeric) && 'num'].filter(Boolean).join(' ')
                   return (
-                    <td key={j} className={cls || undefined}>
-                      {cell.text}
+                    <td key={j} className={cls || undefined} title={cell.title}>
+                      {col.name === 'imagen' && isMediaFile(row[j]) ? (
+                        <span className="cell-media">
+                          <img src={mediaUrl(row[j])} alt="" loading="lazy" />
+                          {cell.text}
+                        </span>
+                      ) : (
+                        cell.text
+                      )}
                     </td>
                   )
                 })}

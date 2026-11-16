@@ -23,17 +23,50 @@ export type StatementType = Open<
   | 'DROP INDEX'
   | 'COPY'
   | 'EXPLAIN'
+  | 'SET'
 >
 export type PlanType = Open<
-  'SeqScan' | 'IndexScan' | 'IndexRangeScan' | 'BinarySearch' | 'SeqFileRangeScan' | 'Insert'
+  | 'SeqScan'
+  | 'IndexScan'
+  | 'IndexRangeScan'
+  | 'BinarySearch'
+  | 'SeqFileRangeScan'
+  | 'Insert'
+  | 'RTreeRadiusScan'
+  | 'RTreeWindowScan'
+  | 'RTreeKNN'
+  | 'InvertedIndexScan'
+  | 'IVFScan'
 >
 export type Organization = Open<'HEAP' | 'SEQUENTIAL'>
-export type IndexType = Open<'BTREE' | 'HASH'>
-export type Structure = Open<'HEAP' | 'SEQUENTIAL' | 'BTREE' | 'HASH'>
-export type ColumnType = Open<'INT' | 'FLOAT' | 'CHAR' | 'VARCHAR'>
+export type IndexType = Open<'BTREE' | 'HASH' | 'RTREE' | 'INVERTED' | 'IVF'>
+export type Structure = Open<'HEAP' | 'SEQUENTIAL' | 'BTREE' | 'HASH' | 'RTREE' | 'INVERTED' | 'IVF'>
+export type ColumnType = Open<'INT' | 'FLOAT' | 'CHAR' | 'VARCHAR' | 'POINT' | 'VECTOR' | 'TEXT'>
+/** Estrategia de una consulta híbrida (filtro escalar + búsqueda espacial, textual o vectorial). */
+export type FilterStrategy = Open<'pre-filter' | 'post-filter'>
 
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
-export type CellValue = string | number | boolean | null
+/** Una columna POINT llega como [lon, lat] y una VECTOR como un arreglo de N números. */
+export type CellValue = string | number | boolean | null | number[]
+
+export interface IoFile {
+  file: string
+  role: Open<'table' | 'index' | 'other'>
+  owner: string
+  reads: number
+  writes: number
+}
+
+/** Lecturas y escrituras de páginas separadas por archivo: índices vs. tabla de datos. */
+export interface IoBreakdown {
+  index_reads: number
+  index_writes: number
+  table_reads: number
+  table_writes: number
+  other_reads: number
+  other_writes: number
+  files: IoFile[]
+}
 
 export interface Metrics {
   disk_reads: number
@@ -41,6 +74,8 @@ export interface Metrics {
   parse_ms: number
   exec_ms: number
   total_ms: number
+  /** Ausente en respuestas de versiones anteriores del backend. */
+  io?: IoBreakdown
 }
 
 export interface PlanCandidate {
@@ -49,6 +84,54 @@ export interface PlanCandidate {
   index: string | null
   estimated_io: number | null
   chosen: boolean
+  strategy?: FilterStrategy | null
+}
+
+/** Rectángulo mínimo de un nodo del R-Tree: [lon_min, lat_min, lon_max, lat_max]. */
+export interface SpatialMbr {
+  page_id: number
+  level: number
+  leaf: boolean
+  mbr: [number, number, number, number]
+}
+
+export interface SpatialPlan {
+  kind: Open<'radius' | 'box' | 'knn'>
+  center?: [number, number] | null
+  radius_km?: number | null
+  box?: [number, number, number, number] | null
+  k?: number | null
+  candidates?: number
+  nodes_visited?: number
+  leaves_visited?: number
+  mbrs?: SpatialMbr[]
+}
+
+export interface TextPlanTerm {
+  term: string
+  df: number
+  idf: number
+  posting_pages: number
+}
+
+export interface TextPlan {
+  mode: Open<'boolean' | 'ranked'>
+  scoring?: string | null
+  matched?: number
+  rebuilt?: boolean
+  terms?: TextPlanTerm[]
+}
+
+export interface VectorPlan {
+  metric?: string | null
+  probes?: number
+  lists?: number
+  probed?: number[]
+  dir_pages?: number
+  list_pages?: number
+  scanned?: number
+  fetched?: number
+  rebuilt?: boolean
 }
 
 export interface Plan {
@@ -63,6 +146,14 @@ export interface Plan {
   detail: string | null
   planner: string | null
   candidates: PlanCandidate[]
+  strategy?: FilterStrategy | null
+  order_by?: string | null
+  limit?: number | null
+  warning?: string | null
+  spatial?: SpatialPlan | null
+  text?: TextPlan | null
+  vector?: VectorPlan | null
+  prefilter_rids?: number | null
 }
 
 export interface StatementSummary {
@@ -112,10 +203,17 @@ export interface IndexInfo {
   name: string
   column: string
   type: IndexType
+  unique?: boolean
   height: number | null
   global_depth: number | null
   page_count: number
   entry_count: number
+  file?: string
+  files?: string[]
+  /** Opciones del WITH (...) con las que se creó el índice. */
+  options?: Record<string, JsonValue> | null
+  /** Metadatos propios de cada tipo (R-Tree, invertido, IVF). */
+  details?: Record<string, JsonValue> | null
 }
 
 export interface TableInfo {
@@ -183,6 +281,89 @@ export interface HealthInfo {
   status: string
   data_dir?: string
   tables?: number
+}
+
+// --- Aplicación: recomendador de productos ---
+
+export type RecommendMethod = Open<'embedding' | 'bovw' | 'exact' | 'text'>
+export type HybridStrategy = 'auto' | 'pre' | 'post'
+
+export interface AppStatus {
+  table: string
+  loaded: boolean
+  models: boolean
+  media: boolean
+  info: { records: number; pages: number; indexes: { name: string; type: IndexType; column: string }[] } | null
+  methods: Record<string, string>
+}
+
+export interface SampleProduct {
+  id: number
+  titulo: string
+  categoria: string
+  tipo: string
+  precio: number
+  imagen: string
+}
+
+/** Campos del formulario de POST /api/app/recommend; se omiten los que no se envían. */
+export interface RecommendParams {
+  image?: File | null
+  product_id?: number | null
+  text?: string
+  price_min?: number | null
+  price_max?: number | null
+  lon?: number | null
+  lat?: number | null
+  radius_km?: number | null
+  category?: string
+  k?: number
+  probes?: number
+  strategy?: HybridStrategy
+  methods?: readonly RecommendMethod[]
+}
+
+export interface RecommendFeatures {
+  keypoints: number
+  embedding_ms: number
+  bovw_ms: number
+  width: number
+  height: number
+  visual_words: number
+}
+
+export interface RecommendResult {
+  method: RecommendMethod
+  label: string
+  sql: string
+  score_column: string
+  columns: string[]
+  rows: CellValue[][]
+  total_rows: number
+  plan: Plan | null
+  metrics: Metrics | null
+  error: string | null
+}
+
+export interface RecommendResponse {
+  query: {
+    text: string
+    has_image: boolean
+    k: number
+    probes: number
+    strategy: string
+    product_id: number | null
+    filters: {
+      price_min: number | null
+      price_max: number | null
+      lon: number | null
+      lat: number | null
+      radius_km: number | null
+      category: string
+    }
+  }
+  features: RecommendFeatures | null
+  results: RecommendResult[]
 }
 
 // ---------------------------------------------------------------------------
@@ -278,7 +459,8 @@ function errorFromResponse(status: number, body: unknown, text: string): ApiErro
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers: Record<string, string> = { Accept: 'application/json' }
-  if (init.body !== undefined) headers['Content-Type'] = 'application/json'
+  // Con FormData el navegador pone el Content-Type (multipart con su boundary)
+  if (typeof init.body === 'string') headers['Content-Type'] = 'application/json'
 
   let res: Response
   let text: string
@@ -323,13 +505,28 @@ const ZERO_METRICS: Metrics = { disk_reads: 0, disk_writes: 0, parse_ms: 0, exec
 
 type Loose<T> = { [K in keyof T]?: T[K] | null }
 
+function normalizeIo(raw: Loose<IoBreakdown> | null | undefined): IoBreakdown | undefined {
+  if (!raw) return undefined
+  return {
+    index_reads: raw.index_reads ?? 0,
+    index_writes: raw.index_writes ?? 0,
+    table_reads: raw.table_reads ?? 0,
+    table_writes: raw.table_writes ?? 0,
+    other_reads: raw.other_reads ?? 0,
+    other_writes: raw.other_writes ?? 0,
+    files: raw.files ?? [],
+  }
+}
+
 function normalizeMetrics(raw: Loose<Metrics> | null | undefined): Metrics {
+  const io = normalizeIo(raw?.io)
   return {
     disk_reads: raw?.disk_reads ?? 0,
     disk_writes: raw?.disk_writes ?? 0,
     parse_ms: raw?.parse_ms ?? 0,
     exec_ms: raw?.exec_ms ?? 0,
     total_ms: raw?.total_ms ?? 0,
+    ...(io ? { io } : {}),
   }
 }
 
@@ -347,6 +544,14 @@ function normalizePlan(raw: Loose<Plan> | null | undefined): Plan | null {
     detail: raw.detail ?? null,
     planner: raw.planner ?? null,
     candidates: raw.candidates ?? [],
+    strategy: raw.strategy ?? null,
+    order_by: raw.order_by ?? null,
+    limit: raw.limit ?? null,
+    warning: raw.warning ?? null,
+    spatial: raw.spatial ?? null,
+    text: raw.text ?? null,
+    vector: raw.vector ?? null,
+    prefilter_rids: raw.prefilter_rids ?? null,
   }
 }
 
@@ -422,6 +627,85 @@ export async function fetchPage(table: string, pageId: number, file: string, sig
 
 export async function fetchHealth(signal?: AbortSignal): Promise<HealthInfo> {
   return request<HealthInfo>('/api/health', { signal })
+}
+
+// --- Aplicación: recomendador de productos ---
+
+/** URL de la imagen de un producto (GET /api/media/<id>.jpg), con la misma base que el resto de la API. */
+export function mediaUrl(filename: string): string {
+  return `${BASE}/api/media/${encodeURIComponent(filename)}`
+}
+
+/** Nombre de archivo que el backend sirve como imagen de producto: "<id>.jpg". */
+export function isMediaFile(value: unknown): value is string {
+  return typeof value === 'string' && /^\d+\.jpg$/.test(value)
+}
+
+export async function fetchAppStatus(signal?: AbortSignal): Promise<AppStatus> {
+  const raw = await request<Loose<AppStatus>>('/api/app/status', { signal })
+  return {
+    table: raw.table ?? 'productos',
+    loaded: raw.loaded ?? false,
+    models: raw.models ?? false,
+    media: raw.media ?? false,
+    info: raw.info ?? null,
+    methods: raw.methods ?? {},
+  }
+}
+
+export async function fetchAppSamples(n: number, seed: number, signal?: AbortSignal): Promise<SampleProduct[]> {
+  const query = new URLSearchParams({ n: String(n), seed: String(seed) })
+  const raw = await request<{ products?: SampleProduct[] | null }>(`/api/app/samples?${query.toString()}`, { signal })
+  return raw.products ?? []
+}
+
+export async function recommend(params: RecommendParams, signal?: AbortSignal): Promise<RecommendResponse> {
+  const form = new FormData()
+  const put = (name: string, value: string | number | null | undefined) => {
+    if (value !== null && value !== undefined && value !== '') form.append(name, String(value))
+  }
+  if (params.image) form.append('image', params.image, params.image.name)
+  put('product_id', params.product_id)
+  put('text', params.text?.trim())
+  put('price_min', params.price_min)
+  put('price_max', params.price_max)
+  put('lon', params.lon)
+  put('lat', params.lat)
+  put('radius_km', params.radius_km)
+  put('category', params.category)
+  put('k', params.k)
+  put('probes', params.probes)
+  put('strategy', params.strategy)
+  if (params.methods && params.methods.length > 0) form.append('methods', params.methods.join(','))
+
+  const raw = await request<Loose<RecommendResponse>>('/api/app/recommend', { method: 'POST', body: form, signal })
+  if (!raw.query) {
+    throw new ApiError({
+      kind: 'invalid',
+      status: null,
+      errorType: 'Respuesta inválida',
+      message: 'El backend respondió sin los datos de la consulta.',
+    })
+  }
+  return {
+    query: raw.query,
+    features: raw.features ?? null,
+    results: (raw.results ?? []).map((r: Loose<RecommendResult>) => {
+      const rows = r.rows ?? []
+      return {
+        method: r.method ?? '',
+        label: r.label ?? r.method ?? '',
+        sql: r.sql ?? '',
+        score_column: r.score_column ?? '',
+        columns: r.columns ?? [],
+        rows,
+        total_rows: r.total_rows ?? rows.length,
+        plan: normalizePlan(r.plan),
+        metrics: r.metrics ? normalizeMetrics(r.metrics) : null,
+        error: r.error ?? null,
+      }
+    }),
+  }
 }
 
 export { ZERO_METRICS }

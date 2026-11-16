@@ -1,4 +1,5 @@
 import { API_TARGET, type HealthInfo } from '../api'
+import type { AppView } from '../types'
 import { Icon, type IconName } from './Icon'
 
 export type HealthState =
@@ -14,14 +15,21 @@ const THEME_OPTIONS: { value: ThemePreference; icon: IconName; label: string }[]
   { value: 'dark', icon: 'moon', label: 'Tema oscuro' },
 ]
 
+const VIEW_OPTIONS: { value: AppView; icon: IconName; label: string; title: string }[] = [
+  { value: 'sql', icon: 'code', label: 'Cliente SQL', title: 'Editor SQL, resultados, plan de ejecución y métricas' },
+  { value: 'recommender', icon: 'image', label: 'Recomendador', title: 'Recomendación de productos por imagen, texto, precio y cercanía' },
+]
+
 interface AppHeaderProps {
+  view: AppView
+  onView(view: AppView): void
   health: HealthState
   theme: ThemePreference
   onTheme(theme: ThemePreference): void
   onRecheck(): void
 }
 
-export function AppHeader({ health, theme, onTheme, onRecheck }: AppHeaderProps) {
+export function AppHeader({ view, onView, health, theme, onTheme, onRecheck }: AppHeaderProps) {
   const label =
     health.status === 'online' ? 'Backend en línea' : health.status === 'offline' ? 'Sin conexión' : 'Conectando…'
   const details =
@@ -40,6 +48,21 @@ export function AppHeader({ health, theme, onTheme, onRecheck }: AppHeaderProps)
         <h1 className="brand-name">MiniDB</h1>
         <span className="brand-sub">Motor relacional en disco · CS2042 Base de Datos II</span>
       </div>
+
+      <nav className="segmented app-nav" aria-label="Vistas de la aplicación">
+        {VIEW_OPTIONS.map((option) => (
+          <button
+            key={option.value}
+            type="button"
+            aria-pressed={view === option.value}
+            onClick={() => onView(option.value)}
+            title={option.title}
+          >
+            <Icon name={option.icon} size={14} />
+            {option.label}
+          </button>
+        ))}
+      </nav>
 
       <div className="header-right">
         <button

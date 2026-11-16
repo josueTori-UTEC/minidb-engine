@@ -11,7 +11,7 @@ import {
   type TableFile,
   type TableInfo,
 } from '../api'
-import { fmtInt } from '../lib/format'
+import { fmtInt, fmtNumber } from '../lib/format'
 import { Badge, StructureBadge } from './Badges'
 import { Icon } from './Icon'
 
@@ -193,7 +193,9 @@ export function PageInspector({ table, tableInfo, onClose }: PageInspectorProps)
                     onClick={() => openFile(f.key)}
                     title={f.path}
                   >
-                    <span className="file-tab-key">{f.key}</span>
+                    <span className="file-tab-key" title={f.key}>
+                      {f.key}
+                    </span>
                     <StructureBadge structure={f.kind} />
                     <span className="file-tab-pages">{fmtInt(f.num_pages)} págs.</span>
                   </button>
@@ -401,7 +403,7 @@ const NAVIGABLE_KEYS = /^(children|child_pages|child_page_ids|pointers|buckets|b
 
 function formatScalar(v: Scalar): string {
   if (v === null) return 'null'
-  if (typeof v === 'number' && !Number.isInteger(v)) return v.toFixed(2)
+  if (typeof v === 'number' && !Number.isInteger(v)) return fmtNumber(v, 5)
   return String(v)
 }
 
@@ -497,11 +499,24 @@ function ChipList({ name, items, onGo }: { name: string; items: Scalar[]; onGo(p
   )
 }
 
-function cellText(v: JsonValue | undefined): string {
+/** A partir de este largo un arreglo se abrevia (vectores, centroides). */
+const MAX_INLINE_ITEMS = 8
+
+function cellText(v: JsonValue | undefined, full = false): string {
   if (v === undefined) return ''
   if (isScalar(v)) return formatScalar(v)
-  if (Array.isArray(v) && v.every(isScalar)) return `[${v.map(formatScalar).join(', ')}]`
+  if (Array.isArray(v)) {
+    if (!full && v.length > MAX_INLINE_ITEMS) {
+      return `[${v.slice(0, 3).map((item) => cellText(item)).join(', ')}, … (${fmtInt(v.length)})]`
+    }
+    return `[${v.map((item) => cellText(item, full)).join(', ')}]`
+  }
   return JSON.stringify(v)
+}
+
+/** Texto completo para el title cuando la celda se muestra abreviada. */
+function cellTitle(v: JsonValue | undefined): string | undefined {
+  return Array.isArray(v) && v.length > MAX_INLINE_ITEMS ? cellText(v, true) : undefined
 }
 
 function ObjectTable({ rows, columns }: { rows: JsonObject[]; columns: string[] }) {
@@ -543,14 +558,14 @@ function ObjectTable({ rows, columns }: { rows: JsonObject[]; columns: string[] 
               {plainKeys.map((k) => {
                 const v = row[k]
                 return (
-                  <td key={k} className={typeof v === 'number' ? 'num' : undefined}>
+                  <td key={k} className={typeof v === 'number' ? 'num' : undefined} title={cellTitle(v)}>
                     {cellText(v)}
                   </td>
                 )
               })}
               {expandValues &&
                 (row.values as JsonValue[]).map((v, j) => (
-                  <td key={`v-${j}`} className={typeof v === 'number' ? 'num' : undefined}>
+                  <td key={`v-${j}`} className={typeof v === 'number' ? 'num' : undefined} title={cellTitle(v)}>
                     {cellText(v)}
                   </td>
                 ))}

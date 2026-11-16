@@ -7,6 +7,7 @@ export const STORAGE_KEYS = {
   theme: 'minidb.theme',
   chartScale: 'minidb.chart.log',
   planner: 'minidb.planner',
+  view: 'minidb.view',
 } as const
 
 export function readString(key: string): string | null {

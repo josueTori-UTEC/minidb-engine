@@ -13,12 +13,13 @@ import {
 import { AppHeader, type HealthState, type ThemePreference } from './components/AppHeader'
 import { PageInspector } from './components/PageInspector'
 import { PlanPanel, type HistoryView } from './components/PlanPanel'
+import { RecommenderPage } from './components/RecommenderPage'
 import { PAGE_SIZES, ResultsPanel } from './components/ResultsPanel'
 import { SqlEditor, type RunTarget, type SqlEditorHandle } from './components/SqlEditor'
 import { TableExplorer, type CatalogStatus, type PlanHighlight } from './components/TableExplorer'
 import { codePointOffsetToUtf16 } from './lib/format'
 import { STORAGE_KEYS, readJson, readString, writeJson, writeString } from './lib/storage'
-import { HISTORY_LIMIT, type Activity, type HistoryEntry, type HistoryState, type ResultState } from './types'
+import { HISTORY_LIMIT, type Activity, type AppView, type HistoryEntry, type HistoryState, type ResultState } from './types'
 
 const DEFAULT_PAGE_SIZE = 50
 const HEALTH_INTERVAL_MS = 15_000
@@ -86,6 +87,16 @@ interface ExecuteOptions {
 
 export default function App() {
   const editorRef = useRef<SqlEditorHandle>(null)
+
+  // --- Vista activa (persistida): cliente SQL o recomendador ---
+  const [view, setView] = useState<AppView>(() => (readString(STORAGE_KEYS.view) === 'recommender' ? 'recommender' : 'sql'))
+  // El recomendador se monta la primera vez que se visita y después conserva su estado
+  const [recommenderOpened, setRecommenderOpened] = useState(view === 'recommender')
+  const changeView = useCallback((next: AppView) => {
+    setView(next)
+    writeString(STORAGE_KEYS.view, next)
+    if (next === 'recommender') setRecommenderOpened(true)
+  }, [])
 
   // --- Editor (persistido en localStorage) ---
   const [sqlText, setSqlText] = useState(() => readString(STORAGE_KEYS.editor) ?? '')
@@ -160,6 +171,13 @@ export default function App() {
     if (lastHealth.current === 'offline' && health.status === 'online') void loadTables()
     lastHealth.current = health.status
   }, [health.status, loadTables])
+
+  // Al volver al cliente SQL se refresca el catálogo (por si cambió mientras tanto)
+  const lastView = useRef(view)
+  useEffect(() => {
+    if (lastView.current !== 'sql' && view === 'sql') void loadTables()
+    lastView.current = view
+  }, [view, loadTables])
 
   // --- Historial de I/O ---
   const [history, setHistory] = useState<HistoryState>(
@@ -257,13 +275,13 @@ export default function App() {
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== 'Enter' || !(event.ctrlKey || event.metaKey) || event.defaultPrevented) return
-      if (inspecting !== null) return
+      if (inspecting !== null || view !== 'sql') return
       event.preventDefault()
       editorRef.current?.run()
     }
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
-  }, [inspecting])
+  }, [inspecting, view])
 
   // --- Reorganización de tablas SEQUENTIAL ---
   const reorganize = useCallback(
@@ -314,8 +332,15 @@ export default function App() {
 
   return (
     <div className="app">
-      <AppHeader health={health} theme={theme} onTheme={setTheme} onRecheck={() => void checkHealth()} />
-      <main className="workspace">
+      <AppHeader
+        view={view}
+        onView={changeView}
+        health={health}
+        theme={theme}
+        onTheme={setTheme}
+        onRecheck={() => void checkHealth()}
+      />
+      <main className="workspace" hidden={view !== 'sql'}>
         <TableExplorer
           tables={tables}
           status={catalog.status}
@@ -358,6 +383,7 @@ export default function App() {
           onClearHistory={clearHistory}
         />
       </main>
+      {recommenderOpened && <RecommenderPage hidden={view !== 'recommender'} onNetworkError={markOffline} />}
       {inspecting !== null && (
         <PageInspector
           table={inspecting}

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { TableInfo } from '../api'
+import type { IndexInfo, TableInfo } from '../api'
 import { columnTypeLabel, fmtInt } from '../lib/format'
 import { StructureBadge } from './Badges'
 import { Icon } from './Icon'
@@ -204,11 +204,11 @@ function TableCard({ table, expanded, onToggle, locked, reorganizing, highlight,
                       <span>
                         col. <code>{index.column}</code>
                       </span>
-                      {index.type === 'HASH' ? (
-                        <span title="Profundidad global del directorio">prof. global {index.global_depth ?? '—'}</span>
-                      ) : (
-                        <span title="Altura del árbol B+">altura {index.height ?? '—'}</span>
-                      )}
+                      {indexFacts(index).map((fact) => (
+                        <span key={fact.text} title={fact.title} className={fact.warn ? 'is-warn' : undefined}>
+                          {fact.text}
+                        </span>
+                      ))}
                       <span>{fmtInt(index.page_count)} págs.</span>
                       <span>{fmtInt(index.entry_count)} entradas</span>
                     </div>
@@ -248,6 +248,68 @@ function TableCard({ table, expanded, onToggle, locked, reorganizing, highlight,
       )}
     </article>
   )
+}
+
+interface IndexFact {
+  text: string
+  title?: string
+  warn?: boolean
+}
+
+/** Metadatos propios de cada tipo de índice (los genéricos, páginas y entradas, van aparte). */
+function indexFacts(index: IndexInfo): IndexFact[] {
+  const details = index.details ?? {}
+  const num = (key: string) => (typeof details[key] === 'number' ? (details[key] as number) : null)
+  const str = (key: string) => {
+    const value = details[key] ?? index.options?.[key]
+    return typeof value === 'string' && value !== '' ? value : null
+  }
+  const facts: IndexFact[] = []
+
+  switch (index.type) {
+    case 'HASH':
+      facts.push({ text: `prof. global ${index.global_depth ?? '—'}`, title: 'Profundidad global del directorio' })
+      break
+    case 'RTREE': {
+      facts.push({ text: `altura ${index.height ?? '—'}`, title: 'Altura del R-Tree' })
+      const leaf = num('leaf_capacity')
+      const internal = num('internal_capacity')
+      if (leaf !== null) {
+        facts.push({
+          text: `${fmtInt(leaf)} por hoja`,
+          title: internal !== null ? `Capacidad: ${leaf} entradas por hoja, ${internal} por nodo interno` : 'Entradas por hoja',
+        })
+      }
+      break
+    }
+    case 'INVERTED': {
+      const terms = num('terms')
+      if (terms !== null) facts.push({ text: `${fmtInt(terms)} términos`, title: 'Tamaño del vocabulario' })
+      const scoring = str('scoring')
+      if (scoring) facts.push({ text: scoring, title: 'Función de puntuación' })
+      const analyzer = str('analyzer')
+      if (analyzer) facts.push({ text: analyzer, title: 'Analizador de texto (tokenización, stopwords, stemming)' })
+      if (details.stale === true) {
+        facts.push({ text: 'desactualizado', title: 'Se reconstruye en la próxima consulta MATCH', warn: true })
+      }
+      break
+    }
+    case 'IVF': {
+      const lists = num('lists')
+      if (lists !== null) facts.push({ text: `${fmtInt(lists)} celdas`, title: 'Listas invertidas (una por centroide)' })
+      const metric = str('metric')
+      if (metric) facts.push({ text: metric, title: 'Métrica de distancia' })
+      const dims = num('dims')
+      if (dims !== null) facts.push({ text: `${fmtInt(dims)} dims`, title: 'Dimensión de los vectores' })
+      if (details.trained === false) {
+        facts.push({ text: 'sin entrenar', title: 'Los centroides se calculan al construir el índice con datos', warn: true })
+      }
+      break
+    }
+    default:
+      facts.push({ text: `altura ${index.height ?? '—'}`, title: 'Altura del árbol B+' })
+  }
+  return facts
 }
 
 function Stat({ label, value, title, tone }: { label: string; value: string; title?: string; tone?: 'warn' }) {

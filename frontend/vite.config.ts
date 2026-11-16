@@ -22,6 +22,7 @@ export default defineConfig({
               test: /node_modules[\\/](@codemirror|@lezer|@uiw|@marijn|codemirror|crelt|style-mod|w3c-keyname)[\\/]/,
               priority: 20,
             },
+            { name: 'map', test: /node_modules[\\/]leaflet[\\/]/, priority: 20 },
             { name: 'vendor', test: /node_modules[\\/]/, priority: 10 },
           ],
         },

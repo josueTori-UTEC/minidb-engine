@@ -9,9 +9,10 @@ import { columnTypeLabel } from './format'
 const MINIDB_DIALECT = SQLDialect.define({
   keywords:
     'select from where and between insert into values delete create table index on using primary key ' +
-    'drop copy explain heap sequential btree hash',
-  types: 'int float char varchar',
-  builtin: '',
+    'drop copy explain heap sequential btree hash ' +
+    'rtree inverted ivf with match within_radius within_box order by limit asc desc as set',
+  types: 'int integer float char varchar point vector text',
+  builtin: 'cosine_score',
   backslashEscapes: false,
   doubleQuotedStrings: false,
   hashComments: false,
@@ -21,6 +22,7 @@ const MINIDB_DIALECT = SQLDialect.define({
 const highlightStyle = HighlightStyle.define([
   { tag: t.keyword, color: 'var(--syn-keyword)', fontWeight: '600' },
   { tag: t.typeName, color: 'var(--syn-type)' },
+  { tag: t.standard(t.name), color: 'var(--syn-type)' },
   { tag: [t.string, t.special(t.string)], color: 'var(--syn-string)' },
   { tag: [t.number, t.bool, t.null], color: 'var(--syn-number)' },
   { tag: [t.lineComment, t.blockComment], color: 'var(--syn-comment)', fontStyle: 'italic' },
