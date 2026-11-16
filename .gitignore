@@ -28,11 +28,19 @@ dist/
 *.hsh
 *.run
 *.tmp
+*.rtr
+*.dic
+*.inv
+*.dir
+*.lst
+*.npz
 
-# Datos generados: solo se versionan el generador y el .gitkeep
+# Datos generados: solo se versionan los generadores y el .gitkeep
+# (data/raw, data/media, data/models y los CSV se regeneran con data/prepare_fashion.py)
 data/*
 !data/.gitkeep
 !data/generate.py
+!data/prepare_fashion.py
 
 # Benchmarks: los resultados (CSV + PNG) SÍ se versionan; los archivos de trabajo no
 benchmarks/work/
