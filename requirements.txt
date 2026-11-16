@@ -1,6 +1,7 @@
 # Dependencias del backend (imagen Docker). Versiones fijadas para builds reproducibles.
 fastapi==0.141.1
 uvicorn[standard]==0.53.0
+python-multipart==0.0.33
 # Entrega 2: aritmética vectorial (R-Tree, IVF, ranking) y stemming Snowball
 numpy==2.5.3
 nltk==3.10.4

@@ -179,3 +179,129 @@ frontend.
 ## `GET /api/health`
 
 `{ "status": "ok", "data_dir": "/app/data", "tables": 1 }`
+
+---
+
+# Entrega 2: extensión multimodal
+
+## Cambios en `POST /api/query`
+
+El contrato no cambia; se agregan campos.
+
+**Valores.** Una columna `POINT` llega como `[lon, lat]` y una `VECTOR(n)` como un arreglo de `n`
+números. Las expresiones `COSINE_SCORE()`, `col <-> x` y `col <=> x` son columnas numéricas.
+
+**`metrics.io`** — desglose de bloques por archivo, separando el índice de la tabla de datos:
+
+```json
+"metrics": {
+  "disk_reads": 280, "disk_writes": 0, "parse_ms": 0.31, "exec_ms": 6.82, "total_ms": 7.13,
+  "io": {
+    "index_reads": 268, "index_writes": 0, "table_reads": 12, "table_writes": 0,
+    "other_reads": 0, "other_writes": 0,
+    "files": [
+      { "file": "productos.heap", "role": "table", "owner": "productos", "reads": 12, "writes": 0 },
+      { "file": "productos_embedding.ivf.dir", "role": "index", "owner": "idx_prod_vec", "reads": 30, "writes": 0 },
+      { "file": "productos_embedding.ivf.lst", "role": "index", "owner": "idx_prod_vec", "reads": 238, "writes": 0 }
+    ]
+  }
+}
+```
+
+**`plan`** — además de los campos de la Entrega 1:
+
+| Campo | Contenido |
+|---|---|
+| `type` | también `RTreeRadiusScan`, `RTreeWindowScan`, `RTreeKNN`, `InvertedIndexScan`, `IVFScan` |
+| `structure` | también `RTREE`, `INVERTED`, `IVF` |
+| `strategy` | `"pre-filter"`, `"post-filter"` o `null` (consultas híbridas: filtro relacional + ranking) |
+| `order_by`, `limit` | el `ORDER BY` y el `LIMIT` de la consulta |
+| `warning` | aviso si el post-filtering devolvió menos filas que el `LIMIT` |
+| `candidates[].strategy` | estrategia de cada camino evaluado por el planificador |
+| `spatial` | `{kind: "radius"\|"box"\|"knn", center, radius_km, box, k, candidates, nodes_visited, leaves_visited, mbrs}`; `mbrs` son las cajas `[x_min, y_min, x_max, y_max]` de los nodos del R-Tree inspeccionados (hasta 400) |
+| `text` | `{mode: "boolean"\|"ranked", scoring, matched, rebuilt, terms: [{term, df, idf, posting_pages}]}` |
+| `vector` | `{metric, probes, lists, probed, dir_pages, list_pages, scanned, fetched, rebuilt}` |
+| `prefilter_rids` | RID entregados por el índice relacional en el pre-filtering textual |
+
+Sentencia nueva: `SET nombre = valor` (`ivf.probes`, `hybrid.strategy`, `text.analyzer`); responde como
+una DDL (`statement: "SET"`, `message`).
+
+## Cambios en `GET /api/tables`
+
+Columnas con `type` `POINT` o `VECTOR` (`size` = dimensión). Cada índice agrega `files` (un índice
+invertido tiene tres archivos y un IVF dos), `options` (las de `WITH (...)`) y `details`:
+
+| `type` | `details` |
+|---|---|
+| `RTREE` | `leaf_capacity`, `internal_capacity` (la altura va en `height`) |
+| `INVERTED` | `terms`, `documents`, `postings`, `avg_length`, `analyzer`, `scoring`, `stale`, `vocab_pages`, `postings_pages`, `docs_pages` |
+| `IVF` | `dims`, `metric`, `lists`, `trained`, `vectors`, `list_capacity`, `dir_pages`, `list_pages` |
+
+En `GET /api/tables/{name}/files` un índice de varios archivos aparece una vez por archivo, con
+`key` = `índice:archivo` (por ejemplo `idx_prod_texto:postings.inv`); esa clave es el parámetro
+`file` de `GET /api/tables/{name}/pages/{page_id}`.
+
+## Aplicación de IA (recomendador multimodal)
+
+### `GET /api/app/status`
+
+```json
+{ "table": "productos", "loaded": true, "models": true, "media": true,
+  "info": { "records": 44072, "pages": 22036,
+            "indexes": [ { "name": "idx_prod_vec", "type": "IVF", "column": "embedding" } ] },
+  "methods": { "embedding": "Embedding ResNet-18 + IVF", "bovw": "BoVW (SIFT) + índice invertido",
+               "exact": "k-NN exacto (recorrido secuencial)", "text": "Texto: TF-IDF + coseno" } }
+```
+
+`loaded` es `false` hasta que se carga el catálogo (`python data/prepare_fashion.py --load`).
+
+### `GET /api/app/samples?n=12&seed=0`
+
+Productos de ejemplo para usar como imagen de consulta:
+`{ "products": [ { "id", "titulo", "categoria", "tipo", "precio", "imagen" } ] }`.
+
+### `GET /api/media/{id}.jpg`
+
+Imagen del producto (JPEG) guardada en `<MINIDB_DATA_DIR>/media`.
+
+### `POST /api/app/recommend` (`multipart/form-data`)
+
+| Campo | Tipo | Uso |
+|---|---|---|
+| `image` | archivo | foto de la prenda (≤ 8 MB) |
+| `product_id` | int | usar la imagen de un producto del catálogo |
+| `text` | string | descripción en lenguaje natural (el catálogo está en inglés) |
+| `price_min`, `price_max` | float | rango de precios (índice B+) |
+| `lon`, `lat`, `radius_km` | float | cercanía a un punto (R-Tree) |
+| `category` | string | categoría exacta (`apparel`, `footwear`, ...) |
+| `k` | int | resultados por método (default 12, máximo 60) |
+| `probes` | int | `ivf.probes` (default 5) |
+| `strategy` | `auto` \| `pre` \| `post` | estrategia de las consultas híbridas |
+| `methods` | lista separada por comas | `embedding`, `bovw`, `exact`, `text`; por defecto `embedding,bovw` con imagen y `text` sin ella |
+
+Debe venir una imagen, un `product_id` o un `text`. La aplicación vectoriza la imagen (ResNet-18 +
+PCA y SIFT + codebook), arma una sentencia SQL por método y la ejecuta en el motor:
+
+```json
+{
+  "query": { "text": "", "has_image": true, "k": 12, "probes": 5, "strategy": "auto", "product_id": 15970,
+             "filters": { "price_min": 20, "price_max": 80, "lon": -77.0282, "lat": -12.1211,
+                          "radius_km": 6, "category": "" } },
+  "features": { "keypoints": 100, "visual_words": 46, "embedding_ms": 35.2, "bovw_ms": 6.1,
+                "width": 60, "height": 80 },
+  "results": [
+    { "method": "embedding", "label": "Embedding ResNet-18 + IVF", "score_column": "distancia",
+      "sql": "SELECT id, titulo, ..., embedding <=> '[-0.73, 0.15, -0.00, … (128 dims)]' AS distancia FROM productos WHERE precio BETWEEN 20.0 AND 80.0 AND ubicacion WITHIN_RADIUS((-77.0282, -12.1211), 6.0) ORDER BY distancia ASC LIMIT 12",
+      "columns": ["id", "titulo", "categoria", "tipo", "color", "precio", "tienda", "ubicacion", "imagen", "distancia"],
+      "rows": [[15970, "Turtle Check Men Navy Blue Shirt", "apparel", "Shirts", "Navy Blue", 46.97,
+                "La Victoria 5", [-77.019484, -12.070601], "15970.jpg", 0.0]],
+      "total_rows": 12, "plan": { "type": "IVFScan", "strategy": "post-filter", "...": "..." },
+      "metrics": { "disk_reads": 293, "exec_ms": 6.8, "io": { "index_reads": 268, "table_reads": 25 } },
+      "error": null }
+  ]
+}
+```
+
+`sql` es la sentencia abreviada para mostrar (el vector y las palabras visuales completos no se
+incluyen). Si un método falla trae `error` y `rows: []`. Errores globales: `400` con el mismo
+formato que `/api/query`.

@@ -96,3 +96,55 @@ def test_inspeccion_de_paginas(client):
     assert client.get("/api/tables/empleados/pages/99").status_code == 400
     assert client.get("/api/tables/empleados/pages/1", params={"file": "zzz"}).status_code == 400
     assert client.get("/api/tables/nada/pages/1").status_code == 404
+
+
+# ---------------------------------------------------------------------- Entrega 2
+def test_consulta_multimodal_y_desglose_de_io(client):
+    client.post("/api/query", json={"sql": (
+        "CREATE TABLE locales (id INT PRIMARY KEY, nombre CHAR(20), ubicacion POINT, resena TEXT(80), v VECTOR(3));"
+        "INSERT INTO locales VALUES (1, 'Centro', (-77.03, -12.05), 'cafe tranquilo con terraza', [1, 0, 0]),"
+        " (2, 'Miraflores', (-77.03, -12.12), 'cafe con vista al mar', [0.9, 0.1, 0]),"
+        " (3, 'Callao', (-77.12, -12.06), 'restaurante de pescado frente al mar', [0, 1, 0]);"
+        "CREATE INDEX idx_geo ON locales (ubicacion) USING RTREE;"
+        "CREATE INDEX idx_txt ON locales (resena) USING INVERTED;"
+        "CREATE INDEX idx_v ON locales (v) USING IVF WITH (metric = 'COSINE');"
+    )})
+    body = client.post("/api/query", json={
+        "sql": "SELECT id, nombre, ubicacion FROM locales WHERE ubicacion WITHIN_RADIUS((-77.03, -12.05), 8.5)"
+    }).json()
+    assert sorted(r[0] for r in body["rows"]) == [1, 2] and body["rows"][0][2] == [-77.03, -12.05]
+    assert body["plan"]["type"] == "RTreeRadiusScan" and body["plan"]["spatial"]["kind"] == "radius"
+    io = body["metrics"]["io"]
+    assert io["index_reads"] >= 1 and io["table_reads"] == 2
+    assert {f["role"] for f in io["files"]} == {"index", "table"}
+    body = client.post("/api/query", json={
+        "sql": "SELECT id, COSINE_SCORE() AS r FROM locales WHERE resena MATCH 'cafe AND mar' ORDER BY r DESC LIMIT 5"
+    }).json()
+    assert [r[0] for r in body["rows"]] == [2] and body["plan"]["text"]["mode"] == "boolean"
+    body = client.post("/api/query", json={
+        "sql": "SET ivf.probes = 3; SELECT id, v <=> '[1, 0, 0]' AS d FROM locales ORDER BY d LIMIT 2"
+    }).json()
+    assert [r[0] for r in body["rows"]] == [1, 2] and body["rows"][0][1] == 0.0
+    assert [s["statement"] for s in body["statements"]] == ["SET", "SELECT"]
+    tables = client.get("/api/tables").json()["tables"]
+    kinds = {i["name"]: i["type"] for i in tables[0]["indexes"]}
+    assert kinds == {"idx_geo": "RTREE", "idx_txt": "INVERTED", "idx_v": "IVF"}
+    assert [c["type"] for c in tables[0]["columns"]] == ["INT", "CHAR", "POINT", "CHAR", "VECTOR"]
+    files = {f["key"] for f in client.get("/api/tables/locales/files").json()["files"]}
+    assert {"data", "idx_geo", "idx_txt:vocab.dic", "idx_txt:postings.inv", "idx_v:ivf.lst"} <= files
+    page = client.get("/api/tables/locales/pages/1", params={"file": "idx_txt:vocab.dic"}).json()
+    assert page["header"]["page_type_name"] == "INV_VOCAB"
+    assert [e["term"] for e in page["details"]["entries"]][:2] == ["caf", "frent"]
+    err = client.post("/api/query", json={"sql": "SELECT * FROM locales WHERE ubicacion WITHIN_RADIUS((0, 0), )"})
+    assert err.status_code == 400 and err.json()["detail"]["error"] == "SyntaxError"
+
+
+def test_aplicacion_sin_catalogo_cargado(client):
+    status = client.get("/api/app/status").json()
+    assert status == {**status, "table": "productos", "loaded": False, "info": None}
+    assert set(status["methods"]) == {"embedding", "bovw", "exact", "text"}
+    assert client.get("/api/app/samples").json() == {"products": []}
+    res = client.post("/api/app/recommend", data={"text": "blue shirt"})
+    assert res.status_code == 400 and "prepare_fashion" in res.json()["detail"]["message"]
+    assert client.get("/api/media/123.jpg").status_code == 404
+    assert client.get("/api/media/..%2Fcatalog.bin").status_code == 404

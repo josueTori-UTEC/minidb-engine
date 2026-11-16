@@ -1,6 +1,11 @@
 """Fixtures compartidas por los tests del motor."""
 
+import os
+
 import pytest
+
+# La API precarga el stemmer y la red en un hilo al arrancar; en los tests no hace falta.
+os.environ.setdefault("MINIDB_WARM_UP", "0")
 
 from backend.storage.disk_manager import DiskCounter
 from backend.storage.record import Column, ColumnType, Schema
