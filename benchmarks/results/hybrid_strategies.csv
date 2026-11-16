@@ -1,0 +1,5 @@
+filter,selectivity_pct,strategy,plan,chosen_by_auto,rows_mean,reads_mean,index_reads_mean,table_reads_mean,ms_mean,estimated_io_mean,recall_mean,queries
+precio <= 300,78.6032,pre,IndexRangeScan (pre-filter),no,10,34822,180,34642,1038.28,23494,1,40
+precio <= 300,78.6032,post,IVFScan (post-filter),sí,10,223.2,208.675,14.525,5.89545,202,0.94,40
+precio <= 22,0.465148,pre,IndexRangeScan (pre-filter),sí,10,208,3,205,5.9907,634,1,40
+precio <= 22,0.465148,post,IVFScan (post-filter),no,0.925,1421.25,208.675,1212.58,15.5628,885,0.065,40

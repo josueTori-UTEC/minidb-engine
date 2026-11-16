@@ -1,0 +1,4 @@
+method,extraction_ms,extraction_note,query_ms_mean,query_ms_std,reads_mean,index_reads_mean,table_reads_mean,index_mb,index_build_s,representation
+BoVW (SIFT + índice invertido),7.69667,por lotes: 7.74 ms/imagen; codebook K-Means: 37 s,133.678,62.5167,646.04,635.04,11,17.0078,2.12696,histograma disperso (≤ 100 de 1000 palabras)
+Embedding (ResNet-18 + IVF),7.79979,por lotes de 256 (GPU): 4.19 ms/imagen,6.10605,3.4895,215.647,204.647,11,25.0664,7.05242,128 float32 (512 bytes)
+Embedding (k-NN exacto),7.79979,por lotes de 256 (GPU): 4.19 ms/imagen,850.249,11.765,22036,0,22036,0,0,128 float32 (512 bytes)

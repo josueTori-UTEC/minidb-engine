@@ -1,0 +1,13 @@
+n,engine,build_s,size_bytes,terms,postings,vocab_pages,postings_pages,docs_pages,heap_pages,build_reads,build_writes,runs
+1000,MiniDB (índice invertido),0.0285471,167936,1010,12722,16,20,5,53,75,68,1
+1000,PostgreSQL (GIN),0.0311415,106496,,,,,,22,,,
+2000,MiniDB (índice invertido),0.0604734,286720,1492,25377,22,39,9,106,148,117,1
+2000,PostgreSQL (GIN),0.0419376,163840,,,,,,44,,,
+5000,MiniDB (índice invertido),0.116079,618496,2398,63538,35,95,21,264,364,256,1
+5000,PostgreSQL (GIN),0.103937,303104,,,,,,152,,,
+10000,MiniDB (índice invertido),0.213181,1159168,3676,127061,53,189,41,527,724,485,1
+10000,PostgreSQL (GIN),0.17621,557056,,,,,,216,,,
+20000,MiniDB (índice invertido),0.391659,2187264,5455,254178,77,376,81,1053,1442,928,1
+20000,PostgreSQL (GIN),0.358306,991232,,,,,,408,,,
+44072,MiniDB (índice invertido),0.916326,4567040,7939,560112,112,828,175,2320,3166,1966,1
+44072,PostgreSQL (GIN),0.727089,1867776,,,,,,856,,,
