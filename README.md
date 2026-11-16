@@ -1,13 +1,29 @@
-# MiniDB — Motor relacional en disco
+# MiniDB — Gestor de bases de datos multimodal en disco
 
 [![tests](https://github.com/josueTori-UTEC/minidb-engine/actions/workflows/tests.yml/badge.svg)](https://github.com/josueTori-UTEC/minidb-engine/actions/workflows/tests.yml)
 
-Proyecto del curso **Base de Datos II (CS2042) — UTEC 2026-II**, Entregable 1.
+Proyecto del curso **Base de Datos II (CS2042) — UTEC 2026-II**, Entregables 1 y 2.
 
-MiniDB es un mini gestor de bases de datos relacional construido desde cero que opera
+MiniDB es un mini gestor de bases de datos construido desde cero que opera
 directamente sobre memoria secundaria: todos los datos e índices viven en archivos binarios
 paginados que se leen y escriben de a una página completa (`seek` + `read`/`write` con
-`struct`), sin motores de bases de datos, ORMs, `pickle` ni JSON para persistir.
+`struct`), sin motores de bases de datos, ORMs, `pickle` ni JSON para persistir. Sobre el
+motor relacional del Entregable 1, el Entregable 2 agrega datos espaciales, texto libre y
+vectores de alta dimensión, un planificador híbrido y una aplicación de IA (recomendador
+multimodal de productos).
+
+| Requisito del enunciado (Entregable 2) | Dónde está |
+|---|---|
+| R-Tree en disco: inserción por mínimo ΔÁrea, split cuadrático, ventana, radio y k-NN con cola de prioridad (MINDIST) | [`backend/indexes/rtree.py`](backend/indexes/rtree.py) |
+| Visor de mapa (Leaflet) con los resultados, el círculo de la consulta y los MBR visitados | [`frontend/src/components/ResultsMap.tsx`](frontend/src/components/ResultsMap.tsx) |
+| Índice invertido en disco (`vocab.dic`, `postings.inv`, `docs.bin`) construido con SPIMI; consultas booleanas por mezcla de listas y ranking TF-IDF + coseno con Top-K | [`backend/indexes/inverted_index.py`](backend/indexes/inverted_index.py), [`backend/text/`](backend/text) |
+| Descriptores de imagen: Bag of Visual Words (SIFT + K-Means) y embeddings densos (ResNet-18 + PCA) | [`backend/ml/features.py`](backend/ml/features.py), [`data/prepare_fashion.py`](data/prepare_fashion.py) |
+| k-NN exacto y ANN con IVF-Flat en disco (`ivf.dir`, `ivf.lst`), `SET ivf.probes` | [`backend/indexes/ivf.py`](backend/indexes/ivf.py) |
+| SQL extendido: `POINT`, `TEXT`, `VECTOR(n)`, `USING RTREE \| INVERTED \| IVF WITH (...)`, `WITHIN_RADIUS`, `MATCH`, `COSINE_SCORE()`, `<->`, `<=>`, `ORDER BY … LIMIT` | [`backend/sql/parser.py`](backend/sql/parser.py) |
+| Planificador híbrido (pre-filtering vs post-filtering) con I/O separado por índice y por tabla | [`backend/sql/multimodal.py`](backend/sql/multimodal.py) |
+| Aplicación de IA (Opción B): recomendador multimodal de e-commerce | [`backend/app/recommender.py`](backend/app/recommender.py), pestaña **Recomendador** del cliente |
+| Experimentos 5 a 8 y comparación de estrategias híbridas | [`benchmarks/`](benchmarks) |
+| Informe disponible y guion del video | [`docs/informe/informe.pdf`](docs/informe/informe.pdf), [`docs/guion_video_e2.md`](docs/guion_video_e2.md) |
 
 | Requisito del enunciado (Entregable 1) | Dónde está |
 |---|---|
@@ -42,7 +58,8 @@ docker compose up --build
 | Cliente web (4 paneles) | <http://localhost:5173> |
 | API REST | <http://localhost:8000> — documentación interactiva en <http://localhost:8000/docs> |
 
-Los archivos binarios (`catalog.bin`, `*.heap`, `*.seq`, `*.ovf`, `*.bpt`, `*.hsh`) se guardan en
+Los archivos binarios (`catalog.bin`, `*.heap`, `*.seq`, `*.ovf`, `*.bpt`, `*.hsh`, `*.rtr`,
+`*.vocab.dic`, `*.postings.inv`, `*.docs.bin`, `*.ivf.dir`, `*.ivf.lst`) se guardan en
 `./data` (montado como volumen en `MINIDB_DATA_DIR=/app/data`), así que todo sobrevive a un
 reinicio de los contenedores.
 
@@ -78,11 +95,53 @@ candidatos que se descartaron, y las métricas exactas: `disk_reads`, `disk_writ
 las reglas del enunciado (por defecto) y el optimizador por costos (campo `planner` de la API).
 El visor de resultados copia al portapapeles en CSV las filas que muestra.
 
+### Cargar el catálogo multimodal (Entregable 2)
+
+La aplicación de IA trabaja sobre una sola tabla, `productos`: 44 072 productos de
+*Fashion Product Images (Small)* con su descripción, precio, tienda (punto geográfico en Lima),
+palabras visuales (BoVW) y embedding de 128 dimensiones. Ni las imágenes ni los binarios se
+versionan; un único script descarga el dataset, extrae las características, crea la tabla y
+construye los seis índices:
+
+```bash
+docker compose exec backend python data/prepare_fashion.py --load
+```
+
+(sin Docker: `pip install -r requirements-ml.txt` y `python data/prepare_fashion.py --load`).
+Necesita conexión para bajar el dataset y los pesos de ResNet-18, y deja ~700 MB en `data/`
+(`media/` con las imágenes, `productos.csv`, `models/` con el codebook y la PCA). Con
+`--limit 5000` prepara un catálogo reducido en un par de minutos; con `--only-load` reutiliza
+un `productos.csv` ya generado y solo carga la tabla y los índices.
+
+```sql
+CREATE TABLE productos (id INT PRIMARY KEY, titulo CHAR(64), ..., precio FLOAT, tienda CHAR(24),
+                        ubicacion POINT, descripcion TEXT(200), imagen CHAR(16),
+                        palabras TEXT(800), embedding VECTOR(128)) USING HEAP;
+CREATE INDEX idx_prod_geo   ON productos (ubicacion)   USING RTREE;
+CREATE INDEX idx_prod_texto ON productos (descripcion) USING INVERTED WITH (analyzer = 'english');
+CREATE INDEX idx_prod_bovw  ON productos (palabras)    USING INVERTED WITH (analyzer = 'raw');
+CREATE INDEX idx_prod_vec   ON productos (embedding)   USING IVF WITH (metric = 'COSINE');
+
+-- tiendas a 2 km con zapatillas rojas, las más parecidas a un vector de consulta
+SELECT id, titulo, precio FROM productos
+WHERE ubicacion WITHIN_RADIUS((-77.0282, -12.1211), 2.0)
+  AND descripcion MATCH 'red AND shoes' AND precio <= 150
+ORDER BY embedding <=> [0.12, -0.03, ...] LIMIT 10;
+```
+
+En el cliente, la pestaña **Recomendador** recibe una imagen (o un producto del catálogo), un
+presupuesto y una ubicación, y muestra los productos sugeridos, el mapa de tiendas, la sentencia
+SQL que generó y el plan con su I/O. El menú **Ejemplos** trae consultas espaciales, de texto,
+vectoriales e híbridas listas para ejecutar, y el visor de resultados dibuja en un mapa cualquier
+resultado que tenga una columna `POINT`.
+
+![Recomendador multimodal: imagen de consulta, filtros, productos sugeridos y mapa de tiendas](docs/informe/figuras/recomendador.png)
+
 ## 2. Desarrollo local (sin Docker)
 
 ```bash
 python3.12 -m venv .venv && source .venv/bin/activate
-pip install -r requirements-dev.txt
+pip install -r requirements-dev.txt             # + requirements-ml.txt para vectorizar imágenes
 uvicorn backend.api.main:app --reload            # API en http://localhost:8000
 
 cd frontend && npm install && npm run dev        # cliente en http://localhost:5173 (proxy /api -> :8000)
@@ -98,12 +157,13 @@ Variables de entorno del backend:
 | `MINIDB_DATA_DIR` | `./data` | carpeta del catálogo y de los archivos binarios |
 | `MINIDB_PAGE_SIZE` | `4096` | tamaño de página de las tablas nuevas (512–65536, potencia de 2) |
 | `MINIDB_PLANNER` | `rules` | `rules` (reglas del enunciado) o `cost` (menor costo estimado) |
+| `MINIDB_WARM_UP` | `1` | precargar el extractor de características al iniciar (`0` lo difiere al primer uso) |
 | `MINIDB_CORS_ORIGINS` | `http://localhost:5173,...` | orígenes permitidos (`*` = todos) |
 
 ## 3. Tests
 
 ```bash
-pytest            # 133 tests (de ~12 s en macOS a ~45 s en Windows)
+pytest            # 189 tests
 ```
 
 Los mismos tests corren en GitHub Actions en cada push y cada pull request
@@ -119,10 +179,17 @@ planner/executor de punta a punta, la API y **pruebas aleatorias diferenciales**
 inserciones, borrados y búsquedas en cada estructura (y por SQL) comparadas contra un modelo en
 memoria, con páginas pequeñas para forzar splits, overflow y reorganizaciones.
 
-## 4. Benchmarks (4 experimentos del enunciado)
+Del Entregable 2: el R-Tree (invariantes de los MBR, ventana, radio y k-NN contra fuerza bruta,
+carga STR, persistencia), el índice invertido (analizador, SPIMI con varios bloques, booleanas
+contra conjuntos en memoria, puntajes TF-IDF y BM25 contra el cálculo directo), IVF (recall con
+todas las listas = exacto, inserción y borrado, métricas L2 y coseno) y las consultas
+multimodales por SQL, incluidas las dos estrategias híbridas y el desglose de I/O. No necesitan
+el catálogo ni las dependencias de `requirements-ml.txt`.
+
+## 4. Benchmarks (8 experimentos del enunciado)
 
 ```bash
-python -m benchmarks.run_all           # corrida completa (~7 min en un portátil)
+python -m benchmarks.run_all           # corrida completa de los 8 experimentos
 python -m benchmarks.run_all --quick   # verificación rápida (~30 s)
 python -m benchmarks.run_all --only 3  # un experimento
 ```
@@ -136,6 +203,24 @@ fija, y guarda CSV + PNG en [`benchmarks/results/`](benchmarks/results) (sí ver
 | 2. 1000 búsquedas de igualdad sobre 100 000 registros | `exp2_equality.py` | `exp2_equality.csv`, `exp2_equality.png` |
 | 3. Rangos con selectividad 0.1 %, 1 %, 5 %, 10 %, 25 % | `exp3_range.py` | `exp3_range.csv`, `exp3_range.png` |
 | 4. Tamaño de página B ∈ {1024, 2048, 4096, 8192} | `exp4_block_size.py` | `exp4_block_size.csv`, `exp4_*.png` |
+| 5. R-Tree vs scan secuencial (radio y k-NN, N ∈ {1e3 … 1e5}) y dimensión D ∈ {2 … 64} | `exp5_spatial.py` | `exp5_spatial.csv`, `exp5_dimension.csv`, `exp5_*.png` |
+| 6. Índice invertido propio vs GIN de PostgreSQL (`tsvector`) | `exp6_text.py` | `exp6_build.csv`, `exp6_queries.csv`, `exp6_*.png` |
+| 7. BoVW vs embeddings: Precision@10 y costo por consulta | `exp7_bovw_vs_embeddings.py` | `exp7_precision.csv`, `exp7_cost.csv`, `exp7_*.png` |
+| 8. ANN (IVF) vs k-NN exacto: Recall@10 y lecturas según `probes` | `exp8_ann.py` | `exp8_ann.csv`, `exp8_recall.png` |
+| Estrategias híbridas: pre-filtering vs post-filtering | `hybrid_strategies.py` | `hybrid_strategies.csv` |
+
+Los experimentos 6, 7 y 8 usan el catálogo `productos` ya cargado. El 6 además necesita un
+PostgreSQL local (variable `MINIDB_PG_DSN`; por defecto prueba la base del usuario y `postgres`): crea una base temporal, mide y
+la elimina; si no hay servidor, omite esa columna.
+
+Resultados principales (B = 4096, 44 072 productos):
+
+| Consulta | Con índice | Sin índice |
+|---|---|---|
+| k-NN espacial, k = 5, N = 100 000 | 12 lecturas (R-Tree) | 1 235 lecturas |
+| Top-10 por texto (TF-IDF + coseno) | 128–252 lecturas, 6–21 ms | 2 320 lecturas, ~600 ms |
+| 10 imágenes más parecidas (embedding) | 212 lecturas, 3 ms, Recall@10 = 95.9 % (IVF, 5 probes) | 22 036 lecturas, ~880 ms |
+| Precision@10 por tipo de artículo | 0.79 embeddings | 0.51 BoVW |
 
 El análisis contra el costo teórico está en el informe. Las lecturas y escrituras son deterministas:
 repetir los experimentos 2, 3 y 4 en otra máquina (macOS arm64 y Windows AMD64) da las mismas columnas
@@ -170,6 +255,31 @@ cond := pred {AND pred}
 pred := col op lit | lit op col | col BETWEEN lit AND lit      op := = | != | <> | < | <= | > | >=
 TYPE := INT | INTEGER | FLOAT | CHAR(n) | VARCHAR(n)
 ```
+
+Extensiones del Entregable 2:
+
+```text
+TYPE := ... | POINT | TEXT[(n)] | VECTOR(n)
+CREATE INDEX nombre ON t (col) USING RTREE | INVERTED | IVF [WITH (opcion = valor, ...)];
+    RTREE     sobre POINT
+    INVERTED  sobre TEXT / CHAR            WITH (analyzer = 'spanish' | 'english' | 'raw', scoring = 'TFIDF_COSINE' | 'BM25')
+    IVF       sobre VECTOR(n)              WITH (lists = C, metric = 'L2' | 'COSINE')
+SELECT item, ... FROM t [WHERE cond] [ORDER BY expr [ASC | DESC]] [LIMIT k];
+SET ivf.probes = 10;   SET hybrid.strategy = auto | pre | post;   SET text.analyzer = spanish;
+
+pred := ... | col WITHIN_RADIUS(point, km) | col WITHIN_BOX(point, point)
+            | col MATCH 'a AND (b OR c) AND NOT d'
+expr := col <-> point                  -- distancia geográfica en km (k-NN espacial)
+      | col <-> [v1, v2, ...]          -- distancia L2
+      | col <=> [v1, v2, ...]          -- distancia coseno
+      | COSINE_SCORE()                 -- puntaje del MATCH de la consulta
+item := * | col | expr [AS alias]
+point := [POINT] (lon, lat)
+```
+
+`MATCH` con operadores (`AND`, `OR`, `NOT`, paréntesis) es booleano; sin operadores es texto libre
+y ordena por puntaje. El plan de cada consulta informa la estrategia híbrida elegida y por qué, y
+las métricas separan las lecturas de cada índice de las de la tabla (`metrics.io`).
 
 Palabras clave case-insensitive, strings entre comillas simples (`''` escapa una comilla),
 comentarios `--` y `/* */`, `;` opcional. Los errores de sintaxis devuelven HTTP 400 con el
@@ -208,6 +318,19 @@ Archivos binarios paginados en MINIDB_DATA_DIR
 - **Planner**: igualdad con índice → `IndexScan`; rango con B+ → `IndexRangeScan`; tabla
   SEQUENTIAL con predicado sobre la PK → `BinarySearch` / `SeqFileRangeScan`; si no, `SeqScan`.
   Cada plan informa su costo estimado de I/O y el real medido.
+- **R-Tree**: nodos de una página (107 entradas en hojas y 113 en internos con D = 2 y B = 4096);
+  `ChooseLeaf` por mínimo ΔÁrea, split cuadrático con llenado mínimo del 40 %, carga masiva STR;
+  k-NN *best-first* con un *heap* ordenado por MINDIST y refinamiento con Haversine.
+- **Índice invertido**: diccionario ordenado de entradas fijas (búsqueda binaria sobre páginas),
+  posteos de 6 B ordenados por `doc_id` (678 por página) y normas precalculadas; SPIMI con
+  bloques acotados y mezcla de k vías. Es estático: tras una escritura se marca `stale` y se
+  reconstruye antes de la siguiente búsqueda.
+- **IVF-Flat**: K-Means propio (k-means++ y Lloyd) sobre una muestra, C = ⌊√N⌋ listas por
+  defecto; directorio de centroides y listas en páginas encadenadas; la búsqueda lee solo las
+  `probes` listas más cercanas.
+- **Planificador híbrido**: con un `ORDER BY` de similitud y filtros, estima el costo de filtrar
+  primero y ordenar los sobrevivientes (pre-filtering) frente a recorrer el índice de ranking y
+  descartar (post-filtering), y elige el menor.
 
 ### Decisiones documentadas
 
@@ -218,6 +341,9 @@ Archivos binarios paginados en MINIDB_DATA_DIR
 - **Unicidad de la PK**: en SEQUENTIAL la valida el propio archivo (búsqueda binaria + overflow);
   en HEAP se valida con el índice único sobre la PK si existe (validarla con full scan haría
   O(N²) el Experimento 1).
+- **`numpy` solo para aritmética**: áreas de cajas, distancias y K-Means operan sobre los bytes
+  de páginas ya leídas con `DiskManager`; no interviene en el almacenamiento. ResNet-18 y SIFT
+  solo extraen características: la indexación y la búsqueda son propias.
 - **Sin transacciones**: un `INSERT` de varias filas se aplica hasta la fila que falla.
 - **Borrados** lógicos (bitmap). El B+ no fusiona nodos y el hash no fusiona buckets.
 - En el área principal del Sequential los slots borrados no se reutilizan hasta reorganizar:
@@ -230,19 +356,24 @@ Archivos binarios paginados en MINIDB_DATA_DIR
 backend/
   storage/    disk_manager.py, page.py, record.py, rid.py, catalog.py
   files/      heap_file.py, sequential_file.py
-  indexes/    bplus_tree.py, extendible_hash.py
-  sql/        lexer.py, parser.py, ast.py, predicates.py, planner.py, executor.py
+  indexes/    bplus_tree.py, extendible_hash.py, rtree.py, inverted_index.py, ivf.py
+  sql/        lexer.py, parser.py, ast.py, predicates.py, planner.py, executor.py, multimodal.py
+  text/       analyzer.py y stoplists (español e inglés)
+  ml/         features.py (SIFT + BoVW, ResNet-18 + PCA)
+  app/        recommender.py (aplicación de IA)
   api/        main.py (FastAPI)
   tools/      dump_page.py
   table.py, database.py, config.py
 tests/        un test_*.py por módulo
 frontend/     cliente React + TypeScript (Vite)
-data/         generate.py (los .csv y binarios no se versionan)
-benchmarks/   exp1_insert.py … exp4_block_size.py, run_all.py, results/ (CSV + PNG)
-docs/         Proyecto_Enunciado.pdf, api.md, informe/ (fuentes LaTeX + informe.pdf), guion_video.md
+data/         generate.py, prepare_fashion.py (los .csv, imágenes y binarios no se versionan)
+benchmarks/   exp1_insert.py … exp8_ann.py, hybrid_strategies.py, run_all.py, results/ (CSV + PNG)
+docs/         Proyecto_Enunciado.pdf, api.md, informe/ (fuentes LaTeX, informe.pdf), guion_video.md, guion_video_e2.md
 ```
 
 ## 9. Contribuciones
+
+### Entregable 1
 
 | Integrante | Aportes |
 |---|---|
@@ -250,3 +381,10 @@ docs/         Proyecto_Enunciado.pdf, api.md, informe/ (fuentes LaTeX + informe.
 | **Lisseth Rondan** | Generador del dataset sintético; los 4 experimentos automatizados y `run_all`, la corrida final y las tablas del informe; cliente web de 4 paneles con su Dockerfile y el selector del modo del planner; informe LaTeX (diseño físico, costos y experimentos) y capturas del cliente y del inspector. |
 | **Josué Toribio** | Repositorio y despliegue: estructura inicial del repositorio, contenedor del backend, `compose.yaml` e integración continua con GitHub Actions; exportación CSV del visor de resultados; compilación del informe a PDF y correcciones de maquetado; y la verificación de reproducibilidad de los experimentos en una segunda máquina. |
 
+### Entregable 2
+
+| Integrante | Aportes |
+|---|---|
+| **Renzo Acervo** | Tipos `POINT`, `TEXT` y `VECTOR(n)` y contadores de I/O por archivo; R-Tree, índice invertido con SPIMI e IVF-Flat en disco; analizador de texto; gramática SQL extendida y planificador híbrido; integración con el catálogo y con `dump_page`; y los tests de los tres índices y de las consultas multimodales. |
+| **Josué Toribio** | Extracción de características (SIFT + BoVW, ResNet-18 + PCA), preparación del catálogo, experimentos 5 a 8 y comparación de estrategias híbridas, con tablas y figuras. |
+| **Lisseth Rondan** | Aplicación de IA: recomendador y endpoints; cliente web con visor de mapa Leaflet, pestaña Recomendador, ejemplos e inspector; contenedor del backend, README y guion del video. |
