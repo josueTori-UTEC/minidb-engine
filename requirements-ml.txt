@@ -1,0 +1,9 @@
+# Extracción de características de imágenes (aplicación de IA y data/prepare_fashion.py):
+# embeddings con ResNet-18 y descriptores SIFT. Solo hacen falta para vectorizar imágenes;
+# el motor y las consultas SQL funcionan sin ellas.
+-r requirements.txt
+pillow==12.3.0
+opencv-python-headless==5.0.0.93
+torch==2.15.0
+torchvision==0.29.2
+pyarrow==26.0.1
