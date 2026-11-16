@@ -1,5 +1,8 @@
 # Dependencias de desarrollo: tests y benchmarks (no se instalan en la imagen).
+# Los experimentos 6 a 8 y data/prepare_fashion.py necesitan además requirements-ml.txt.
 -r requirements.txt
 pytest==9.1.1
 httpx2==2.13.0
 matplotlib==3.11.2
+# Experimento 6: comparación con el índice GIN de PostgreSQL (opcional)
+psycopg[binary]==3.3.9
