@@ -1,5 +1,8 @@
 import type { ApiError, QueryResponse, ReorganizeResponse, StatementSummary } from './api'
 
+/** Vistas de nivel superior de la aplicación. */
+export type AppView = 'sql' | 'recommender'
+
 /** Lo que muestra el visor de resultados. */
 export type ResultState =
   | { status: 'idle' }
