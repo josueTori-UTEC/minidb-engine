@@ -1,10 +1,15 @@
-"""Ejecuta los 4 experimentos y resume los resultados en ``benchmarks/results/``.
+"""Ejecuta los 8 experimentos y resume los resultados en ``benchmarks/results/``.
+
+Experimentos 1–4 (Entrega 1, motor relacional) y 5–8 (Entrega 2, motor multimodal).
+Los experimentos 6, 7 y 8 usan el catálogo de productos: antes hay que generar
+``data/productos.csv`` con ``python data/prepare_fashion.py``. El 6 compara además
+con PostgreSQL si hay un servidor local (ver ``benchmarks/exp6_text.py``).
 
 Uso::
 
-    python -m benchmarks.run_all            # corrida completa (N hasta 500 000)
-    python -m benchmarks.run_all --quick    # corrida corta para verificar que todo funciona
-    python -m benchmarks.run_all --only 2 3 # solo algunos experimentos
+    python -m benchmarks.run_all              # corrida completa
+    python -m benchmarks.run_all --quick      # corrida corta para verificar que todo funciona
+    python -m benchmarks.run_all --only 5 6   # solo algunos experimentos
 """
 
 from __future__ import annotations
@@ -12,7 +17,16 @@ from __future__ import annotations
 import argparse
 import time
 
-from benchmarks import exp1_insert, exp2_equality, exp3_range, exp4_block_size
+from benchmarks import (
+    exp1_insert,
+    exp2_equality,
+    exp3_range,
+    exp4_block_size,
+    exp5_spatial,
+    exp6_text,
+    exp7_bovw_vs_embeddings,
+    exp8_ann,
+)
 from benchmarks.common import RESULTS_DIR, environment, load_csv, write_csv
 
 EXPERIMENTS = {
@@ -20,6 +34,10 @@ EXPERIMENTS = {
     2: ("Búsquedas de igualdad", exp2_equality),
     3: ("Búsquedas por rango", exp3_range),
     4: ("Tamaño de bloque", exp4_block_size),
+    5: ("Escalabilidad espacial y dimensionalidad (R-Tree)", exp5_spatial),
+    6: ("Índice invertido vs. full scan y GIN", exp6_text),
+    7: ("BoVW vs. embeddings densos", exp7_bovw_vs_embeddings),
+    8: ("Recall vs. latencia e I/O en IVF", exp8_ann),
 }
 
 
