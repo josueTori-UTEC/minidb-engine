@@ -8,3 +8,4 @@ node_modules
 data/*
 !data/generate.py
 benchmarks/results
+!data/prepare_fashion.py

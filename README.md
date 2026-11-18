@@ -12,7 +12,7 @@ motor relacional del Entregable 1, el Entregable 2 agrega datos espaciales, text
 vectores de alta dimensión, un planificador híbrido y una aplicación de IA (recomendador
 multimodal de productos).
 
-| Requisito del enunciado (Entregable 2) | Dónde está |
+| Entregable 2 | Dónde está |
 |---|---|
 | R-Tree en disco: inserción por mínimo ΔÁrea, split cuadrático, ventana, radio y k-NN con cola de prioridad (MINDIST) | [`backend/indexes/rtree.py`](backend/indexes/rtree.py) |
 | Visor de mapa (Leaflet) con los resultados, el círculo de la consulta y los MBR visitados | [`frontend/src/components/ResultsMap.tsx`](frontend/src/components/ResultsMap.tsx) |
@@ -23,9 +23,9 @@ multimodal de productos).
 | Planificador híbrido (pre-filtering vs post-filtering) con I/O separado por índice y por tabla | [`backend/sql/multimodal.py`](backend/sql/multimodal.py) |
 | Aplicación de IA (Opción B): recomendador multimodal de e-commerce | [`backend/app/recommender.py`](backend/app/recommender.py), pestaña **Recomendador** del cliente |
 | Experimentos 5 a 8 y comparación de estrategias híbridas | [`benchmarks/`](benchmarks) |
-| Informe disponible y guion del video | [`docs/informe/informe.pdf`](docs/informe/informe.pdf), [`docs/guion_video_e2.md`](docs/guion_video_e2.md) |
+| Informe disponible | [`docs/informe/informe_e2.pdf`](docs/informe/informe_e2.pdf) |
 
-| Requisito del enunciado (Entregable 1) | Dónde está |
+| Entregable 1 | Dónde está |
 |---|---|
 | Páginas de tamaño fijo con header, RID `⟨page_id, slot⟩` y `DiskCounter` | [`backend/storage/`](backend/storage) |
 | Heap File con Free-List | [`backend/files/heap_file.py`](backend/files/heap_file.py) |
@@ -37,7 +37,7 @@ multimodal de productos).
 | API REST (`POST /api/query`, `GET /api/tables`, `POST /api/tables/reorganize`) | [`backend/api/main.py`](backend/api/main.py), [`docs/api.md`](docs/api.md) |
 | Cliente web con 4 paneles (explorador, editor SQL, resultados, plan y métricas) | [`frontend/`](frontend) |
 | Datos sintéticos ≥ 100 000 registros y 4 experimentos automatizados | [`data/generate.py`](data/generate.py), [`benchmarks/`](benchmarks) |
-| Informe en PDF compilado desde LaTeX y guion del video | [`docs/informe/informe.pdf`](docs/informe/informe.pdf), [`docs/guion_video.md`](docs/guion_video.md) |
+| Informe en PDF  | [`docs/informe/informe.pdf`](docs/informe/informe.pdf) |
 
 **Integrantes:** Renzo Acervo, Josué Toribio, Lisseth Rondan.
 
